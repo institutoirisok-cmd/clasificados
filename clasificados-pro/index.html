@@ -2,853 +2,375 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>clasificadosOK - Compra y Venta en Argentina</title>
-  
-  <!-- Ícono HD para Navegador y Accesos Directos de Aplicación (PWA) -->
-  <link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
-
-  <!-- Manifest PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#FFE600">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="clasificadosOK">
-
-  <!-- Fuente Outfit & FontAwesome icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>clasificadosOK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Limpiador de Service Worker viejo -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(registrations => {
-        for (let r of registrations) r.unregister();
-      });
-    }
-  </script>
-
   <style>
-    :root {
-      --bg: #0d0e12;
-      --card-bg: rgba(255, 255, 255, 0.04);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent: #FFE600;
-      --accent-hover: #e6cf00;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
-      --glass: rgba(18, 18, 24, 0.75);
-      --glass-border: rgba(255, 255, 255, 0.12);
-      --radius: 16px;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg); color: var(--text); background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0d0e12 70%); min-height: 100vh; padding-bottom: 70px; }
-
-    /* Header & Nav */
-    header { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); background: var(--glass); border-bottom: 1px solid var(--glass-border); padding: 12px 20px; }
-    .header-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
-    .logo { font-size: 1.5rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
-    .logo span { color: var(--accent); }
-
-    .nav-actions { display: flex; align-items: center; gap: 10px; }
-    .btn { border: none; outline: none; padding: 10px 18px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; text-decoration: none; }
-    .btn-primary { background: var(--accent); color: #000; box-shadow: 0 4px 15px rgba(255, 230, 0, 0.25); }
-    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
-    .btn-secondary { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid var(--glass-border); }
-    .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
-    .btn-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-    .btn-install { background: linear-gradient(135deg, #10b981, #059669); color: white; display: none; }
-
-    /* Controls Bar */
-    .controls-bar { max-width: 1200px; margin: 20px auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
-    .search-box { flex: 1; min-width: 260px; position: relative; }
-    .search-box input { width: 100%; padding: 12px 16px 12px 42px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); border-radius: 12px; color: #fff; font-size: 0.95rem; }
-    .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-    .filter-select { padding: 12px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); border-radius: 12px; color: #fff; outline: none; cursor: pointer; font-size: 0.9rem; }
-    .filter-select option { background: #18181b; color: #fff; }
-
-    /* Categories Horizontal Scroll */
-    .categories-bar { max-width: 1200px; margin: 0 auto 20px; padding: 0 20px; display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
-    .categories-bar::-webkit-scrollbar { display: none; }
-    .cat-chip { padding: 8px 16px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--card-border); border-radius: 20px; white-space: nowrap; cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.2s; }
-    .cat-chip.active, .cat-chip:hover { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
-
-    /* Grid Layout */
-    .grid { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
-    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s; position: relative; display: flex; flex-direction: column; }
-    .card:hover { transform: translateY(-5deg); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .card.vip { border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(255, 230, 0, 0.15); }
-    .vip-tag { position: absolute; top: 10px; left: 10px; background: var(--accent); color: #000; font-weight: 800; font-size: 0.7rem; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; z-index: 2; }
-    
-    .card-img-wrap { width: 100%; height: 200px; position: relative; overflow: hidden; background: #18181b; }
-    .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .fav-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); border: none; width: 34px; height: 34px; border-radius: 50%; color: #fff; cursor: pointer; backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 2; }
-    .fav-btn.active { color: #ef4444; }
-
-    .card-body { padding: 15px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
-    .card-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-price { font-size: 1.3rem; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
-    .card-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; }
-
-    /* Modals */
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: #16161a; border: 1px solid var(--glass-border); border-radius: var(--radius); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 25px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-    .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; }
-    .modal h2 { margin-bottom: 15px; font-weight: 700; color: #fff; }
-
-    /* Forms */
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-muted); }
-    .form-control { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-size: 0.95rem; outline: none; }
-    .form-control:focus { border-color: var(--accent); }
-    textarea.form-control { min-height: 90px; resize: vertical; }
-
-    /* Chat Floating */
-    .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 500; }
-    .chat-btn { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); color: #000; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 8px 25px rgba(255,230,0,0.4); display: flex; align-items: center; justify-content: center; }
-    .chat-box { position: absolute; bottom: 70px; right: 0; width: 330px; height: 420px; background: #16161a; border: 1px solid var(--glass-border); border-radius: var(--radius); display: none; flex-direction: column; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
-    .chat-header { background: rgba(255,255,255,0.05); padding: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); }
-    .chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; }
-    .msg-item { background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 10px; max-width: 85%; }
-    .msg-item .author { font-weight: 700; color: var(--accent); font-size: 0.75rem; display: block; }
-    .chat-input-area { padding: 10px; border-top: 1px solid var(--card-border); display: flex; gap: 8px; }
-    .chat-input-area input { flex: 1; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); border-radius: 8px; color: #fff; font-size: 0.85rem; }
-
-    /* Install Overlay PWA Banner */
-    .install-overlay { position: fixed; bottom: 20px; left: 20px; right: 20px; max-width: 450px; margin: 0 auto; background: rgba(18, 18, 24, 0.95); border: 2px solid var(--accent); border-radius: var(--radius); padding: 18px; backdrop-filter: blur(10px); z-index: 9999; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-    .install-overlay img { width: 50px; height: 50px; border-radius: 12px; }
-    .install-info { flex: 1; }
-    .install-info h4 { font-size: 1rem; color: #fff; }
-    .install-info p { font-size: 0.8rem; color: var(--text-muted); }
-
-    /* Comments Section inside Listing Modal */
-    .comments-section { margin-top: 20px; border-top: 1px solid var(--card-border); padding-top: 15px; }
-    .comment-item { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; font-size: 0.85rem; }
-    .comment-author { font-weight: 700; color: var(--accent); font-size: 0.75rem; }
-
-    footer { text-align: center; padding: 30px; font-size: 0.8rem; color: var(--text-muted); margin-top: 40px; border-top: 1px solid var(--card-border); }
-    footer a { color: var(--text-muted); text-decoration: none; cursor: pointer; }
-
-    @media (max-width: 600px) {
-      .header-container { flex-wrap: wrap; }
-      .chat-box { width: calc(100vw - 40px); right: -10px; }
-    }
+    :root{--bg:#0d0e12;--card:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--accent:#FFE600;--text:#f3f4f6;--muted:#9ca3af}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Outfit,sans-serif}
+    body{background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:70px}
+    header{position:sticky;top:0;z-index:100;background:rgba(18,18,24,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 20px}
+    .header{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+    .logo{font-size:1.5rem;font-weight:800;color:#fff;text-decoration:none}
+    .logo span{color:var(--accent)}
+    .btn{border:none;padding:10px 16px;border-radius:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:.9rem}
+    .btn-p{background:var(--accent);color:#000}
+    .btn-s{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--border)}
+    .controls{max-width:1200px;margin:20px auto;padding:0 20px;display:flex;gap:10px;flex-wrap:wrap}
+    .search{flex:1;min-width:200px;position:relative}
+    .search input,.filter{width:100%;padding:12px 12px 12px 40px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;color:#fff}
+    .search i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+    .filter{padding:12px;cursor:pointer}
+    .cats{max-width:1200px;margin:0 auto 20px;padding:0 20px;display:flex;gap:8px;overflow-x:auto}
+    .chip{padding:8px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:.85rem;color:var(--muted);white-space:nowrap}
+    .chip.active{background:var(--accent);color:#000;font-weight:600}
+    .grid{max-width:1200px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+    .card.vip{border:2px solid var(--accent)}
+    .img{height:180px;background:#18181b;position:relative}
+    .img img{width:100%;height:100%;object-fit:cover}
+    .body{padding:14px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .title{font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .price{color:var(--accent);font-weight:800;font-size:1.2rem;margin-bottom:8px}
+    .meta{font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:10px}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+    .modal.active{display:flex}
+    .box{background:#16161a;border:1px solid var(--border);border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:24px;position:relative}
+    .close{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer}
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--muted)}
+    .form-control{width:100%;padding:12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:#fff}
+    textarea.form-control{min-height:90px}
+    .comment-item{background:rgba(255,255,255,.03);border-radius:8px;padding:8px 12px;margin-bottom:8px;font-size:.85rem}
+    .comment-author{font-weight:700;color:var(--accent);font-size:.75rem}
+    footer{text-align:center;padding:30px;font-size:.8rem;color:var(--muted);margin-top:40px;border-top:1px solid var(--border)}
   </style>
 </head>
 <body>
-
-  <!-- Header -->
   <header>
-    <div class="header-container">
-      <a href="#" class="logo"><i class="fa-solid fa-bolt" style="color:var(--accent);"></i> clasificados<span>OK</span></a>
-      <div class="nav-actions">
-        <button id="pwa-install-btn" class="btn btn-install" onclick="triggerPwaInstall()">
-          <i class="fa-solid fa-download"></i> Instalar App
-        </button>
-        <a href="https://wa.link/snq5ah" target="_blank" class="btn btn-vip">
-          <i class="fa-solid fa-star"></i> Destacar Anuncio
-        </a>
-        <button class="btn btn-secondary" id="auth-btn" onclick="openAuthModal()">
-          <i class="fa-regular fa-user"></i> Ingresar
-        </button>
-        <button class="btn btn-primary" onclick="openPublishModal()">
-          <i class="fa-solid fa-plus"></i> Publicar
-        </button>
+    <div class="header">
+      <a href="#" class="logo"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> clasificados<span>OK</span></a>
+      <div>
+        <a href="https://wa.link/snq5ah" target="_blank" class="btn btn-p"><i class="fa-solid fa-star"></i> Destacar</a>
+        <button class="btn btn-s" id="auth-btn" onclick="openAuth()">Ingresar</button>
+        <button class="btn btn-p" onclick="openPublish()">+ Publicar</button>
       </div>
     </div>
   </header>
 
-  <!-- Controls Bar -->
-  <div class="controls-bar">
-    <div class="search-box">
+  <div class="controls">
+    <div class="search">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="search-input" placeholder="¿Qué estás buscando hoy?" onkeyup="filterListings()">
+      <input type="text" id="search" placeholder="¿Qué estás buscando?" onkeyup="render()">
     </div>
-    <select class="filter-select" id="filter-prov" onchange="filterListings()">
-      <option value="">🇦🇷 Todas las Provincias</option>
+    <select class="filter" id="prov" onchange="render()">
+      <option value="">Todas las Provincias</option>
       <option value="Buenos Aires">Buenos Aires</option>
       <option value="Ciudad Autónoma de Buenos Aires">CABA</option>
-      <option value="Catamarca">Catamarca</option>
-      <option value="Chaco">Chaco</option>
-      <option value="Chubut">Chubut</option>
       <option value="Córdoba">Córdoba</option>
-      <option value="Corrientes">Corrientes</option>
-      <option value="Entre Ríos">Entre Ríos</option>
-      <option value="Formosa">Formosa</option>
-      <option value="Jujuy">Jujuy</option>
-      <option value="La Pampa">La Pampa</option>
-      <option value="La Rioja">La Rioja</option>
-      <option value="Mendoza">Mendoza</option>
-      <option value="Misiones">Misiones</option>
-      <option value="Neuquén">Neuquén</option>
-      <option value="Río Negro">Río Negro</option>
-      <option value="Salta">Salta</option>
-      <option value="San Juan">San Juan</option>
-      <option value="San Luis">San Luis</option>
-      <option value="Santa Cruz">Santa Cruz</option>
       <option value="Santa Fe">Santa Fe</option>
-      <option value="Santiago del Estero">Santiago del Estero</option>
-      <option value="Tierra del Fuego">Tierra del Fuego</option>
+      <option value="Mendoza">Mendoza</option>
       <option value="Tucumán">Tucumán</option>
     </select>
-    <button class="btn btn-secondary" onclick="toggleFavFilter()" id="btn-favs">
-      <i class="fa-regular fa-heart"></i> Favoritos
-    </button>
-    <button class="btn btn-secondary" style="display:none;" id="btn-my-listings" onclick="filterMyListings()">
-      <i class="fa-solid fa-list"></i> Mis Avisos
-    </button>
+    <button class="btn btn-s" id="btn-mine" onclick="toggleMine()" style="display:none">Mis Avisos</button>
   </div>
 
-  <!-- Categories Horizontal -->
-  <div class="categories-bar">
-    <div class="cat-chip active" onclick="selectCat('', this)">Todas</div>
-    <div class="cat-chip" onclick="selectCat('Vehículos', this)">🚗 Vehículos</div>
-    <div class="cat-chip" onclick="selectCat('Inmuebles', this)">🏠 Inmuebles</div>
-    <div class="cat-chip" onclick="selectCat('Tecnología', this)">📱 Tecnología</div>
-    <div class="cat-chip" onclick="selectCat('Hogar', this)">🛋️ Hogar y Muebles</div>
-    <div class="cat-chip" onclick="selectCat('Servicios', this)">🛠️ Servicios</div>
-    <div class="cat-chip" onclick="selectCat('Empleo', this)">💼 Empleo</div>
-    <div class="cat-chip" onclick="selectCat('Moda', this)">👕 Ropa y Moda</div>
+  <div class="cats">
+    <div class="chip active" onclick="setCat('',this)">Todas</div>
+    <div class="chip" onclick="setCat('Vehículos',this)">Vehículos</div>
+    <div class="chip" onclick="setCat('Inmuebles',this)">Inmuebles</div>
+    <div class="chip" onclick="setCat('Tecnología',this)">Tecnología</div>
+    <div class="chip" onclick="setCat('Hogar',this)">Hogar</div>
+    <div class="chip" onclick="setCat('Servicios',this)">Servicios</div>
+    <div class="chip" onclick="setCat('Empleo',this)">Empleo</div>
+    <div class="chip" onclick="setCat('Moda',this)">Moda</div>
   </div>
 
-  <!-- Listings Grid -->
-  <main class="grid" id="listings-container">
-    <p style="text-align: center; grid-column: 1/-1; padding: 40px; color: var(--text-muted);">Cargando avisos clasificados...</p>
-  </main>
+  <main class="grid" id="grid"></main>
 
-  <!-- Chat Floating Widget -->
-  <div class="chat-widget">
-    <div class="chat-box" id="chat-box">
-      <div class="chat-header">
-        <span><i class="fa-solid fa-comments"></i> Chat en Vivo</span>
-        <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="toggleChat()"></i>
-      </div>
-      <div class="chat-messages" id="chat-msgs"></div>
-      <div class="chat-input-area">
-        <input type="text" id="chat-nick" placeholder="Tu Nombre..." style="width:30%; display:none;">
-        <input type="text" id="chat-msg" placeholder="Escribe un mensaje..." onkeypress="if(event.key==='Enter') sendChat()">
-        <button class="btn btn-primary" onclick="sendChat()" style="padding: 8px 12px;"><i class="fa-solid fa-paper-plane"></i></button>
-      </div>
-    </div>
-    <button class="chat-btn" onclick="toggleChat()"><i class="fa-solid fa-comments"></i></button>
-  </div>
-
-  <!-- Modal Publicar Anuncio -->
-  <div class="modal-overlay" id="modal-pub">
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal('modal-pub')">&times;</button>
-      <h2><i class="fa-solid fa-bullhorn" style="color:var(--accent);"></i> Publicar Aviso</h2>
-      <form onsubmit="handlePublish(event)">
-        <div class="form-group">
-          <label>Título del Aviso</label>
-          <input type="text" id="pub-title" class="form-control" placeholder="Ej: Vendo Moto Honda 150cc 2022" required>
-        </div>
-        <div class="form-group">
-          <label>Precio ($ ARS)</label>
-          <input type="number" id="pub-price" class="form-control" placeholder="Ej: 850000" required>
-        </div>
-        <div class="form-group">
-          <label>Categoría</label>
-          <select id="pub-cat" class="form-control" required>
-            <option value="Vehículos">Vehículos</option>
-            <option value="Inmuebles">Inmuebles</option>
-            <option value="Tecnología">Tecnología</option>
-            <option value="Hogar">Hogar y Muebles</option>
-            <option value="Servicios">Servicios</option>
-            <option value="Empleo">Empleo</option>
-            <option value="Moda">Ropa y Moda</option>
-            <option value="Otros">Otros</option>
+  <!-- Modal Publicar / Editar -->
+  <div class="modal" id="modal-pub">
+    <div class="box">
+      <button class="close" onclick="closeModal('modal-pub')">&times;</button>
+      <h2 id="pub-title">Publicar Aviso</h2>
+      <form onsubmit="save(event)">
+        <div class="form-group"><label>Título</label><input id="f-title" class="form-control" required></div>
+        <div class="form-group"><label>Precio</label><input id="f-price" type="number" class="form-control" required></div>
+        <div class="form-group"><label>Categoría</label>
+          <select id="f-cat" class="form-control">
+            <option>Vehículos</option><option>Inmuebles</option><option>Tecnología</option>
+            <option>Hogar</option><option>Servicios</option><option>Empleo</option><option>Moda</option><option>Otros</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Provincia</label>
-          <select id="pub-location" class="form-control" required>
-            <option value="Buenos Aires">Buenos Aires</option>
-            <option value="Ciudad Autónoma de Buenos Aires">Ciudad Autónoma de Buenos Aires (CABA)</option>
-            <option value="Catamarca">Catamarca</option>
-            <option value="Chaco">Chaco</option>
-            <option value="Chubut">Chubut</option>
-            <option value="Córdoba">Córdoba</option>
-            <option value="Corrientes">Corrientes</option>
-            <option value="Entre Ríos">Entre Ríos</option>
-            <option value="Formosa">Formosa</option>
-            <option value="Jujuy">Jujuy</option>
-            <option value="La Pampa">La Pampa</option>
-            <option value="La Rioja">La Rioja</option>
-            <option value="Mendoza">Mendoza</option>
-            <option value="Misiones">Misiones</option>
-            <option value="Neuquén">Neuquén</option>
-            <option value="Río Negro">Río Negro</option>
-            <option value="Salta">Salta</option>
-            <option value="San Juan">San Juan</option>
-            <option value="San Luis">San Luis</option>
-            <option value="Santa Cruz">Santa Cruz</option>
-            <option value="Santa Fe">Santa Fe</option>
-            <option value="Santiago del Estero">Santiago del Estero</option>
-            <option value="Tierra del Fuego">Tierra del Fuego</option>
-            <option value="Tucumán">Tucumán</option>
+        <div class="form-group"><label>Provincia</label>
+          <select id="f-loc" class="form-control">
+            <option>Buenos Aires</option><option>Ciudad Autónoma de Buenos Aires</option><option>Córdoba</option>
+            <option>Santa Fe</option><option>Mendoza</option><option>Tucumán</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Teléfono de Contacto (WhatsApp)</label>
-          <input type="tel" id="pub-phone" class="form-control" placeholder="Ej: 5492645198342" required>
-        </div>
-        <div class="form-group">
-          <label>Descripción detallada</label>
-          <textarea id="pub-desc" class="form-control" placeholder="Describe tu producto o servicio..." required></textarea>
-        </div>
-        <div class="form-group">
-          <label>Foto de la publicación (Galería o Cámara)</label>
-          <input type="file" id="pub-img" class="form-control" accept="image/*" required>
-        </div>
-        <button type="submit" id="pub-submit-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">
-          <i class="fa-solid fa-cloud-arrow-up"></i> Publicar Ahora
-        </button>
+        <div class="form-group"><label>WhatsApp</label><input id="f-phone" class="form-control" required></div>
+        <div class="form-group"><label>Descripción</label><textarea id="f-desc" class="form-control" required></textarea></div>
+        <div class="form-group"><label id="img-label">Foto</label><input id="f-img" type="file" accept="image/*" class="form-control"></div>
+        <button class="btn btn-p" style="width:100%" id="pub-btn">Publicar</button>
       </form>
     </div>
   </div>
 
-  <!-- Modal Detalle del Aviso -->
-  <div class="modal-overlay" id="modal-detail">
-    <div class="modal" style="max-width: 650px;">
-      <button class="modal-close" onclick="closeModal('modal-detail')">&times;</button>
-      <div id="detail-content"></div>
-      
-      <!-- Sección Comentarios / Preguntas -->
-      <div class="comments-section">
-        <h4 style="color:#fff; margin-bottom: 10px;"><i class="fa-solid fa-comments"></i> Preguntas al vendedor</h4>
-        <div id="comments-list"></div>
-        <div style="display:flex; gap:8px; margin-top:10px;">
-          <input type="text" id="comment-msg" class="form-control" placeholder="Escribe tu consulta pública...">
-          <button class="btn btn-primary" onclick="sendComment()"><i class="fa-solid fa-paper-plane"></i></button>
+  <!-- Modal Detalle -->
+  <div class="modal" id="modal-detail">
+    <div class="box">
+      <button class="close" onclick="closeModal('modal-detail')">&times;</button>
+      <div id="detail"></div>
+      <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:15px">
+        <h4 style="margin-bottom:10px"><i class="fa-solid fa-comments"></i> Preguntas al vendedor</h4>
+        <div id="comments"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <input id="comment-input" class="form-control" placeholder="Escribe tu consulta...">
+          <button class="btn btn-p" onclick="sendComment()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal Auth (Login/Register) -->
-  <div class="modal-overlay" id="modal-auth">
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal('modal-auth')">&times;</button>
-      <h2 id="auth-title">Iniciar Sesión</h2>
-      <form onsubmit="handleAuth(event)">
-        <div class="form-group">
-          <label>Correo Electrónico</label>
-          <input type="email" id="auth-email" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label>Contraseña</label>
-          <input type="password" id="auth-pass" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;" id="auth-submit-btn">Ingresar</button>
+  <!-- Modal Auth -->
+  <div class="modal" id="modal-auth">
+    <div class="box">
+      <button class="close" onclick="closeModal('modal-auth')">&times;</button>
+      <h2 id="auth-title">Ingresar</h2>
+      <form onsubmit="doAuth(event)">
+        <div class="form-group"><label>Email</label><input id="a-email" type="email" class="form-control" required></div>
+        <div class="form-group"><label>Contraseña</label><input id="a-pass" type="password" class="form-control" required></div>
+        <button class="btn btn-p" style="width:100%" id="auth-btn-submit">Ingresar</button>
       </form>
-      
-      <button class="btn btn-secondary" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="loginWithGoogle()">
-        <i class="fa-brands fa-google"></i> Continuar con Google
-      </button>
-
-      <p style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);">
-        <span id="auth-toggle-msg">¿No tienes cuenta?</span> 
-        <a href="#" onclick="toggleAuthMode()" id="auth-toggle-link" style="color: var(--accent);">Regístrate</a>
+      <p style="text-align:center;margin-top:12px;font-size:.85rem;color:var(--muted)">
+        <span id="auth-msg">¿No tienes cuenta?</span> <a href="#" onclick="toggleAuth()" style="color:var(--accent)">Regístrate</a>
       </p>
     </div>
   </div>
 
-  <!-- Overlay Forzado PWA para Móviles -->
-  <div class="install-overlay" id="install-overlay">
-    <img src="https://cdn-icons-png.flaticon.com/512/1041/1041883.png" alt="App Icon">
-    <div class="install-info">
-      <h4>Instala clasificadosOK</h4>
-      <p>Añade la app a tu pantalla de inicio para una experiencia más rápida.</p>
-    </div>
-    <button class="btn btn-primary" onclick="triggerPwaInstall()">Instalar</button>
-    <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--text-muted);" onclick="closePwaOverlay()"></i>
-  </div>
-
   <footer>
-    <p>&copy; 2025 clasificadosOK Argentina - Todos los derechos reservados.</p>
-    <p style="margin-top: 8px;">
-      <a href="https://wa.link/snq5ah" target="_blank" style="color: var(--accent); margin-right: 15px;"><i class="fa-brands fa-whatsapp"></i> Contacto Soporte VIP</a>
-      <a onclick="adminPanel()"><i class="fa-solid fa-lock"></i> Panel Administrador</a>
-    </p>
+    <p>&copy; 2025 clasificadosOK Argentina</p>
   </footer>
 
-  <script>
-    // Configuración Supabase
-    const SUPABASE_URL = 'https://rhozvkoogswzbdkpeimz.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
-    
-    let sb = null;
-    function getSb() {
-      if (!sb && window.supabase) {
-        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      }
-      return sb;
-    }
+<script>
+const SUPABASE_URL = 'https://rhozvkoogswzbdkpeimz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
 
-    // Estado Global
-    let dataAll = [];
-    let currentCat = '';
-    let currentUser = null;
-    let favs = JSON.parse(localStorage.getItem('favs') || '[]');
-    let showOnlyFavs = false;
-    let showOnlyMine = false;
-    let isRegMode = false;
-    let activeListingId = null;
-    let deferredPrompt = null;
+let sb, data = [], user = null, cat = '', onlyMine = false, editingId = null, activeId = null, isRegister = false;
 
-    // Detectar Geolocalización del usuario por IP (Argentina)
-    async function autoDetectLocation() {
-      try {
-        const res = await fetch('https://ipapi.co/json/');
-        const data = await res.json();
-        if (data && data.country_code === 'AR' && data.region) {
-          const select = document.getElementById('filter-prov');
-          for (let option of select.options) {
-            if (option.value.toLowerCase().includes(data.region.toLowerCase()) || data.region.toLowerCase().includes(option.value.toLowerCase())) {
-              select.value = option.value;
-              filterListings();
-              break;
-            }
-          }
-        }
-      } catch (e) {
-        console.log("No se pudo autodetectar provincia", e);
-      }
-    }
+function getSb(){ if(!sb) sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); return sb; }
 
-    // Capturar evento PWA de instalación
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('pwa-install-btn').style.display = 'inline-flex';
-      
-      if (!localStorage.getItem('pwa_closed') && window.innerWidth <= 768) {
-        setTimeout(() => {
-          document.getElementById('install-overlay').style.display = 'flex';
-        }, 1500);
-      }
-    });
+async function init(){
+  const { data: { session } } = await getSb().auth.getSession();
+  user = session?.user || null;
+  updateUI();
+  getSb().auth.onAuthStateChange((_, s) => { user = s?.user || null; updateUI(); });
+  load();
+}
+function updateUI(){
+  const btn = document.getElementById('auth-btn');
+  const mine = document.getElementById('btn-mine');
+  if(user){
+    btn.innerHTML = 'Salir';
+    btn.onclick = () => getSb().auth.signOut();
+    mine.style.display = 'inline-flex';
+  } else {
+    btn.innerHTML = 'Ingresar';
+    btn.onclick = openAuth;
+    mine.style.display = 'none';
+    onlyMine = false;
+  }
+  if(data.length) render();
+}
 
-    async function triggerPwaInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('Usuario instaló la PWA');
-        }
-        deferredPrompt = null;
-        document.getElementById('install-overlay').style.display = 'none';
-      } else {
-        alert("Para instalar en iPhone/iOS: Tocá el botón Compartir ⎋ y elegí 'Agregar a Inicio ➕'.\n\nEn Android: Tocá los 3 puntos del navegador y elegí 'Instalar Aplicación'.");
-      }
-    }
+async function load(){
+  const { data: rows } = await getSb().from('listings').select('*').order('created_at',{ascending:false});
+  data = rows || [];
+  render();
+}
 
-    function closePwaOverlay() {
-      document.getElementById('install-overlay').style.display = 'none';
-      localStorage.setItem('pwa_closed', 'true');
-    }
-
-    // Carga Inicial
-    window.addEventListener('DOMContentLoaded', async () => {
-      autoDetectLocation();
-      initAuth();
-      loadListings();
-      initChat();
-    });
-
-    // Autenticación
-    async function initAuth() {
-      const client = getSb();
-      if (!client) return;
-      const { data: { session } } = await client.auth.getSession();
-      updateUserUI(session ? session.user : null);
-
-      client.auth.onAuthStateChange((_event, session) => {
-        updateUserUI(session ? session.user : null);
-      });
-    }
-
-    function updateUserUI(user) {
-      currentUser = user;
-      const btn = document.getElementById('auth-btn');
-      const btnMine = document.getElementById('btn-my-listings');
-      const nickInput = document.getElementById('chat-nick');
-
-      if (user) {
-        btn.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> Salir`;
-        btn.onclick = () => getSb().auth.signOut();
-        btnMine.style.display = 'inline-flex';
-        nickInput.style.display = 'none';
-      } else {
-        btn.innerHTML = `<i class="fa-regular fa-user"></i> Ingresar`;
-        btn.onclick = openAuthModal;
-        btnMine.style.display = 'none';
-        nickInput.style.display = 'block';
-      }
-    }
-
-    // Cargar Avisos desde Supabase
-    async function loadListings() {
-      const client = getSb();
-      if (!client) return;
-
-      const { data, error } = await client
-        .from('listings')
-        .select('*')
-        .order('is_featured', { ascending: false })
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      dataAll = data || [];
-      renderGrid();
-    }
-
-    function renderGrid() {
-      const container = document.getElementById('listings-container');
-      const searchVal = document.getElementById('search-input').value.toLowerCase();
-      const provVal = document.getElementById('filter-prov').value;
-
-      let filtered = dataAll.filter(item => {
-        const matchSearch = item.title.toLowerCase().includes(searchVal) || item.description.toLowerCase().includes(searchVal);
-        const matchProv = provVal === '' || item.location === provVal;
-        const matchCat = currentCat === '' || item.category === currentCat;
-        const matchFav = !showOnlyFavs || favs.includes(item.id);
-        const matchMine = !showOnlyMine || (currentUser && item.user_id === currentUser.id);
-
-        return matchSearch && matchProv && matchCat && matchFav && matchMine;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<p style="text-align: center; grid-column: 1/-1; padding: 40px; color: var(--text-muted);">No se encontraron avisos que coincidan con la búsqueda.</p>`;
-        return;
-      }
-
-      container.innerHTML = filtered.map(item => {
-        const isFav = favs.includes(item.id);
-        const isMine = currentUser && item.user_id === currentUser.id;
-        
-        return `
-          <div class="card ${item.is_featured ? 'vip' : ''}">
-            ${item.is_featured ? '<div class="vip-tag"><i class="fa-solid fa-star"></i> DESTACADO</div>' : ''}
-            <div class="card-img-wrap" onclick="openDetailModal('${item.id}')" style="cursor:pointer;">
-              <img src="${item.image_url || 'https://via.placeholder.com/400x300?text=Sin+Imagen'}" alt="${item.title}">
-              <button class="fav-btn ${isFav ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${item.id}')">
-                <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
-              </button>
-            </div>
-            <div class="card-body">
-              <div>
-                <div class="card-title" onclick="openDetailModal('${item.id}')" style="cursor:pointer;">${item.title}</div>
-                <div class="card-price">$ ${Number(item.price).toLocaleString('es-AR')}</div>
-                <div class="card-meta">
-                  <span><i class="fa-solid fa-location-dot"></i> ${item.location}</span>
-                  <span><i class="fa-solid fa-tag"></i> ${item.category}</span>
-                </div>
-              </div>
-              <div style="display:flex; gap:8px;">
-                <a href="https://wa.me/${item.phone}?text=Hola,%20vi%20tu%20anuncio%20'${encodeURIComponent(item.title)}'%20en%20clasificadosOK" target="_blank" class="btn btn-primary" style="flex:1; justify-content:center; text-decoration:none;">
-                  <i class="fa-brands fa-whatsapp"></i> Contactar
-                </a>
-                ${isMine ? `<button class="btn btn-secondary" onclick="deleteMyListing('${item.id}')" style="color:#ef4444;"><i class="fa-solid fa-trash"></i></button>` : ''}
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // Filtros
-    function selectCat(cat, el) {
-      currentCat = cat;
-      document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      renderGrid();
-    }
-
-    function filterListings() { renderGrid(); }
-
-    function toggleFav(id) {
-      if (favs.includes(id)) {
-        favs = favs.filter(i => i !== id);
-      } else {
-        favs.push(id);
-      }
-      localStorage.setItem('favs', JSON.stringify(favs));
-      renderGrid();
-    }
-
-    function toggleFavFilter() {
-      showOnlyFavs = !showOnlyFavs;
-      showOnlyMine = false;
-      document.getElementById('btn-favs').classList.toggle('btn-primary', showOnlyFavs);
-      renderGrid();
-    }
-
-    function filterMyListings() {
-      showOnlyMine = !showOnlyMine;
-      showOnlyFavs = false;
-      renderGrid();
-    }
-
-    // Publicación
-    function openPublishModal() {
-      if (!currentUser) {
-        alert("Debes iniciar sesión para publicar un aviso.");
-        openAuthModal();
-        return;
-      }
-      document.getElementById('modal-pub').classList.add('active');
-    }
-
-    async function handlePublish(e) {
-      e.preventDefault();
-      const btn = document.getElementById('pub-submit-btn');
-      btn.disabled = true;
-      btn.innerText = "Subiendo aviso...";
-
-      try {
-        const fileInput = document.getElementById('pub-img');
-        const file = fileInput.files[0];
-        let imgUrl = '';
-
-        if (file) {
-          imgUrl = await uploadImage(file);
-        }
-
-        const listingData = {
-          title: document.getElementById('pub-title').value,
-          price: parseFloat(document.getElementById('pub-price').value),
-          category: document.getElementById('pub-cat').value,
-          location: document.getElementById('pub-location').value,
-          phone: document.getElementById('pub-phone').value,
-          description: document.getElementById('pub-desc').value,
-          image_url: imgUrl,
-          user_id: currentUser.id,
-          is_featured: false
-        };
-
-        const { error } = await getSb().from('listings').insert([listingData]);
-
-        if (error) throw error;
-
-        alert("¡Tu aviso fue publicado con éxito!");
-        closeModal('modal-pub');
-        loadListings();
-      } catch (err) {
-        alert("Error al publicar: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Publicar Ahora";
-      }
-    }
-
-    // Subida de imagen con Fallback Base64
-    async function uploadImage(file) {
-      const client = getSb();
-      const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-
-      try {
-        const { data, error } = await client.storage.from('anuncios').upload(fileName, file);
-        if (!error && data) {
-          const { data: urlData } = client.storage.from('anuncios').getPublicUrl(fileName);
-          return urlData.publicUrl;
-        }
-      } catch (e) {
-        console.warn("Fallo subida a bucket, convirtiendo a Base64...", e);
-      }
-
-      // Fallback Base64
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(file);
-      });
-    }
-
-    // Modal Detalle y Comentarios
-    async function openDetailModal(id) {
-      activeListingId = id;
-      const item = dataAll.find(i => i.id === id);
-      if (!item) return;
-
-      const detail = document.getElementById('detail-content');
-      detail.innerHTML = `
-        <img src="${item.image_url}" style="width:100%; max-height:350px; object-fit:cover; border-radius:12px; margin-bottom:15px;">
-        <h2>${item.title}</h2>
-        <h3 style="color:var(--accent); font-size:1.6rem; margin:10px 0;">$ ${Number(item.price).toLocaleString('es-AR')}</h3>
-        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:15px;"><i class="fa-solid fa-location-dot"></i> ${item.location} | <i class="fa-solid fa-tag"></i> ${item.category}</p>
-        <p style="white-space:pre-line; margin-bottom:20px; font-size:0.95rem;">${item.description}</p>
-        <a href="https://wa.me/${item.phone}?text=Hola,%20vi%20tu%20anuncio%20'${encodeURIComponent(item.title)}'" target="_blank" class="btn btn-primary" style="width:100%; justify-content:center; text-decoration:none; margin-bottom:15px;">
-          <i class="fa-brands fa-whatsapp"></i> Contactar al Vendedor por WhatsApp
-        </a>
-      `;
-
-      loadComments(id);
-      document.getElementById('modal-detail').classList.add('active');
-    }
-
-    async function loadComments(listingId) {
-      const { data } = await getSb().from('ad_comments').select('*').eq('listing_id', listingId).order('created_at', { ascending: true });
-      const container = document.getElementById('comments-list');
-      if (!data || data.length === 0) {
-        container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted);">No hay preguntas aún. ¡Sé el primero!</p>`;
-        return;
-      }
-      container.innerHTML = data.map(c => `
-        <div class="comment-item">
-          <span class="comment-author">${c.sender_name}</span>
-          <p style="color:#fff; margin-top:2px;">${c.message}</p>
+function render(){
+  const q = document.getElementById('search').value.toLowerCase();
+  const p = document.getElementById('prov').value;
+  const filtered = data.filter(i => 
+    (i.title.toLowerCase().includes(q) || i.description.toLowerCase().includes(q)) &&
+    (!p || i.location === p) &&
+    (!cat || i.category === cat) &&
+    (!onlyMine || (user && i.user_id === user.id))
+  );
+  document.getElementById('grid').innerHTML = filtered.length ? filtered.map(i => {
+    const mine = user && i.user_id === user.id;
+    return `
+      <div class="card ${i.is_featured?'vip':''}">
+        <div class="img" onclick="openDetail('${i.id}')" style="cursor:pointer">
+          <img src="${i.image_url||'https://via.placeholder.com/400x300?text=Sin+Imagen'}">
         </div>
-      `).join('');
-    }
-
-    async function sendComment() {
-      const input = document.getElementById('comment-msg');
-      const msg = input.value.trim();
-      if (!msg) return;
-
-      const name = currentUser ? (currentUser.email.split('@')[0]) : 'Anónimo';
-      await getSb().from('ad_comments').insert([{ listing_id: activeListingId, sender_name: name, message: msg }]);
-      input.value = '';
-      loadComments(activeListingId);
-    }
-
-    // Chat Global
-    function toggleChat() {
-      const box = document.getElementById('chat-box');
-      box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    async function initChat() {
-      const client = getSb();
-      if (!client) return;
-
-      loadChatMessages();
-      client.channel('public:chat_messages')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, payload => {
-          appendChatMessage(payload.new);
-        }).subscribe();
-    }
-
-    async function loadChatMessages() {
-      const { data } = await getSb().from('chat_messages').select('*').order('created_at', { ascending: false }).limit(30);
-      const container = document.getElementById('chat-msgs');
-      if (data) {
-        container.innerHTML = data.reverse().map(m => `
-          <div class="msg-item">
-            <span class="author">${m.sender_name}</span>
-            <span>${m.message}</span>
+        <div class="body">
+          <div>
+            <div class="title" onclick="openDetail('${i.id}')" style="cursor:pointer">${i.title}</div>
+            <div class="price">$ ${Number(i.price).toLocaleString('es-AR')}</div>
+            <div class="meta"><span>${i.location}</span><span>${i.category}</span></div>
           </div>
-        `).join('');
-        container.scrollTop = container.scrollHeight;
-      }
-    }
-
-    function appendChatMessage(m) {
-      const container = document.getElementById('chat-msgs');
-      container.innerHTML += `
-        <div class="msg-item">
-          <span class="author">${m.sender_name}</span>
-          <span>${m.message}</span>
+          <div style="display:flex;gap:6px">
+            <a href="https://wa.me/${i.phone}?text=Hola,%20vi%20tu%20anuncio%20'${encodeURIComponent(i.title)}'" target="_blank" class="btn btn-p" style="flex:1;justify-content:center">Contactar</a>
+            ${mine?`<button class="btn btn-s" onclick="openPublish('${i.id}')">Editar</button>
+            <button class="btn btn-s" onclick="del('${i.id}')" style="color:#ef4444"><i class="fa-solid fa-trash"></i></button>`:''}
+          </div>
         </div>
-      `;
-      container.scrollTop = container.scrollHeight;
-    }
+      </div>`;
+  }).join('') : '<p style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">No hay resultados</p>';
+}
 
-    async function sendChat() {
-      const input = document.getElementById('chat-msg');
-      const msg = input.value.trim();
-      if (!msg) return;
+function setCat(c, el){ cat = c; document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active')); el.classList.add('active'); render(); }
+function toggleMine(){ onlyMine = !onlyMine; render(); }
 
-      let name = 'Anónimo';
-      if (currentUser) {
-        name = currentUser.email.split('@')[0];
-      } else {
-        name = document.getElementById('chat-nick').value.trim() || 'Anónimo';
-      }
+function openPublish(id=null){
+  if(!user){ alert('Debes iniciar sesión'); openAuth(); return; }
+  editingId = id;
+  const title = document.getElementById('pub-title');
+  const btn = document.getElementById('pub-btn');
+  const img = document.getElementById('f-img');
+  const imgLabel = document.getElementById('img-label');
 
-      await getSb().from('chat_messages').insert([{ sender_name: name, message: msg }]);
-      input.value = '';
-    }
+  if(id){
+    const item = data.find(x=>x.id===id);
+    if(!item) return;
+    title.textContent = 'Editar Aviso';
+    btn.textContent = 'Guardar Cambios';
+    img.required = false;
+    imgLabel.textContent = 'Foto (opcional)';
+    document.getElementById('f-title').value = item.title;
+    document.getElementById('f-price').value = item.price;
+    document.getElementById('f-cat').value = item.category;
+    document.getElementById('f-loc').value = item.location;
+    document.getElementById('f-phone').value = item.phone;
+    document.getElementById('f-desc').value = item.description;
+    img.value = '';
+  } else {
+    title.textContent = 'Publicar Aviso';
+    btn.textContent = 'Publicar';
+    img.required = true;
+    imgLabel.textContent = 'Foto';
+    document.getElementById('f-title').value = '';
+    document.getElementById('f-price').value = '';
+    document.getElementById('f-phone').value = '';
+    document.getElementById('f-desc').value = '';
+    img.value = '';
+  }
+  document.getElementById('modal-pub').classList.add('active');
+}
 
-    // Auth Modal Handlers
-    function openAuthModal() { document.getElementById('modal-auth').classList.add('active'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+async function save(e){
+  e.preventDefault();
+  const btn = document.getElementById('pub-btn');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
 
-    function toggleAuthMode() {
-      isRegMode = !isRegMode;
-      document.getElementById('auth-title').innerText = isRegMode ? 'Crear Cuenta' : 'Iniciar Sesión';
-      document.getElementById('auth-submit-btn').innerText = isRegMode ? 'Registrarse' : 'Ingresar';
-      document.getElementById('auth-toggle-msg').innerText = isRegMode ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?';
-      document.getElementById('auth-toggle-link').innerText = isRegMode ? 'Inicia Sesión' : 'Regístrate';
-    }
+  let imgUrl = '';
+  const file = document.getElementById('f-img').files[0];
+  if(editingId){
+    const old = data.find(x=>x.id===editingId);
+    imgUrl = old?.image_url || '';
+    if(file) imgUrl = await upload(file);
+  } else if(file) imgUrl = await upload(file);
 
-    async function handleAuth(e) {
-      e.preventDefault();
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-pass').value;
+  const payload = {
+    title: document.getElementById('f-title').value,
+    price: +document.getElementById('f-price').value,
+    category: document.getElementById('f-cat').value,
+    location: document.getElementById('f-loc').value,
+    phone: document.getElementById('f-phone').value,
+    description: document.getElementById('f-desc').value,
+    image_url: imgUrl,
+    user_id: user.id
+  };
 
-      if (isRegMode) {
-        const { error } = await getSb().auth.signUp({ email, password });
-        if (error) alert(error.message);
-        else { alert("Registro exitoso. ¡Bienvenido!"); closeModal('modal-auth'); }
-      } else {
-        const { error } = await getSb().auth.signInWithPassword({ email, password });
-        if (error) alert(error.message);
-        else closeModal('modal-auth');
-      }
-    }
+  let err;
+  if(editingId){
+    ({ error: err } = await getSb().from('listings').update(payload).eq('id', editingId));
+  } else {
+    payload.is_featured = false;
+    ({ error: err } = await getSb().from('listings').insert([payload]));
+  }
+  if(err) alert(err.message);
+  else {
+    closeModal('modal-pub');
+    editingId = null;
+    load();
+  }
+  btn.disabled = false;
+}
 
-    async function loginWithGoogle() {
-      await getSb().auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: window.location.origin }
-      });
-    }
+async function upload(file){
+  const name = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9.]/g,'_');
+  const { error } = await getSb().storage.from('anuncios').upload(name, file);
+  if(!error) return getSb().storage.from('anuncios').getPublicUrl(name).data.publicUrl;
+  return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(file); });
+}
 
-    // Borrar mi propio aviso
-    async function deleteMyListing(id) {
-      if (confirm("¿Estás seguro de eliminar este aviso?")) {
-        await getSb().from('listings').delete().eq('id', id);
-        loadListings();
-      }
-    }
+async function del(id){
+  if(!confirm('¿Eliminar este aviso?')) return;
+  await getSb().from('listings').delete().eq('id', id);
+  load();
+}
 
-    // Panel Administrador (Oculto)
-    async function adminPanel() {
-      const pass = prompt("Ingrese clave de administrador:");
-      if (pass !== "admin1234") { alert("Clave incorrecta"); return; }
+function openDetail(id){
+  activeId = id;
+  const i = data.find(x=>x.id===id);
+  if(!i) return;
+  document.getElementById('detail').innerHTML = `
+    <img src="${i.image_url||'https://via.placeholder.com/400x300'}" style="width:100%;max-height:280px;object-fit:cover;border-radius:12px;margin-bottom:12px">
+    <h2>${i.title}</h2>
+    <h3 style="color:var(--accent);margin:8px 0">$ ${Number(i.price).toLocaleString('es-AR')}</h3>
+    <p style="color:var(--muted);font-size:.9rem">${i.location} | ${i.category}</p>
+    <p style="margin:12px 0;white-space:pre-line">${i.description}</p>
+    <a href="https://wa.me/${i.phone}?text=Hola,%20vi%20tu%20anuncio%20'${encodeURIComponent(i.title)}'" target="_blank" class="btn btn-p" style="width:100%;justify-content:center">Contactar por WhatsApp</a>
+  `;
+  loadComments(id);
+  document.getElementById('modal-detail').classList.add('active');
+}
 
-      const id = prompt("Ingrese la ID del aviso para alternar DESTACADO/VIP o eliminar (escriba 'delete:ID'):");
-      if (!id) return;
+async function loadComments(id){
+  const { data: rows } = await getSb().from('ad_comments').select('*').eq('listing_id', id).order('created_at');
+  const box = document.getElementById('comments');
+  if(!rows?.length){
+    box.innerHTML = '<p style="font-size:.8rem;color:var(--muted)">No hay preguntas aún. ¡Sé el primero!</p>';
+    return;
+  }
+  box.innerHTML = rows.map(c => `<div class="comment-item"><span class="comment-author">${c.sender_name||'Anónimo'}</span><p>${c.message}</p></div>`).join('');
+}
 
-      if (id.startsWith('delete:')) {
-        const realId = id.replace('delete:', '').trim();
-        await getSb().from('listings').delete().eq('id', realId);
-        alert("Aviso eliminado");
-      } else {
-        const item = dataAll.find(i => i.id === id.trim());
-        if (item) {
-          await getSb().from('listings').update({ is_featured: !item.is_featured }).eq('id', item.id);
-          alert("Estado VIP actualizado");
-        }
-      }
-      loadListings();
-    }
-  </script>
+async function sendComment(){
+  const input = document.getElementById('comment-input');
+  const msg = input.value.trim();
+  if(!msg || !activeId) return;
+  const name = user ? user.email.split('@')[0] : 'Anónimo';
+  const { error } = await getSb().from('ad_comments').insert([{ listing_id: activeId, sender_name: name, message: msg }]);
+  if(error) alert(error.message);
+  else { input.value = ''; loadComments(activeId); }
+}
+
+function openAuth(){ document.getElementById('modal-auth').classList.add('active'); }
+function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+function toggleAuth(){
+  isRegister = !isRegister;
+  document.getElementById('auth-title').textContent = isRegister ? 'Crear Cuenta' : 'Ingresar';
+  document.getElementById('auth-btn-submit').textContent = isRegister ? 'Registrarse' : 'Ingresar';
+  document.getElementById('auth-msg').textContent = isRegister ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?';
+}
+async function doAuth(e){
+  e.preventDefault();
+  const email = document.getElementById('a-email').value;
+  const pass = document.getElementById('a-pass').value;
+  const fn = isRegister ? getSb().auth.signUp : getSb().auth.signInWithPassword;
+  const { error } = await fn({ email, password: pass });
+  if(error) alert(error.message);
+  else closeModal('modal-auth');
+}
+
+init();
+</script>
 </body>
 </html>
