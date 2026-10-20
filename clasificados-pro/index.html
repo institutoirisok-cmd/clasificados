@@ -7,8 +7,10 @@
 <!-- Google Fonts & Font Awesome -->
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<!-- Supabase JS Client -->
+<!-- Supabase JS Clients (Principal + Backup) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 <style>
 :root{--bg:#0f1117;--card:#181b24;--accent:#FFE600;--text:#f3f4f6;--muted:#9ca3af;--border:rgba(255,255,255,0.08);--r:16px;}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif;}
@@ -96,10 +98,9 @@ header{background:rgba(24,27,36,.95);backdrop-filter:blur(10px);border-bottom:1p
 
 footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:var(--muted);font-size:.85rem; margin-top:40px;}
 
-/* RESPONSIVE */
 @media(max-width: 500px) {
     .hd { flex-direction:row; justify-content:space-between; }
-    #navBtns .btn span { display: none; } /* Oculta el texto de los botones en el cel, deja iconos */
+    #navBtns .btn span { display: none; }
     #navBtns .btn { padding: 8px 12px; }
     .grid { grid-template-columns: 1fr 1fr; gap:10px; }
     .imgw { height:130px; }
@@ -147,7 +148,7 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 <div class="grid" id="grdN"></div>
 </div>
 
-<!-- CHAT FLOTANTE (ABIERTO AL INICIO) -->
+<!-- CHAT FLOTANTE -->
 <button class="chat-btn-float" onclick="toggleChat()">
     <i class="fa-solid fa-comment-dots"></i>
 </button>
@@ -159,9 +160,7 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
     </div>
     <div class="chat-m" id="chatMs"></div>
     <form class="chat-in" onsubmit="envChat(event)">
-        <!-- Caja para poner el nombre si no está logueado -->
-        <input type="text" id="chatName" placeholder="Tu nombre o Apodo..." style="display:none; font-size:0.8rem; border-color:var(--accent);">
-        
+        <input type="text" id="chatName" placeholder="Tu nombre o apodo..." style="font-size:0.8rem; border-color:var(--accent);">
         <div class="chat-row">
             <input type="text" id="chatIn" placeholder="Escribe un mensaje..." required>
             <button type="submit" class="btn btn-primary" style="padding:8px 12px;"><i class="fa-solid fa-paper-plane"></i></button>
@@ -221,10 +220,20 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 </footer>
 
 <script>
-// CONFIGURACION (TU WHATSAPP PARA RECIBIR PAGOS)
-const MI_WHATSAPP_ADMIN = "5492644118460"; // Cambia esto por tu numero real con codigo de pais (ej. 549 para arg)
+const MI_WHATSAPP_ADMIN = "5492644118460";
+const URL_SB='https://rhozvkoogswzbdkpeimz.supabase.co';
+const KEY_SB='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
 
-// FUNCIONES BÁSICAS NUNCA FALLAN
+// CONECTOR CON REINTENTO AUTOMATICO
+function getSb() {
+    if (window._sbClient) return window._sbClient;
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+        window._sbClient = window.supabase.createClient(URL_SB, KEY_SB);
+        return window._sbClient;
+    }
+    return null;
+}
+
 function abrirMod(id){ var el = document.getElementById(id); if(el) el.classList.add('active'); }
 function cerrar(id){ var el = document.getElementById(id); if(el) el.classList.remove('active'); }
 
@@ -240,24 +249,23 @@ function abrirAuth(r){
 function toggleAuth(){ abrirAuth(!isRegMode); }
 function toggleChat() { var p = document.getElementById('chatPanel'); if(p) p.classList.toggle('minimized'); }
 
-// SUPABASE CLIENT
-const URL='https://rhozvkoogswzbdkpeimz.supabase.co';
-const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
-var sb = null;
-if (typeof supabase !== 'undefined') sb = supabase.createClient(URL, KEY);
-
 var dataAll=[], cat='todas', user=null, favs=JSON.parse(localStorage.getItem('favs')||'[]');
 
 window.addEventListener('load', function(){
-    if(!sb) return;
+    setTimeout(initApp, 300);
+});
+
+function initApp() {
+    var sb = getSb();
+    if(!sb) return setTimeout(initApp, 500); // reintenta si tarda en cargar
     checkUser();
     loadAds();
     loadChat();
     subsChat();
-});
+}
 
 async function checkUser(){
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return;
     try {
         const{data}=await sb.auth.getSession();
         user=data?.session?.user||null;
@@ -269,10 +277,11 @@ async function checkUser(){
 function configChatName() {
     const nameInput = document.getElementById('chatName');
     if(!nameInput) return;
-    if(user) {
-        nameInput.style.display = 'none'; // Logueado no necesita poner nombre
+    if(user && user.email) {
+        nameInput.value = user.email.split('@')[0];
+        nameInput.style.display = 'none';
     } else {
-        nameInput.style.display = 'block'; // No logueado SI debe poner nombre
+        nameInput.style.display = 'block';
     }
 }
 
@@ -294,7 +303,7 @@ function renderNav(){
 
 async function auth(e){
     e.preventDefault();
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return alert("Cargando conexión...");
     const em=document.getElementById('aEm').value.trim(), pa=document.getElementById('aPass').value;
     const btn=document.getElementById('btnAuth');
     btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i>';
@@ -314,24 +323,27 @@ async function auth(e){
 }
 
 async function loginGoogle(){
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return alert("Cargando conector...");
     try {
-        const{error}=await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin } });
-        if(error) throw error;
+        const{error}=await sb.auth.signInWithOAuth({ 
+            provider:'google', 
+            options:{ redirectTo: window.location.origin } 
+        });
+        if(error) alert('Configuración Google: ' + error.message);
     } catch(err) { alert('Error: '+err.message); }
 }
 
 async function logout(){
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return;
     await sb.auth.signOut();
     user=null;
     renderNav();
     configChatName();
 }
 
-// CARGAR Y PINTAR ANUNCIOS
+// ANUNCIOS
 async function loadAds(){
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return;
     try{
         const{data,error}=await sb.from('listings').select('*').order('created_at',{ascending:false});
         if(!error){ dataAll=data||[]; draw(); }
@@ -376,7 +388,6 @@ function showD(i){
     abrirMod('modDet');
 }
 
-// PANEL: MIS ANUNCIOS
 function abrirMisAnuncios() {
     if(!user) return;
     const misAds = dataAll.filter(a => a.user_id === user.id);
@@ -402,21 +413,23 @@ function abrirMisAnuncios() {
     abrirMod('modDet');
 }
 
-// FOTO Y PUBLICAR
 async function procesarImagen(file){
     if(!file) return 'https://via.placeholder.com/300x200?text=Sin+Imagen';
+    var sb = getSb();
     try{
-        const ext=file.name.split('.').pop();
-        const p='foto_'+Date.now()+'.'+ext;
-        const{data,error}=await sb.storage.from('anuncios').upload(p,file);
-        if(!error&&data) return sb.storage.from('anuncios').getPublicUrl(p).data.publicUrl;
+        if(sb) {
+            const ext=file.name.split('.').pop();
+            const p='foto_'+Date.now()+'.'+ext;
+            const{data,error}=await sb.storage.from('anuncios').upload(p,file);
+            if(!error&&data) return sb.storage.from('anuncios').getPublicUrl(p).data.publicUrl;
+        }
     }catch(e){}
     return new Promise(r=>{ const r2=new FileReader(); r2.onloadend=()=>r(r2.result); r2.readAsDataURL(file); });
 }
 
 async function guardar(e){
     e.preventDefault();
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return alert("Cargando conexión...");
     const btn=document.getElementById('btnSav');
     btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Publicando...';
     try{
@@ -443,9 +456,9 @@ async function guardar(e){
 
 function esc(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// CHAT EN VIVO CON NOMBRE CUSTOM
+// CHAT EN VIVO
 async function loadChat(){
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return;
     try{
         const{data}=await sb.from('chat_messages').select('*').order('created_at',{ascending:false}).limit(25);
         const box=document.getElementById('chatMs');
@@ -456,7 +469,7 @@ async function loadChat(){
 }
 
 function subsChat(){
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return;
     try{
         sb.channel('chat_live').on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},p=>{
             bubble(p.new);
@@ -477,7 +490,7 @@ function bubble(m){
 
 async function envChat(e){
     e.preventDefault();
-    if(!sb) return alert("Error conectando al chat");
+    var sb = getSb(); if(!sb) return alert("Esperando conexión al servidor...");
     
     const inEl=document.getElementById('chatIn');
     const nameEl=document.getElementById('chatName');
@@ -485,7 +498,6 @@ async function envChat(e){
     const v = inEl.value.trim();
     if(!v) return;
     
-    // Si esta logueado usa email, si no, usa lo que puso en la caja, si está vacía pone "Anónimo"
     let senderName = "Anónimo";
     if (user && user.email) {
         senderName = user.email.split('@')[0];
@@ -506,7 +518,7 @@ async function envChat(e){
     }
 }
 
-// PANEL ADMIN (CON AUTORIZAR DESTACADOS)
+// PANEL ADMIN
 async function admin(){
     const p=prompt('Clave de Admin:');
     if(p==='admin1234'){
@@ -534,18 +546,18 @@ function renderAdminPanel() {
 }
 
 async function toggleDestacado(id, currentState) {
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return;
     try {
         await sb.from('listings').update({ is_featured: !currentState }).eq('id', id);
-        await loadAds(); // recarga la web por detras
-        renderAdminPanel(); // recarga los botones del panel admin
+        await loadAds();
+        renderAdminPanel();
     } catch(err) {
-        alert("Error al actualizar: " + err.message);
+        alert("Error: " + err.message);
     }
 }
 
 async function delAd(id){
-    if(!sb) return;
+    var sb = getSb(); if(!sb) return;
     if(confirm('¿Seguro que deseas eliminar este anuncio permanentemente?')){
         await sb.from('listings').delete().eq('id',id);
         alert('Anuncio borrado correctamente');
