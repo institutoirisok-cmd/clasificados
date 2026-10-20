@@ -14,55 +14,46 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif;}
 body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 
-/* CARTEL APP INSTALAR */
-.pwa-banner {
-    position: fixed; top: 0; left: 0; right: 0;
-    background: #1e2230; border-bottom: 2px solid var(--accent);
-    padding: 10px 20px; z-index: 1001;
-    display: none; align-items: center; justify-content: space-between;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
-
 /* HEADER */
 header{background:rgba(24,27,36,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:12px 20px;}
 .hd{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;display:flex;align-items:center;gap:6px;}
 .logo span{background:var(--accent);color:#000;padding:2px 6px;border-radius:6px;font-size:1rem;}
-.btn{padding:8px 16px;border-radius:10px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;}
+.btn{padding:8px 16px;border-radius:10px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;}
 .btn-primary{background:var(--accent);color:#000;}
 .btn-secondary{background:rgba(255,255,255,.12);color:#fff;}
 .btn-danger{background:#ef4444;color:#fff;}
-#navBtns{display:flex;gap:10px;align-items:center;}
+#navBtns{display:flex;gap:8px;align-items:center;}
 
 /* HERO Y BUSCADOR */
 .hero{padding:30px 20px;text-align:center;background:radial-gradient(circle at top,rgba(255,230,0,.08)0%,transparent 70%);}
-.hero h1{font-size:1.8rem;font-weight:800;margin-bottom:10px;}
-.search-box{max-width:500px;margin:0 auto;display:flex;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:6px;}
+.hero h1{font-size:2rem;font-weight:800;margin-bottom:10px;}
+.search-box{max-width:550px;margin:0 auto;display:flex;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:6px;}
 .search-box input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:10px;font-size:1rem;}
 
 /* CATEGORIAS */
 .cats{display:flex;gap:10px;overflow-x:auto;padding:15px 20px;max-width:1200px;margin:0 auto;scrollbar-width:none;}
 .cats::-webkit-scrollbar{display:none;}
-.cat{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.85rem;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;}
+.cat{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.85rem;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:0.2s;}
 .cat.active,.cat:hover{background:var(--accent);color:#000;font-weight:600;border-color:var(--accent);}
 
 /* MAIN */
 .main{max-width:1200px;margin:20px auto;padding:0 20px;}
-.tit{font-size:1.2rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-bottom:30px;}
+.tit{font-size:1.3rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-bottom:30px;}
 
 /* TARJETAS ANUNCIOS */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:.25s;cursor:pointer;display:flex;flex-direction:column;position:relative;}
-.card:hover{transform:translateY(-4px);border-color:rgba(255,230,0,.4);}
-.card.f{border:2px solid var(--accent);}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,230,0,.4);box-shadow:0 10px 20px rgba(0,0,0,0.4);}
+.card.f{border:2px solid var(--accent); background: linear-gradient(180deg, #181b24 0%, #2a2c15 100%);}
 .imgw{width:100%;height:180px;background:#252836;position:relative;}
 .imgw img{width:100%;height:100%;object-fit:cover;}
-.badge{position:absolute;top:10px;left:10px;background:var(--accent);color:#000;font-size:.7rem;font-weight:800;padding:4px 8px;border-radius:6px;}
-.btn-fav{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.badge{position:absolute;top:10px;left:10px;background:var(--accent);color:#000;font-size:.7rem;font-weight:800;padding:4px 8px;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,0.5);}
+.btn-fav{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.2s;}
 .btn-fav.active{color:#ef4444;}
 .body{padding:14px;display:flex;flex-direction:column;flex:1;}
-.pri{font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:6px;}
-.t{font-size:.95rem;font-weight:600;margin-bottom:8px;line-clamp:2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.pri{font-size:1.3rem;font-weight:800;color:var(--accent);margin-bottom:6px;}
+.t{font-size:1rem;font-weight:600;margin-bottom:8px;line-clamp:2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .meta{margin-top:auto;font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;}
 
 /* CHAT FLOTANTE */
@@ -75,69 +66,56 @@ header{background:rgba(24,27,36,.95);backdrop-filter:blur(10px);border-bottom:1p
 .chat-btn-float:hover { transform: scale(1.05); }
 
 .chat-panel {
-    position: fixed; bottom: 90px; right: 20px; width: 340px; height: 480px;
+    position: fixed; bottom: 90px; right: 20px; width: 340px; height: 500px;
     max-height: calc(100vh - 120px); background: var(--card); border: 1px solid var(--border);
     border-radius: 16px; display: flex; flex-direction: column; z-index: 999;
     box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden;
 }
 .chat-panel.minimized { display: none !important; }
+@media(max-width: 420px) { .chat-panel { width: calc(100% - 40px); right: 20px; bottom: 85px; } }
 
-@media(max-width: 420px) {
-    .chat-panel { width: calc(100% - 40px); right: 20px; bottom: 85px; }
-}
-
-.chat-h { padding:12px 16px; background:#232734; font-weight:700; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); }
+.chat-h { padding:14px; background:#232734; font-weight:700; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); }
 .close-chat { background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer; line-height:1; }
 .chat-m { flex:1; padding:14px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
 .b { background:#2a2f40; padding:8px 12px; border-radius:10px; font-size:.85rem; max-width:85%; word-wrap:break-word; }
 .b.mine { background:var(--accent); color:#000; align-self:flex-end; }
-.chat-in { padding:12px; border-top:1px solid var(--border); display:flex; gap:8px; background:#181b24; }
-.chat-in input { flex:1; background:#2a2f40; border:1px solid var(--border); border-radius:8px; color:#fff; padding:8px 12px; outline:none; font-size:.9rem; }
+.chat-in { padding:10px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; background:#181b24; }
+.chat-in input { background:#2a2f40; border:1px solid var(--border); border-radius:8px; color:#fff; padding:8px 12px; outline:none; font-size:.9rem; }
+.chat-row { display:flex; gap:8px; }
+.chat-row input { flex:1; }
 
 /* MODALES */
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(5px);z-index:2000;align-items:center;justify-content:center;padding:15px;}
 .modal.active{display:flex !important;}
-.mc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:480px;padding:22px;position:relative;max-height:90vh;overflow-y:auto;}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:550px;padding:24px;position:relative;max-height:90vh;overflow-y:auto;}
 .close{position:absolute;top:15px;right:15px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;}
 .fg{margin-bottom:14px;}
 .fg label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;}
 .fc{width:100%;padding:10px 14px;background:#2a2f40;border:1px solid var(--border);border-radius:8px;color:#fff;outline:none;font-size:.9rem;}
-.google-btn{width:100%;margin-bottom:15px;background:#fff;color:#000;font-weight:700;border:1px solid #ccc;padding:12px;font-size:.9rem;}
+.google-btn{width:100%;margin-bottom:15px;background:#fff;color:#000;font-weight:700;border:1px solid #ccc;padding:12px;font-size:.9rem; cursor:pointer;}
 
 footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:var(--muted);font-size:.85rem; margin-top:40px;}
 
+/* RESPONSIVE */
 @media(max-width: 500px) {
     .hd { flex-direction:row; justify-content:space-between; }
+    #navBtns .btn span { display: none; } /* Oculta el texto de los botones en el cel, deja iconos */
+    #navBtns .btn { padding: 8px 12px; }
     .grid { grid-template-columns: 1fr 1fr; gap:10px; }
-    .imgw { height:120px; }
-    .pri { font-size: 1.1rem; }
+    .imgw { height:130px; }
+    .pri { font-size: 1.15rem; }
     .t { font-size: .85rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- CARTEL APP -->
-<div id="pwaBanner" class="pwa-banner">
-    <div style="display:flex; align-items:center; gap:10px;">
-        <i class="fa-solid fa-mobile-screen-button" style="font-size:1.4rem; color:var(--accent);"></i>
-        <div>
-            <strong style="font-size:0.9rem; display:block;">¡Instalar ElClasificado.ok!</strong>
-            <span style="font-size:0.75rem; color:var(--muted);">Acceso directo en 1 clic</span>
-        </div>
-    </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-        <button onclick="instalarPWA()" class="btn btn-primary" style="padding:6px 12px; font-size:0.8rem;">Instalar</button>
-        <button onclick="cerrarPWA()" class="close-chat" style="font-size:1.2rem;">&times;</button>
-    </div>
-</div>
-
 <header>
 <div class="hd">
 <a href="#" class="logo"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> ElClasificado<span>.ok</span></a>
 <div id="navBtns">
-    <button class="btn btn-secondary" onclick="abrirAuth(false)">Entrar</button>
-    <button class="btn btn-primary" onclick="abrirAuth(true)">Registro</button>
+    <button class="btn btn-secondary" onclick="abrirAuth(false)"><i class="fa-solid fa-user"></i> <span>Entrar</span></button>
+    <button class="btn btn-primary" onclick="abrirAuth(true)"><i class="fa-solid fa-user-plus"></i> <span>Registro</span></button>
 </div>
 </div>
 </header>
@@ -162,27 +140,32 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 
 <div class="main">
 <div id="secDest">
-<div class="tit"><i class="fa-solid fa-star" style="color:var(--accent)"></i> Destacados</div>
+<div class="tit"><i class="fa-solid fa-star" style="color:var(--accent)"></i> Anuncios Destacados VIP</div>
 <div class="grid" id="grdD"></div>
 </div>
-<div class="tit" style="margin-top:20px;"><i class="fa-solid fa-list"></i> Anuncios Recientes</div>
+<div class="tit" style="margin-top:40px;"><i class="fa-solid fa-list"></i> Anuncios Recientes</div>
 <div class="grid" id="grdN"></div>
 </div>
 
-<!-- CHAT FLOTANTE -->
+<!-- CHAT FLOTANTE (ABIERTO AL INICIO) -->
 <button class="chat-btn-float" onclick="toggleChat()">
     <i class="fa-solid fa-comment-dots"></i>
 </button>
 
 <div class="chat-panel" id="chatPanel">
     <div class="chat-h">
-        <span><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.6rem; margin-right:5px;"></i> Chat Global en Vivo</span>
+        <span><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.6rem; margin-right:5px;"></i> Chat en Vivo</span>
         <button class="close-chat" onclick="toggleChat()">&times;</button>
     </div>
     <div class="chat-m" id="chatMs"></div>
     <form class="chat-in" onsubmit="envChat(event)">
-        <input id="chatIn" placeholder="Escribe un mensaje..." required>
-        <button type="submit" class="btn btn-primary" style="padding:8px 12px;"><i class="fa-solid fa-paper-plane"></i></button>
+        <!-- Caja para poner el nombre si no está logueado -->
+        <input type="text" id="chatName" placeholder="Tu nombre o Apodo..." style="display:none; font-size:0.8rem; border-color:var(--accent);">
+        
+        <div class="chat-row">
+            <input type="text" id="chatIn" placeholder="Escribe un mensaje..." required>
+            <button type="submit" class="btn btn-primary" style="padding:8px 12px;"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
     </form>
 </div>
 
@@ -210,8 +193,8 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 <button class="close" onclick="cerrar('modAuth')">&times;</button>
 <h2 id="authTit" style="margin-bottom:18px;text-align:center;">Ingresar</h2>
 
-<button class="btn google-btn" type="button" onclick="loginGoogle()">
-<img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" height="20" alt="G"> Continuar con Google
+<button class="google-btn" type="button" onclick="loginGoogle()">
+<img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" height="20" alt="G" style="vertical-align:middle; margin-right:8px;"> Continuar con Google
 </button>
 <div style="text-align:center;color:var(--muted);margin:10px 0;font-size:.8rem;">— O CON EMAIL —</div>
 
@@ -224,9 +207,9 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 </div>
 </div>
 
-<!-- MODAL DETALLE -->
+<!-- MODAL DETALLE / MIS ANUNCIOS / ADMIN -->
 <div class="modal" id="modDet">
-<div class="mc" style="max-width:500px;">
+<div class="mc" style="max-width:550px;">
 <button class="close" onclick="cerrar('modDet')">&times;</button>
 <div id="detCont"></div>
 </div>
@@ -238,64 +221,30 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 </footer>
 
 <script>
-// FUNCIONES DE INTERFAZ PRIMARIAS (NUNCA FALLAN)
-function abrirMod(id){
-    var el = document.getElementById(id);
-    if(el) el.classList.add('active');
-}
-function cerrar(id){
-    var el = document.getElementById(id);
-    if(el) el.classList.remove('active');
-}
+// CONFIGURACION (TU WHATSAPP PARA RECIBIR PAGOS)
+const MI_WHATSAPP_ADMIN = "5492644118460"; // Cambia esto por tu numero real con codigo de pais (ej. 549 para arg)
+
+// FUNCIONES BÁSICAS NUNCA FALLAN
+function abrirMod(id){ var el = document.getElementById(id); if(el) el.classList.add('active'); }
+function cerrar(id){ var el = document.getElementById(id); if(el) el.classList.remove('active'); }
 
 var isRegMode = false;
 function abrirAuth(r){
     isRegMode = r;
-    var tit = document.getElementById('authTit');
-    var btn = document.getElementById('btnAuth');
-    var txt = document.getElementById('authTxt');
-    var lnk = document.getElementById('authLnk');
-    if(tit) tit.innerText = r ? 'Crear Cuenta' : 'Iniciar Sesión';
-    if(btn) btn.innerText = r ? 'Registrarse' : 'Entrar';
-    if(txt) txt.innerText = r ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?';
-    if(lnk) lnk.innerText = r ? 'Inicia Sesión' : 'Regístrate';
+    document.getElementById('authTit').innerText = r ? 'Crear Cuenta' : 'Iniciar Sesión';
+    document.getElementById('btnAuth').innerText = r ? 'Registrarse' : 'Entrar';
+    document.getElementById('authTxt').innerText = r ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?';
+    document.getElementById('authLnk').innerText = r ? 'Inicia Sesión' : 'Regístrate';
     abrirMod('modAuth');
 }
-
 function toggleAuth(){ abrirAuth(!isRegMode); }
+function toggleChat() { var p = document.getElementById('chatPanel'); if(p) p.classList.toggle('minimized'); }
 
-function toggleChat() {
-    var p = document.getElementById('chatPanel');
-    if(p) p.classList.toggle('minimized');
-}
-
-// PWA INSTALAR
-var deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    var b = document.getElementById('pwaBanner');
-    if(b) b.style.display = 'flex';
-});
-
-function instalarPWA() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function(choice) {
-            if (choice.outcome === 'accepted') cerrarPWA();
-            deferredPrompt = null;
-        });
-    }
-}
-function cerrarPWA() { var b=document.getElementById('pwaBanner'); if(b) b.style.display = 'none'; }
-
-// SUPABASE CLIENT & BACKEND LOGIC
+// SUPABASE CLIENT
 const URL='https://rhozvkoogswzbdkpeimz.supabase.co';
 const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
 var sb = null;
-if (typeof supabase !== 'undefined') {
-    sb = supabase.createClient(URL, KEY);
-}
+if (typeof supabase !== 'undefined') sb = supabase.createClient(URL, KEY);
 
 var dataAll=[], cat='todas', user=null, favs=JSON.parse(localStorage.getItem('favs')||'[]');
 
@@ -313,61 +262,63 @@ async function checkUser(){
         const{data}=await sb.auth.getSession();
         user=data?.session?.user||null;
         renderNav();
+        configChatName();
     } catch(e) {}
+}
+
+function configChatName() {
+    const nameInput = document.getElementById('chatName');
+    if(!nameInput) return;
+    if(user) {
+        nameInput.style.display = 'none'; // Logueado no necesita poner nombre
+    } else {
+        nameInput.style.display = 'block'; // No logueado SI debe poner nombre
+    }
 }
 
 function renderNav(){
     const n=document.getElementById('navBtns'); if(!n) return;
     if(user){
-        const userEmail = user.email ? user.email.split('@')[0] : 'Usuario';
-        n.innerHTML='<button class="btn btn-primary" onclick="abrirMod(\'modPub\')"><i class="fa-solid fa-plus"></i> Publicar</button><button class="btn btn-secondary" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Salir ('+userEmail+')</button>';
+        n.innerHTML=`
+            <button class="btn btn-primary" onclick="abrirMod('modPub')"><i class="fa-solid fa-plus"></i> <span>Publicar</span></button>
+            <button class="btn btn-secondary" onclick="abrirMisAnuncios()"><i class="fa-solid fa-star"></i> <span>Mis Avisos</span></button>
+            <button class="btn btn-danger" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+        `;
     } else {
-        n.innerHTML='<button class="btn btn-secondary" onclick="abrirAuth(false)">Entrar</button><button class="btn btn-primary" onclick="abrirAuth(true)">Registro</button>';
+        n.innerHTML=`
+            <button class="btn btn-secondary" onclick="abrirAuth(false)"><i class="fa-solid fa-user"></i> <span>Entrar</span></button>
+            <button class="btn btn-primary" onclick="abrirAuth(true)"><i class="fa-solid fa-user-plus"></i> <span>Registro</span></button>
+        `;
     }
 }
 
 async function auth(e){
     e.preventDefault();
-    if(!sb) return alert("Cargando servidor, intente de nuevo en un segundo.");
-    const em=document.getElementById('aEm').value.trim();
-    const pa=document.getElementById('aPass').value;
+    if(!sb) return;
+    const em=document.getElementById('aEm').value.trim(), pa=document.getElementById('aPass').value;
     const btn=document.getElementById('btnAuth');
-    btn.disabled=true;
-    btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Procesando...';
-
+    btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i>';
     try {
         if(isRegMode) {
-            const { data, error } = await sb.auth.signUp({ email: em, password: pa });
+            const { error } = await sb.auth.signUp({ email: em, password: pa });
             if(error) throw error;
-            alert("¡Cuenta registrada! Ya estás registrado.");
-            cerrar('modAuth');
-            await checkUser();
+            alert("¡Cuenta registrada con éxito!");
+            cerrar('modAuth'); await checkUser();
         } else {
-            const { data, error } = await sb.auth.signInWithPassword({ email: em, password: pa });
+            const { error } = await sb.auth.signInWithPassword({ email: em, password: pa });
             if(error) throw error;
-            alert("¡Bienvenido!");
-            cerrar('modAuth');
-            await checkUser();
+            cerrar('modAuth'); await checkUser();
         }
-    } catch(err) {
-        alert("Atención: " + err.message);
-    } finally {
-        btn.disabled=false;
-        btn.innerText = isRegMode ? 'Registrarse' : 'Entrar';
-    }
+    } catch(err) { alert("Error: " + err.message); } 
+    finally { btn.disabled=false; btn.innerText = isRegMode ? 'Registrarse' : 'Entrar'; }
 }
 
 async function loginGoogle(){
     if(!sb) return;
     try {
-        const{error}=await sb.auth.signInWithOAuth({
-            provider:'google',
-            options:{ redirectTo: window.location.origin }
-        });
+        const{error}=await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin } });
         if(error) throw error;
-    } catch(err) {
-        alert('Error Google: '+err.message);
-    }
+    } catch(err) { alert('Error: '+err.message); }
 }
 
 async function logout(){
@@ -375,9 +326,10 @@ async function logout(){
     await sb.auth.signOut();
     user=null;
     renderNav();
+    configChatName();
 }
 
-// ANUNCIOS
+// CARGAR Y PINTAR ANUNCIOS
 async function loadAds(){
     if(!sb) return;
     try{
@@ -395,18 +347,20 @@ function draw(){
         const mS=x.title.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase());
         return mCat&&mS;
     });
-    const des=f.filter(x=>x.is_featured),norm=f.filter(x=>!x.is_featured);
-    document.getElementById('secDest').style.display=des.length?'block':'none';
+    const des=f.filter(x=>x.is_featured), norm=f.filter(x=>!x.is_featured);
+    
+    document.getElementById('secDest').style.display = des.length ? 'block' : 'none';
     des.forEach(x=>d.appendChild(card(x)));
     norm.forEach(x=>n.appendChild(card(x)));
-    if(f.length===0) n.innerHTML='<p style="color:var(--muted);grid-column:1/-1;">No hay anuncios todavía. ¡Sé el primero en publicar!</p>';
+    
+    if(f.length===0) n.innerHTML='<p style="color:var(--muted);grid-column:1/-1;">No hay anuncios todavía.</p>';
 }
 
 function card(i){
     const c=document.createElement('div'); c.className='card '+(i.is_featured?'f':'');
     const img=i.image_url||'https://via.placeholder.com/300x200?text=Sin+Imagen';
     const isF=favs.includes(i.id);
-    c.innerHTML='<div class="imgw"><img src="'+img+'">'+(i.is_featured?'<span class="badge"><i class="fa-solid fa-star"></i> DESTACADO</span>':'')+'<button class="btn-fav '+(isF?'active':'')+'" onclick="fav(event,\''+i.id+'\')"><i class="fa-solid fa-heart"></i></button></div><div class="body"><div class="pri">$'+Number(i.price||0).toLocaleString()+'</div><div class="t">'+esc(i.title)+'</div><div class="meta"><span><i class="fa-solid fa-location-dot"></i> '+esc(i.location||'N/A')+'</span></div></div>';
+    c.innerHTML='<div class="imgw"><img src="'+img+'">'+(i.is_featured?'<span class="badge"><i class="fa-solid fa-star"></i> VIP</span>':'')+'<button class="btn-fav '+(isF?'active':'')+'" onclick="fav(event,\''+i.id+'\')"><i class="fa-solid fa-heart"></i></button></div><div class="body"><div class="pri">$'+Number(i.price||0).toLocaleString()+'</div><div class="t">'+esc(i.title)+'</div><div class="meta"><span><i class="fa-solid fa-location-dot"></i> '+esc(i.location||'N/A')+'</span></div></div>';
     c.onclick=e=>{ if(!e.target.closest('.btn-fav')) showD(i); };
     return c;
 }
@@ -417,24 +371,49 @@ function filtrar(){ draw(); }
 
 function showD(i){
     const ph=(i.phone||'').replace(/\D/g,'');
-    const wa='https://wa.me/'+ph+'?text=Hola!%20Vi%20tu%20anuncio%20'+encodeURIComponent(i.title);
-    document.getElementById('detCont').innerHTML='<img src="'+(i.image_url||'https://via.placeholder.com/500x300')+'" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-bottom:15px;"><h2 style="font-size:1.2rem;">'+esc(i.title)+'</h2><h3 style="color:var(--accent);font-size:1.5rem;margin:8px 0;">$'+Number(i.price||0).toLocaleString()+'</h3><p style="color:var(--muted);margin-bottom:12px;font-size:0.9rem;"><i class="fa-solid fa-location-dot"></i> '+esc(i.location||'N/A')+'</p><div style="background:#2a2f40;padding:12px;border-radius:8px;margin-bottom:15px;font-size:0.9rem;"><p style="white-space:pre-wrap;">'+esc(i.description||'Sin descripción.')+'</p></div><a href="'+wa+'" target="_blank" class="btn btn-primary" style="width:100%;background:#22c55e;color:#fff;"><i class="fa-brands fa-whatsapp"></i> Enviar WhatsApp</a>';
+    const wa='https://wa.me/'+ph+'?text=Hola!%20Vi%20tu%20anuncio%20"'+encodeURIComponent(i.title)+'"%20en%20ElClasificado.ok';
+    document.getElementById('detCont').innerHTML='<img src="'+(i.image_url||'https://via.placeholder.com/500x300')+'" style="width:100%;max-height:250px;object-fit:cover;border-radius:12px;margin-bottom:15px;"><h2 style="font-size:1.3rem;">'+esc(i.title)+'</h2><h3 style="color:var(--accent);font-size:1.6rem;margin:8px 0;">$'+Number(i.price||0).toLocaleString()+'</h3><p style="color:var(--muted);margin-bottom:12px;font-size:0.9rem;"><i class="fa-solid fa-location-dot"></i> '+esc(i.location||'N/A')+'</p><div style="background:#2a2f40;padding:12px;border-radius:8px;margin-bottom:15px;font-size:0.95rem;line-height:1.4;"><p style="white-space:pre-wrap;">'+esc(i.description||'Sin descripción detallada.')+'</p></div><a href="'+wa+'" target="_blank" class="btn btn-primary" style="width:100%;background:#22c55e;color:#fff;font-size:1.1rem;padding:12px;"><i class="fa-brands fa-whatsapp" style="font-size:1.3rem;"></i> Enviar WhatsApp al Vendedor</a>';
     abrirMod('modDet');
 }
 
-// SUBIR FOTO FAILSAFE
+// PANEL: MIS ANUNCIOS
+function abrirMisAnuncios() {
+    if(!user) return;
+    const misAds = dataAll.filter(a => a.user_id === user.id);
+    let h = '<h2 style="margin-bottom:15px;"><i class="fa-solid fa-user"></i> Mis Avisos Publicados</h2>';
+    if(misAds.length === 0) h += '<p style="color:var(--muted);">Aún no tienes publicaciones.</p>';
+    
+    misAds.forEach(i => {
+        const msgAdmin = `Hola, quiero PAGAR para DESTACAR mi anuncio en la web. Título: ${i.title}`;
+        const waAdmin = `https://wa.me/${MI_WHATSAPP_ADMIN}?text=${encodeURIComponent(msgAdmin)}`;
+        
+        h += `<div style="background:#2a2f40; border:1px solid var(--border); padding:12px; margin-bottom:10px; border-radius:8px;">
+                <strong style="display:block; margin-bottom:8px; font-size:1rem;">${esc(i.title)}</strong>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <button onclick="delAd('${i.id}')" class="btn btn-danger" style="padding:6px 10px; font-size:.8rem;"><i class="fa-solid fa-trash"></i> Borrar</button>
+                    ${i.is_featured 
+                        ? `<span class="badge" style="position:static; display:inline-block;"><i class="fa-solid fa-star"></i> Eres Destacado</span>`
+                        : `<a href="${waAdmin}" target="_blank" class="btn btn-primary" style="padding:6px 10px; font-size:.8rem;"><i class="fa-solid fa-star"></i> Destacar Anuncio (Pagar)</a>`
+                    }
+                </div>
+              </div>`;
+    });
+    document.getElementById('detCont').innerHTML = h;
+    abrirMod('modDet');
+}
+
+// FOTO Y PUBLICAR
 async function procesarImagen(file){
     if(!file) return 'https://via.placeholder.com/300x200?text=Sin+Imagen';
     try{
         const ext=file.name.split('.').pop();
         const p='foto_'+Date.now()+'.'+ext;
         const{data,error}=await sb.storage.from('anuncios').upload(p,file);
-        if(!error&&data){ return sb.storage.from('anuncios').getPublicUrl(p).data.publicUrl; }
+        if(!error&&data) return sb.storage.from('anuncios').getPublicUrl(p).data.publicUrl;
     }catch(e){}
     return new Promise(r=>{ const r2=new FileReader(); r2.onloadend=()=>r(r2.result); r2.readAsDataURL(file); });
 }
 
-// PUBLICAR
 async function guardar(e){
     e.preventDefault();
     if(!sb) return;
@@ -464,14 +443,13 @@ async function guardar(e){
 
 function esc(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// CHAT EN VIVO
+// CHAT EN VIVO CON NOMBRE CUSTOM
 async function loadChat(){
     if(!sb) return;
     try{
         const{data}=await sb.from('chat_messages').select('*').order('created_at',{ascending:false}).limit(25);
         const box=document.getElementById('chatMs');
-        if(!box) return;
-        box.innerHTML='';
+        if(!box) return; box.innerHTML='';
         (data||[]).reverse().forEach(x=>bubble(x));
         box.scrollTop=box.scrollHeight;
     }catch(e){}
@@ -493,41 +471,82 @@ function bubble(m){
     const d=document.createElement('div');
     const mine=user&&user.id===m.user_id;
     d.className='b '+(mine?'mine':'');
-    d.innerHTML='<div style="font-weight:700;font-size:.7rem;margin-bottom:3px;opacity:.7;">'+esc(m.sender_name||'Anónimo')+'</div><div>'+esc(m.message)+'</div>';
+    d.innerHTML='<div style="font-weight:800;font-size:.7rem;margin-bottom:3px;opacity:.7;">'+esc(m.sender_name||'Anónimo')+'</div><div>'+esc(m.message)+'</div>';
     box.appendChild(d);
 }
 
 async function envChat(e){
     e.preventDefault();
-    if(!sb) return;
+    if(!sb) return alert("Error conectando al chat");
+    
     const inEl=document.getElementById('chatIn');
-    const v=inEl.value.trim();
+    const nameEl=document.getElementById('chatName');
+    
+    const v = inEl.value.trim();
     if(!v) return;
-    const senderName = user ? (user.email ? user.email.split('@')[0] : 'Usuario') : 'Visita';
-    await sb.from('chat_messages').insert([{
-        sender_name: senderName,
-        message: v,
-        user_id: user ? user.id : null
-    }]);
-    inEl.value='';
+    
+    // Si esta logueado usa email, si no, usa lo que puso en la caja, si está vacía pone "Anónimo"
+    let senderName = "Anónimo";
+    if (user && user.email) {
+        senderName = user.email.split('@')[0];
+    } else if (nameEl && nameEl.value.trim()) {
+        senderName = nameEl.value.trim();
+    }
+
+    try {
+        const {error} = await sb.from('chat_messages').insert([{
+            sender_name: senderName,
+            message: v,
+            user_id: user ? user.id : null
+        }]);
+        if(error) throw error;
+        inEl.value='';
+    } catch (err) {
+        alert("No se pudo enviar: " + err.message);
+    }
 }
 
-// PANEL ADMIN
+// PANEL ADMIN (CON AUTORIZAR DESTACADOS)
 async function admin(){
     const p=prompt('Clave de Admin:');
     if(p==='admin1234'){
-        let h='<h2 style="margin-bottom:15px;font-size:1.2rem;">Borrar Anuncios</h2>';
-        dataAll.forEach(i=>{
-            h+='<div style="display:flex;justify-content:space-between;align-items:center;background:#2a2f40;padding:10px;margin-bottom:8px;border-radius:6px;"><span style="font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%;">'+esc(i.title)+'</span><button onclick="delAd(\''+i.id+'\')" class="btn btn-danger" style="padding:4px 8px;font-size:.8rem;">Borrar</button></div>'
-        });
-        document.getElementById('detCont').innerHTML=h;
-        abrirMod('modDet');
+        renderAdminPanel();
     } else if(p) alert('Clave Incorrecta');
+}
+
+function renderAdminPanel() {
+    let h='<h2 style="margin-bottom:15px;font-size:1.3rem;"><i class="fa-solid fa-lock"></i> Panel Administrador</h2>';
+    h += '<p style="color:var(--muted); font-size:0.85rem; margin-bottom:15px;">Gestiona y autoriza los anuncios VIP.</p>';
+    
+    dataAll.forEach(i=>{
+        h+=`<div style="display:flex; flex-direction:column; gap:8px; background:#2a2f40; border:1px solid var(--border); padding:12px; margin-bottom:10px; border-radius:8px;">
+            <span style="font-size:.95rem; font-weight:600;">${esc(i.title)}</span>
+            <div style="display:flex; gap:8px;">
+                <button onclick="toggleDestacado('${i.id}', ${i.is_featured})" class="btn ${i.is_featured ? 'btn-secondary' : 'btn-primary'}" style="flex:1; padding:6px; font-size:0.8rem;">
+                    <i class="fa-solid fa-star"></i> ${i.is_featured ? 'Quitar VIP' : 'Hacer VIP'}
+                </button>
+                <button onclick="delAd('${i.id}')" class="btn btn-danger" style="padding:6px 12px; font-size:0.8rem;"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>`;
+    });
+    document.getElementById('detCont').innerHTML=h;
+    abrirMod('modDet');
+}
+
+async function toggleDestacado(id, currentState) {
+    if(!sb) return;
+    try {
+        await sb.from('listings').update({ is_featured: !currentState }).eq('id', id);
+        await loadAds(); // recarga la web por detras
+        renderAdminPanel(); // recarga los botones del panel admin
+    } catch(err) {
+        alert("Error al actualizar: " + err.message);
+    }
 }
 
 async function delAd(id){
     if(!sb) return;
-    if(confirm('¿Seguro que deseas eliminar este anuncio?')){
+    if(confirm('¿Seguro que deseas eliminar este anuncio permanentemente?')){
         await sb.from('listings').delete().eq('id',id);
         alert('Anuncio borrado correctamente');
         cerrar('modDet');
