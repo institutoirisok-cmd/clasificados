@@ -1,905 +1,313 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElClasificado.ok | Clasificados en Vivo</title>
-    <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root {
-            --bg-dark: #0f1117;
-            --bg-card: #181b24;
-            --bg-card-hover: #222634;
-            --accent: #FFE600;
-            --accent-hover: #e6cf00;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --radius: 16px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElClasificado.ok | Compra y Vende en Vivo</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#0f1117;--card:#181b24;--accent:#FFE600;--text:#f3f4f6;--muted:#9ca3af;--border:rgba(255,255,255,0.08);--r:16px;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Outfit',sans-serif;}
+body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+/* HEADER */
+header{background:rgba(24,27,36,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:14px 20px;}
+.hd{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.logo span{background:var(--accent);color:#000;padding:2px 6px;border-radius:6px;font-size:1rem;}
+.btn{padding:10px 16px;border-radius:10px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-secondary{background:rgba(255,255,255,.08);color:#fff;}
+.btn-danger{background:#ef4444;color:#fff;}
+#navBtns{display:flex;gap:10px;}
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
+/* HERO Y BUSCADOR */
+.hero{padding:30px 20px;text-align:center;background:radial-gradient(circle at top,rgba(255,230,0,.08)0%,transparent 70%);}
+.hero h1{font-size:1.8rem;font-weight:800;margin-bottom:10px;}
+.hero p{color:var(--muted);font-size:0.95rem;margin-bottom:20px;}
+.search-box{max-width:500px;margin:0 auto;display:flex;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:6px;}
+.search-box input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:10px;font-size:1rem;}
 
-        /* HEADER */
-        header {
-            background: rgba(24, 27, 36, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 12px 24px;
-        }
+/* CATEGORIAS */
+.cats{display:flex;gap:10px;overflow-x:auto;padding:15px 20px;max-width:1200px;margin:0 auto;scrollbar-width:none;}
+.cats::-webkit-scrollbar{display:none;}
+.cat{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.85rem;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;}
+.cat.active,.cat:hover{background:var(--accent);color:#000;font-weight:600;border-color:var(--accent);}
 
-        .header-container {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-        }
+/* CONTENIDO PRINCIPAL (1 COLUMNA RESPONSIVA) */
+.main{max-width:1200px;margin:20px auto;padding:0 20px;}
+.tit{font-size:1.2rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:30px;}
 
-        .logo {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+/* TARJETAS ANUNCIOS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:.25s;cursor:pointer;display:flex;flex-direction:column;position:relative;}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,230,0,.4);box-shadow:0 10px 25px -5px rgba(0,0,0,.5);}
+.card.f{border:2px solid var(--accent);}
+.imgw{width:100%;height:180px;background:#252836;position:relative;}
+.imgw img{width:100%;height:100%;object-fit:cover;}
+.badge{position:absolute;top:10px;left:10px;background:var(--accent);color:#000;font-size:.7rem;font-weight:800;padding:4px 8px;border-radius:6px;}
+.btn-fav{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.btn-fav.active{color:#ef4444;}
+.body{padding:14px;display:flex;flex-direction:column;flex:1;}
+.pri{font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:6px;}
+.t{font-size:.95rem;font-weight:600;margin-bottom:8px;line-clamp:2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.meta{margin-top:auto;font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;}
 
-        .logo span {
-            background: var(--accent);
-            color: #000;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 1.1rem;
-        }
+/* CHAT FLOTANTE MINIMIZABLE */
+.chat-btn-float {
+    position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;
+    background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: #000; cursor: pointer; z-index: 998;
+    box-shadow: 0 4px 15px rgba(255,230,0,0.4); border: none; transition: .2s;
+}
+.chat-btn-float:hover { transform: scale(1.05); }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.chat-panel {
+    position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px;
+    max-height: calc(100vh - 120px); background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; display: none; flex-direction: column; z-index: 999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden;
+}
+.chat-panel.active { display: flex; }
+@media(max-width: 420px) {
+    .chat-panel { width: calc(100% - 40px); right: 20px; bottom: 90px; }
+}
 
-        .btn {
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
+.chat-h { padding:14px; background:#232734; font-weight:700; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); }
+.close-chat { background:none; border:none; color:var(--text); font-size:1.2rem; cursor:pointer; padding:4px; }
+.chat-m { flex:1; padding:14px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+.b { background:#2a2f40; padding:8px 12px; border-radius:10px; font-size:.85rem; max-width:85%; word-wrap:break-word; }
+.b.mine { background:var(--accent); color:#000; align-self:flex-end; }
+.chat-in { padding:12px; border-top:1px solid var(--border); display:flex; gap:8px; background:#181b24; }
+.chat-in input { flex:1; background:#2a2f40; border:1px solid var(--border); border-radius:8px; color:#fff; padding:8px 12px; outline:none; font-size:.9rem; }
 
-        .btn-primary { background: var(--accent); color: #000; }
-        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
-        .btn-secondary { background: rgba(255, 255, 255, 0.08); color: #fff; }
-        .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
-        .btn-danger { background: #ef4444; color: #fff; }
+/* MODALES */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(5px);z-index:1000;align-items:center;justify-content:center;padding:15px;}
+.modal.active{display:flex;}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:500px;padding:20px;position:relative;max-height:90vh;overflow-y:auto;}
+.close{position:absolute;top:15px;right:15px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;}
+.fc{width:100%;padding:10px 14px;background:#2a2f40;border:1px solid var(--border);border-radius:8px;color:#fff;outline:none;font-size:.9rem;}
+.google-btn{width:100%;margin-bottom:15px;background:#fff;color:#000;font-weight:700;border:1px solid #ccc;padding:12px;font-size:.9rem;}
+.google-btn:hover{background:#f1f1f1;}
 
-        /* HERO & BUSCADOR */
-        .hero {
-            padding: 40px 20px;
-            text-align: center;
-            background: radial-gradient(circle at top, rgba(255, 230, 0, 0.08) 0%, transparent 70%);
-        }
+footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:var(--muted);font-size:.85rem; margin-top:40px;}
 
-        .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
-        .hero p { color: var(--text-muted); font-size: 1rem; margin-bottom: 24px; }
-
-        .search-box {
-            max-width: 600px;
-            margin: 0 auto;
-            display: flex;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 6px;
-        }
-
-        .search-box input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-            padding: 10px 16px;
-            font-size: 1rem;
-        }
-
-        /* CATEGORIAS CHIPS */
-        .categories-bar {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 15px 20px;
-            max-width: 1300px;
-            margin: 0 auto;
-            scrollbar-width: none;
-        }
-
-        .cat-chip {
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .cat-chip.active, .cat-chip:hover {
-            background: var(--accent);
-            color: #000;
-            font-weight: 600;
-            border-color: var(--accent);
-        }
-
-        /* MAIN LAYOUT */
-        .main-container {
-            max-width: 1300px;
-            margin: 20px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 24px;
-            width: 100%;
-        }
-
-        @media (max-width: 900px) {
-            .main-container { grid-template-columns: 1fr; }
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* GRID DE ANUNCIOS */
-        .ads-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 18px;
-            margin-bottom: 30px;
-        }
-
-        .ad-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            overflow: hidden;
-            transition: all 0.25s;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .ad-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 230, 0, 0.4);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-        }
-
-        .ad-card.featured {
-            border: 2px solid var(--accent);
-        }
-
-        .ad-img-wrapper {
-            width: 100%;
-            height: 160px;
-            background: #252836;
-            position: relative;
-        }
-
-        .ad-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .badge-destacado {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: var(--accent);
-            color: #000;
-            font-size: 0.75rem;
-            font-weight: 800;
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
-
-        .btn-fav {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.6);
-            color: #fff;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-        }
-
-        .btn-fav.active { color: #ef4444; }
-
-        .ad-body {
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .ad-price {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 6px;
-        }
-
-        .ad-title {
-            font-size: 0.98rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 8px;
-            line-clamp: 2;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .ad-meta {
-            margin-top: auto;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* CHAT EN VIVO STICKY */
-        .chat-panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            display: flex;
-            flex-direction: column;
-            height: 520px;
-            position: sticky;
-            top: 90px;
-        }
-
-        .chat-header {
-            padding: 14px 18px;
-            border-bottom: 1px solid var(--border-color);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 14px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .chat-bubble {
-            background: #232734;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 0.88rem;
-            max-width: 85%;
-
-        }
-
-        .chat-bubble.mine {
-            background: var(--accent);
-            color: #000;
-            align-self: flex-end;
-        }
-
-        .chat-sender { font-weight: 700; font-size: 0.75rem; margin-bottom: 2px; opacity: 0.8; }
-
-        .chat-input-area {
-            padding: 12px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 8px;
-        }
-
-        .chat-input-area input {
-            flex: 1;
-            background: #232734;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: #fff;
-            padding: 8px 12px;
-            outline: none;
-        }
-
-        /* MODALES */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal.active { display: flex; }
-
-        .modal-content {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            width: 100%;
-            max-width: 520px;
-            padding: 24px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 16px; right: 16px;
-            background: none; border: none;
-            color: var(--text-muted); font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px; }
-        .form-control {
-            width: 100%;
-            padding: 10px 14px;
-            background: #232734;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: #fff;
-            outline: none;
-        }
-
-        /* FOOTER */
-        footer {
-            margin-top: auto;
-            border-top: 1px solid var(--border-color);
-            padding: 20px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.88rem;
-        }
-    </style>
+/* AJUSTES MOVILES GLOBALES */
+@media(max-width: 500px) {
+    .hd { flex-direction:column; gap:12px; }
+    #navBtns { width:100%; display:grid; grid-template-columns:1fr 1fr; }
+    .hero h1 { font-size:1.5rem; }
+    .grid { grid-template-columns: 1fr 1fr; gap:10px; }
+    .imgw { height:120px; }
+    .pri { font-size: 1.1rem; }
+    .t { font-size: .85rem; }
+}
+</style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <div class="header-container">
-            <a href="#" class="logo">
-                <i class="fa-solid fa-bolt" style="color:var(--accent)"></i>
-                ElClasificado<span>.ok</span>
-            </a>
-            <div class="header-actions" id="headerNav">
-                <!-- Se llena dinámicamente -->
-            </div>
-        </div>
-    </header>
+<header>
+<div class="hd">
+<a href="#" class="logo"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> ElClasificado<span>.ok</span></a>
+<div id="navBtns"></div>
+</div>
+</header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <h1>Compra, Vende y Encuentra Todo en Vivo</h1>
-        <p>El portal #1 de clasificados gratis con chat en tiempo real.</p>
-        <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass" style="margin: 12px; color: var(--text-muted);"></i>
-            <input type="text" id="searchInput" placeholder="Buscar autos, empleos, casas, celulares..." oninput="filtrarAnuncios()">
-        </div>
-    </section>
+<section class="hero">
+<h1>Compra y Vende Todo en Vivo</h1>
+<div class="search-box">
+<i class="fa-solid fa-magnifying-glass" style="margin:10px;color:var(--muted)"></i>
+<input type="text" id="searchInput" placeholder="Buscar autos, casas, empleos..." oninput="filtrar()">
+</div>
+</section>
 
-    <!-- CATEGORIAS CHIPS -->
-    <div class="categories-bar">
-        <div class="cat-chip active" onclick="filtrarCategoria('todas', this)"><i class="fa-solid fa-border-all"></i> Todas</div>
-        <div class="cat-chip" onclick="filtrarCategoria('autos', this)"><i class="fa-solid fa-car"></i> Autos y Vehículos</div>
-        <div class="cat-chip" onclick="filtrarCategoria('rentas', this)"><i class="fa-solid fa-house"></i> Rentas y Propiedades</div>
-        <div class="cat-chip" onclick="filtrarCategoria('empleos', this)"><i class="fa-solid fa-briefcase"></i> Empleos</div>
-        <div class="cat-chip" onclick="filtrarCategoria('servicios', this)"><i class="fa-solid fa-wrench"></i> Servicios</div>
-        <div class="cat-chip" onclick="filtrarCategoria('electronica', this)"><i class="fa-solid fa-mobile-screen"></i> Electrónica</div>
-        <div class="cat-chip" onclick="filtrarCategoria('otros', this)"><i class="fa-solid fa-tag"></i> Otros</div>
+<div class="cats">
+<div class="cat active" onclick="catSel('todas',this)"><i class="fa-solid fa-border-all"></i> Todas</div>
+<div class="cat" onclick="catSel('autos',this)"><i class="fa-solid fa-car"></i> Autos</div>
+<div class="cat" onclick="catSel('rentas',this)"><i class="fa-solid fa-house"></i> Rentas</div>
+<div class="cat" onclick="catSel('empleos',this)"><i class="fa-solid fa-briefcase"></i> Empleos</div>
+<div class="cat" onclick="catSel('servicios',this)"><i class="fa-solid fa-wrench"></i> Servicios</div>
+<div class="cat" onclick="catSel('electronica',this)"><i class="fa-solid fa-mobile-screen"></i> Electrónica</div>
+<div class="cat" onclick="catSel('otros',this)"><i class="fa-solid fa-tag"></i> Otros</div>
+</div>
+
+<div class="main">
+<div id="secDest">
+<div class="tit"><i class="fa-solid fa-star" style="color:var(--accent)"></i> Destacados</div>
+<div class="grid" id="grdD"></div>
+</div>
+<div class="tit" style="margin-top:20px;"><i class="fa-solid fa-list"></i> Anuncios Recientes</div>
+<div class="grid" id="grdN"></div>
+</div>
+
+<!-- CHAT FLOTANTE -->
+<button class="chat-btn-float" onclick="toggleChat()">
+    <i class="fa-solid fa-comment-dots"></i>
+</button>
+
+<div class="chat-panel" id="chatPanel">
+    <div class="chat-h">
+        <span><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.6rem; margin-right:5px;"></i> Chat en Vivo</span>
+        <button class="close-chat" onclick="toggleChat()">&times;</button>
     </div>
+    <div class="chat-m" id="chatMs"></div>
+    <form class="chat-in" onsubmit="envChat(event)">
+        <input id="chatIn" placeholder="Mensaje..." required>
+        <button type="submit" class="btn btn-primary" style="padding:8px 12px;"><i class="fa-solid fa-paper-plane"></i></button>
+    </form>
+</div>
 
-    <!-- MAIN CONTAINER -->
-    <div class="main-container">
-        
-        <!-- COLUMNA PRINCIPAL -->
-        <div>
-            <!-- DESTACADOS -->
-            <div id="secDestacados">
-                <div class="section-title"><i class="fa-solid fa-star" style="color: var(--accent);"></i> Anuncios Destacados</div>
-                <div class="ads-grid" id="gridDestacados"></div>
-            </div>
+<!-- MODAL PUBLICAR -->
+<div class="modal" id="modPub">
+<div class="mc">
+<button class="close" onclick="cerrar('modPub')">&times;</button>
+<h2 style="margin-bottom:18px; font-size:1.3rem;"><i class="fa-solid fa-plus-circle" style="color:var(--accent)"></i> Publicar Anuncio</h2>
+<form onsubmit="guardar(event)">
+<div class="fg"><label>Título *</label><input id="pubTit" class="fc" placeholder="Ej: Vendo Auto" required></div>
+<div class="fg"><label>Categoría *</label><select id="pubCat" class="fc"><option value="autos">Autos</option><option value="rentas">Rentas</option><option value="empleos">Empleos</option><option value="servicios">Servicios</option><option value="electronica">Electrónica</option><option value="otros" selected>Otros</option></select></div>
+<div class="fg"><label>Precio *</label><input id="pubPre" type="number" class="fc" placeholder="Ej: 5000" required></div>
+<div class="fg"><label>WhatsApp de Contacto *</label><input id="pubTel" class="fc" placeholder="Ej: 2644118460" required></div>
+<div class="fg"><label>Ubicación</label><input id="pubUbi" class="fc" placeholder="Ej: San Juan"></div>
+<div class="fg"><label>Foto del Anuncio</label><input type="file" id="pubFoto" accept="image/*" capture="environment" class="fc"></div>
+<div class="fg"><label>Descripción</label><textarea id="pubDesc" class="fc" rows="2" placeholder="Detalles..."></textarea></div>
+<button type="submit" class="btn btn-primary" style="width:100%;" id="btnSav"><i class="fa-solid fa-cloud-arrow-up"></i> Publicar Ahora</button>
+</form>
+</div>
+</div>
 
-            <!-- TODOS LOS ANUNCIOS -->
-            <div class="section-title"><i class="fa-solid fa-list"></i> Anuncios Recientes</div>
-            <div class="ads-grid" id="gridAnuncios"></div>
-        </div>
+<!-- MODAL AUTH -->
+<div class="modal" id="modAuth">
+<div class="mc">
+<button class="close" onclick="cerrar('modAuth')">&times;</button>
+<h2 id="authTit" style="margin-bottom:18px;text-align:center;">Ingresar</h2>
 
-        <!-- COLUMNA CHAT EN VIVO -->
-        <aside>
-            <div class="chat-panel">
-                <div class="chat-header">
-                    <span><i class="fa-solid fa-comments" style="color: var(--accent);"></i> Chat Global en Vivo</span>
-                    <span style="font-size:0.75rem; color:#22c55e;">● En Línea</span>
-                </div>
-                <div class="chat-messages" id="chatMessages"></div>
-                <form class="chat-input-area" onsubmit="enviarChat(event)">
-                    <input type="text" id="chatInput" placeholder="Escribe un mensaje..." required>
-                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
-                </form>
-            </div>
-        </aside>
+<button class="btn google-btn" type="button" onclick="loginGoogle()">
+<img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" height="20" alt="G"> Continuar con Google
+</button>
+<div style="text-align:center;color:var(--muted);margin:10px 0;font-size:.8rem;">— O CORREO —</div>
 
-    </div>
+<form onsubmit="auth(event)">
+<div class="fg"><label>Email</label><input id="aEm" type="email" class="fc" required></div>
+<div class="fg"><label>Contraseña</label><input id="aPass" type="password" class="fc" required minlength="6"></div>
+<button type="submit" class="btn btn-primary" style="width:100%;" id="btnAuth">Entrar</button>
+</form>
+<p style="text-align:center;margin-top:15px;font-size:.85rem;color:var(--muted);"><span id="authTxt">¿No tienes cuenta?</span> <a href="#" onclick="toggleAuth()" style="color:var(--accent);font-weight:700;" id="authLnk">Regístrate</a></p>
+</div>
+</div>
 
-    <!-- MODAL PUBLICAR -->
-    <div class="modal" id="modalPublicar">
-        <div class="modal-content">
-            <button class="close-modal" onclick="cerrarModal('modalPublicar')">&times;</button>
-            <h2 style="margin-bottom:18px;"><i class="fa-solid fa-plus-circle" style="color:var(--accent);"></i> Publicar Anuncio</h2>
-            <form onsubmit="guardarAnuncio(event)">
-                <div class="form-group">
-                    <label>Título del Anuncio *</label>
-                    <input type="text" id="pubTitulo" class="form-control" placeholder="Ej: Toyota Corolla 2020 impecable" required>
-                </div>
-                <div class="form-group">
-                    <label>Categoría *</label>
-                    <select id="pubCategoria" class="form-control" required>
-                        <option value="autos">Autos y Vehículos</option>
-                        <option value="rentas">Rentas y Propiedades</option>
-                        <option value="empleos">Empleos</option>
-                        <option value="servicios">Servicios</option>
-                        <option value="electronica">Electrónica</option>
-                        <option value="otros" selected>Otros</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Precio ($ USD / ARS) *</label>
-                    <input type="number" id="pubPrecio" class="form-control" placeholder="Ej: 5000" required>
-                </div>
-                <div class="form-group">
-                    <label>Teléfono / WhatsApp *</label>
-                    <input type="text" id="pubTelefono" class="form-control" placeholder="Ej: +5491122334455" required>
-                </div>
-                <div class="form-group">
-                    <label>Ubicación</label>
-                    <input type="text" id="pubUbicacion" class="form-control" placeholder="Ej: Buenos Aires, Argentina">
-                </div>
-                <div class="form-group">
-                    <label>Foto del Anuncio (Galería o Cámara)</label>
-                    <input type="file" id="pubFotoFile" class="form-control" accept="image/*" capture="environment">
-                </div>
-                <div class="form-group">
-                    <label>Descripción</label>
-                    <textarea id="pubDescripcion" class="form-control" rows="3" placeholder="Detalles de lo que ofreces..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" id="btnGuardar">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> Publicar Ahora
-                </button>
-            </form>
-        </div>
-    </div>
+<!-- MODAL DETALLE -->
+<div class="modal" id="modDet">
+<div class="mc" style="max-width:500px;">
+<button class="close" onclick="cerrar('modDet')">&times;</button>
+<div id="detCont"></div>
+</div>
+</div>
 
-    <!-- MODAL AUTH (LOGIN/REGISTRO) -->
-    <div class="modal" id="modalAuth">
-        <div class="modal-content">
-            <button class="close-modal" onclick="cerrarModal('modalAuth')">&times;</button>
-            <h2 id="authTitle" style="margin-bottom:18px;">Iniciar Sesión</h2>
-            <form onsubmit="procesarAuth(event)">
-                <div class="form-group">
-                    <label>Correo Electrónico</label>
-                    <input type="email" id="authEmail" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="authPassword" class="form-control" required minlength="6">
-                </div>
-                <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" id="btnAuthSubmit">Entrar</button>
-            </form>
-            <p style="text-align:center; margin-top:15px; font-size:0.85rem; color:var(--text-muted);">
-                <span id="authToggleText">¿No tienes cuenta?</span> 
-                <a href="#" onclick="toggleAuthMode()" style="color:var(--accent); font-weight:700;" id="authToggleLink">Regístrate</a>
-            </p>
-        </div>
-    </div>
+<footer>
+<p>© 2026 ElClasificado.ok - Todos los derechos reservados.</p>
+<p style="margin-top:8px;"><a href="#" onclick="admin()" style="color:var(--muted);text-decoration:none;"><i class="fa-solid fa-lock"></i> Panel Admin</a></p>
+</footer>
 
-    <!-- MODAL DETALLE ANUNCIO -->
-    <div class="modal" id="modalDetalle">
-        <div class="modal-content" style="max-width: 600px;">
-            <button class="close-modal" onclick="cerrarModal('modalDetalle')">&times;</button>
-            <div id="detalleContent"></div>
-        </div>
-    </div>
+<script>
+// Limpiar caché vieja de Vercel
+if('serviceWorker'in navigator) navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));
 
-    <!-- FOOTER -->
-    <footer>
-        <p>&copy; 2026 ElClasificado.ok - Todos los derechos reservados.</p>
-        <p style="margin-top:8px;">
-            <a href="#" onclick="abrirAdmin()" style="color:var(--text-muted); text-decoration:none;"><i class="fa-solid fa-lock"></i> Panel Admin</a>
-        </p>
-    </footer>
+// CREDENCIALES SUPABASE
+const URL='https://rhozvkoogswzbdkpeimz.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
+const sb=supabase.createClient(URL,KEY);
 
-    <!-- JS SCRIPT PRINCIPAL -->
-    <script>
-        // ELIMINAR CACHÉ ANTIGUO
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
-        }
+let dataAll=[],cat='todas',user=null,isReg=false,favs=JSON.parse(localStorage.getItem('favs')||'[]');
 
-        // SUPABASE CLIENT
-        const SUPABASE_URL = 'https://rhozvkoogswzbdkpeimz.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.addEventListener('load',()=>{checkUser();loadAds();loadChat();subsChat();});
 
-        // ESTADOS GLOBALES
-        let todosAnuncios = [];
-        let categoriaActual = 'todas';
-        let currentUser = null;
-        let isRegisterMode = false;
-        let favoritos = JSON.parse(localStorage.getItem('favs_clasificados') || '[]');
+// AUTENTICACIÓN
+async function checkUser(){const{data}=await sb.auth.getSession();user=data?.session?.user||null;renderNav();}
+function renderNav(){
+const n=document.getElementById('navBtns');
+if(user){n.innerHTML='<button class="btn btn-primary" onclick="abrirMod(\'modPub\')" style="width:100%;"><i class="fa-solid fa-plus"></i> Publicar</button><button class="btn btn-secondary" onclick="logout()" style="width:100%;"><i class="fa-solid fa-right-from-bracket"></i></button>';}
+else{n.innerHTML='<button class="btn btn-secondary" onclick="abrirAuth(false)" style="width:100%;">Entrar</button><button class="btn btn-primary" onclick="abrirAuth(true)" style="width:100%;">Registro</button>';}
+}
 
-        // INICIALIZACIÓN
-        window.addEventListener('load', async () => {
-            verificarUsuario();
-            await cargarAnuncios();
-            cargarChat();
-            suscribirChatRealtime();
-        });
+function abrirAuth(r){isReg=r;document.getElementById('authTit').innerText=r?'Crear Cuenta':'Iniciar Sesión';document.getElementById('btnAuth').innerText=r?'Registrarse':'Entrar';document.getElementById('authTxt').innerText=r?'¿Ya tienes cuenta?':'¿No tienes cuenta?';document.getElementById('authLnk').innerText=r?'Inicia Sesión':'Regístrate';abrirMod('modAuth');}
+function toggleAuth(){abrirAuth(!isReg);}
+async function auth(e){e.preventDefault();const em=document.getElementById('aEm').value,pa=document.getElementById('aPass').value;const res=isReg?await sb.auth.signUp({email:em,password:pa}):await sb.auth.signInWithPassword({email:em,password:pa});if(res.error){alert('Error: '+res.error.message);}else{alert(isReg?'¡Cuenta creada!':'¡Bienvenido!');cerrar('modAuth');checkUser();}}
+async function loginGoogle(){const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});if(error)alert('Error: '+error.message);}
+async function logout(){await sb.auth.signOut();user=null;renderNav();}
 
-        // AUTENTICACIÓN
-        async function verificarUsuario() {
-            const { data } = await sb.auth.getSession();
-            currentUser = data?.session?.user || null;
-            renderNav();
-        }
+// ANUNCIOS
+async function loadAds(){const{data,error}=await sb.from('listings').select('*').order('created_at',{ascending:false});if(!error){dataAll=data||[];draw();}}
+function draw(){
+const d=document.getElementById('grdD'),n=document.getElementById('grdN');d.innerHTML='';n.innerHTML='';
+const f=dataAll.filter(x=>{const mCat=cat==='todas'||x.category===cat;const mS=x.title.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase());return mCat&&mS;});
+const des=f.filter(x=>x.is_featured),norm=f.filter(x=>!x.is_featured);
+document.getElementById('secDest').style.display=des.length?'block':'none';
+des.forEach(x=>d.appendChild(card(x)));norm.forEach(x=>n.appendChild(card(x)));
+if(f.length===0)n.innerHTML='<p style="color:var(--muted);grid-column:1/-1;">No hay anuncios todavía.</p>';
+}
+function card(i){
+const c=document.createElement('div');c.className='card '+(i.is_featured?'f':'');
+const img=i.image_url||'https://via.placeholder.com/300x200?text=Sin+Imagen';const isF=favs.includes(i.id);
+c.innerHTML='<div class="imgw"><img src="'+img+'">'+(i.is_featured?'<span class="badge"><i class="fa-solid fa-star"></i> DESTACADO</span>':'')+'<button class="btn-fav '+(isF?'active':'')+'" onclick="fav(event,\''+i.id+'\')"><i class="fa-solid fa-heart"></i></button></div><div class="body"><div class="pri">$'+Number(i.price||0).toLocaleString()+'</div><div class="t">'+esc(i.title)+'</div><div class="meta"><span><i class="fa-solid fa-location-dot"></i> '+esc(i.location||'N/A')+'</span></div></div>';
+c.onclick=e=>{if(!e.target.closest('.btn-fav'))showD(i);};return c;
+}
+function fav(e,id){e.stopPropagation();favs=favs.includes(id)?favs.filter(x=>x!==id):[...favs,id];localStorage.setItem('favs',JSON.stringify(favs));draw();}
+function catSel(c,el){cat=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));el.classList.add('active');draw();}
+function filtrar(){draw();}
 
-        function renderNav() {
-            const nav = document.getElementById('headerNav');
-            if (currentUser) {
-                nav.innerHTML = `
-                    <button class="btn btn-primary" onclick="abrirModal('modalPublicar')"><i class="fa-solid fa-plus"></i> Publicar</button>
-                    <button class="btn btn-secondary" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
-                `;
-            } else {
-                nav.innerHTML = `
-                    <button class="btn btn-secondary" onclick="abrirAuth(false)">Ingresar</button>
-                    <button class="btn btn-primary" onclick="abrirAuth(true)">Registrarse</button>
-                `;
-            }
-        }
+// DETALLE ANUNCIO
+function showD(i){
+const ph=(i.phone||'').replace(/\D/g,'');const wa='https://wa.me/'+ph+'?text=Hola!%20Vi%20tu%20anuncio%20'+encodeURIComponent(i.title);
+document.getElementById('detCont').innerHTML='<img src="'+(i.image_url||'https://via.placeholder.com/500x300')+'" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-bottom:15px;"><h2 style="font-size:1.2rem;">'+esc(i.title)+'</h2><h3 style="color:var(--accent);font-size:1.5rem;margin:8px 0;">$'+Number(i.price||0).toLocaleString()+'</h3><p style="color:var(--muted);margin-bottom:12px;font-size:0.9rem;"><i class="fa-solid fa-location-dot"></i> '+esc(i.location||'N/A')+'</p><div style="background:#2a2f40;padding:12px;border-radius:8px;margin-bottom:15px;font-size:0.9rem;"><p style="white-space:pre-wrap;">'+esc(i.description||'Sin descripción.')+'</p></div><a href="'+wa+'" target="_blank" class="btn btn-primary" style="width:100%;background:#22c55e;color:#fff;"><i class="fa-brands fa-whatsapp"></i> Enviar WhatsApp</a>';
+abrirMod('modDet');
+}
 
-        function abrirAuth(isRegister) {
-            isRegisterMode = isRegister;
-            document.getElementById('authTitle').innerText = isRegister ? 'Crear Cuenta' : 'Iniciar Sesión';
-            document.getElementById('btnAuthSubmit').innerText = isRegister ? 'Registrarse' : 'Entrar';
-            document.getElementById('authToggleText').innerText = isRegister ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?';
-            document.getElementById('authToggleLink').innerText = isRegister ? 'Inicia Sesión' : 'Regístrate';
-            abrirModal('modalAuth');
-        }
+// SUBIR FOTO INFALIBLE
+async function procesarImagen(file){
+if(!file) return 'https://via.placeholder.com/300x200?text=Sin+Imagen';
+try{const ext=file.name.split('.').pop();const p='foto_'+Date.now()+'.'+ext;const{data,error}=await sb.storage.from('anuncios').upload(p,file);if(!error&&data){return sb.storage.from('anuncios').getPublicUrl(p).data.publicUrl;}}catch(e){}
+return new Promise(r=>{const r2=new FileReader();r2.onloadend=()=>r(r2.result);r2.readAsDataURL(file);});
+}
 
-        function toggleAuthMode() {
-            abrirAuth(!isRegisterMode);
-        }
+// PUBLICAR
+async function guardar(e){
+e.preventDefault();const btn=document.getElementById('btnSav');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Publicando...';
+try{
+const f=document.getElementById('pubFoto').files[0];const url=await procesarImagen(f);
+const pl={title:document.getElementById('pubTit').value,category:document.getElementById('pubCat').value||'otros',price:parseFloat(document.getElementById('pubPre').value||0),phone:document.getElementById('pubTel').value||'',location:document.getElementById('pubUbi').value||'',description:document.getElementById('pubDesc').value||'',image_url:url,user_id:user?user.id:null};
+const{error}=await sb.from('listings').insert([pl]);
+if(error)throw error;
+alert('¡Publicado con éxito!');cerrar('modPub');loadAds();
+}catch(err){alert('Error al publicar: '+err.message);}
+finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Publicar Ahora';}
+}
 
-        async function procesarAuth(e) {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
+// UTILIDADES MODAL
+function abrirMod(id){document.getElementById(id).classList.add('active');}
+function cerrar(id){document.getElementById(id).classList.remove('active');}
+function esc(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-            let res = isRegisterMode 
-                ? await sb.auth.signUp({ email, password })
-                : await sb.auth.signInWithPassword({ email, password });
+// CHAT FLOTANTE LOGIC
+function toggleChat() {
+    const p = document.getElementById('chatPanel');
+    p.classList.toggle('active');
+    if(p.classList.contains('active')) {
+        const b = document.getElementById('chatMs');
+        b.scrollTop = b.scrollHeight;
+    }
+}
+async function loadChat(){const{data}=await sb.from('chat_messages').select('*').order('created_at',{ascending:false}).limit(20);const box=document.getElementById('chatMs');box.innerHTML='';(data||[]).reverse().forEach(x=>bubble(x));box.scrollTop=box.scrollHeight;}
+function subsChat(){sb.channel('chat_live').on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},p=>{bubble(p.new);const b=document.getElementById('chatMs');b.scrollTop=b.scrollHeight;}).subscribe();}
+function bubble(m){const box=document.getElementById('chatMs');const d=document.createElement('div');const mine=user&&user.id===m.user_id;d.className='b '+(mine?'mine':'');d.innerHTML='<div style="font-weight:700;font-size:.7rem;margin-bottom:3px;opacity:.7;">'+esc(m.sender_name||'Anónimo')+'</div><div>'+esc(m.message)+'</div>';box.appendChild(d);}
+async function envChat(e){e.preventDefault();const inEl=document.getElementById('chatIn');const v=inEl.value.trim();if(!v)return;await sb.from('chat_messages').insert([{sender_name:user?user.email.split('@')[0]:'Visita',message:v,user_id:user?user.id:null}]);inEl.value='';}
 
-            if (res.error) {
-                alert("Error: " + res.error.message);
-            } else {
-                alert(isRegisterMode ? "¡Cuenta creada con éxito!" : "¡Bienvenido!");
-                cerrarModal('modalAuth');
-                verificarUsuario();
-            }
-        }
-
-        async function cerrarSesion() {
-            await sb.auth.signOut();
-            currentUser = null;
-            renderNav();
-        }
-
-        // CARGAR ANUNCIOS
-        async function cargarAnuncios() {
-            const { data, error } = await sb.from('listings').select('*').order('created_at', { ascending: false });
-            if (error) return console.error(error);
-            todosAnuncios = data || [];
-            renderizarGrids();
-        }
-
-        function renderizarGrids() {
-            const gridDest = document.getElementById('gridDestacados');
-            const gridNorm = document.getElementById('gridAnuncios');
-            const secDest = document.getElementById('secDestacados');
-
-            gridDest.innerHTML = '';
-            gridNorm.innerHTML = '';
-
-            let filtrados = todosAnuncios.filter(item => {
-                const matchCat = categoriaActual === 'todas' || item.category === categoriaActual;
-                const matchSearch = item.title.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase());
-                return matchCat && matchSearch;
-            });
-
-            const destacados = filtrados.filter(a => a.is_featured);
-            const normales = filtrados.filter(a => !a.is_featured);
-
-            secDest.style.display = destacados.length > 0 ? 'block' : 'none';
-
-            destacados.forEach(item => gridDest.appendChild(crearCardAnuncio(item)));
-            normales.forEach(item => gridNorm.appendChild(crearCardAnuncio(item)));
-
-            if(filtrados.length === 0) {
-                gridNorm.innerHTML = `<p style="color:var(--text-muted); grid-column:1/-1;">No hay anuncios para esta búsqueda.</p>`;
-            }
-        }
-
-        function crearCardAnuncio(item) {
-            const card = document.createElement('div');
-            card.className = `ad-card ${item.is_featured ? 'featured' : ''}`;
-            const img = item.image_url || 'https://via.placeholder.com/300x200?text=Sin+Imagen';
-            const isFav = favoritos.includes(item.id);
-
-            card.innerHTML = `
-                <div class="ad-img-wrapper">
-                    <img src="${img}" class="ad-img" alt="${item.title}">
-                    ${item.is_featured ? `<span class="badge-destacado"><i class="fa-solid fa-star"></i> DESTACADO</span>` : ''}
-                    <button class="btn-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, '${item.id}')">
-                        <i class="fa-solid fa-heart"></i>
-                    </button>
-                </div>
-                <div class="ad-body">
-                    <div class="ad-price">$${Number(item.price).toLocaleString()}</div>
-                    <div class="ad-title">${escapeHtml(item.title)}</div>
-                    <div class="ad-meta">
-                        <span><i class="fa-solid fa-location-dot"></i> ${escapeHtml(item.location || 'N/A')}</span>
-                        <span>${new Date(item.created_at).toLocaleDateString()}</span>
-                    </div>
-                </div>
-            `;
-            card.onclick = (e) => {
-                if(!e.target.closest('.btn-fav')) verDetalle(item);
-            };
-            return card;
-        }
-
-        // SUBIDA DE IMAGEN FAILSAFE (Intenta Bucket -> si falla pasa a Base64)
-        async function procesarImagen(file) {
-            if (!file) return 'https://via.placeholder.com/300x200?text=Sin+Imagen';
-
-            try {
-                // Intento 1: Supabase Storage
-                const ext = file.name.split('.').pop();
-                const path = `foto_${Date.now()}.${ext}`;
-                const { data, error } = await sb.storage.from('anuncios').upload(path, file);
-
-                if (!error && data) {
-                    const pub = sb.storage.from('anuncios').getPublicUrl(path);
-                    return pub.data.publicUrl;
-                }
-            } catch (err) {
-                console.warn("Storage fallback activado");
-            }
-
-            // Intento 2: Base64 directo (100% infalible)
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // GUARDAR ANUNCIO
-        async function guardarAnuncio(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnGuardar');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publicando...';
-
-            try {
-                const file = document.getElementById('pubFotoFile').files[0];
-                const imgUrl = await procesarImagen(file);
-
-                const payload = {
-                    title: document.getElementById('pubTitulo').value,
-                    category: document.getElementById('pubCategoria').value,
-                    price: parseFloat(document.getElementById('pubPrecio').value),
-                    phone: document.getElementById('pubTelefono').value,
-                    location: document.getElementById('pubUbicacion').value,
-                    description: document.getElementById('pubDescripcion').value,
-                    image_url: imgUrl,
-                    user_id: currentUser ? currentUser.id : null
-                };
-
-                const { error } = await sb.from('listings').insert([payload]);
-                if (error) throw error;
-
-                alert("¡Anuncio publicado con éxito!");
-                cerrarModal('modalPublicar');
-                cargarAnuncios();
-            } catch (err) {
-                alert("Error al publicar: " + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Publicar Ahora';
-            }
-        }
-
-        // DETALLE DE ANUNCIO
-        function verDetalle(item) {
-            const cleanPhone = (item.phone || '').replace(/[^0-9]/g, '');
-            const waLink = `https://wa.me/${cleanPhone}?text=Hola!%20Vi%20tu%20anuncio%20"${encodeURIComponent(item.title)}"%20en%20ElClasificado.ok`;
-
-            document.getElementById('detalleContent').innerHTML = `
-                <img src="${item.image_url || 'https://via.placeholder.com/500x300'}" style="width:100%; max-height:300px; object-fit:cover; border-radius:12px; margin-bottom:15px;">
-                <h2 style="font-size:1.4rem;">${escapeHtml(item.title)}</h2>
-                <h3 style="color:var(--accent); font-size:1.6rem; margin:10px 0;">$${Number(item.price).toLocaleString()}</h3>
-                <p style="color:var(--text-muted); margin-bottom:15px;"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(item.location || 'Sin ubicación')}</p>
-                <div style="background:#232734; padding:12px; border-radius:8px; margin-bottom:20px;">
-                    <p style="white-space:pre-wrap;">${escapeHtml(item.description || 'Sin descripción detallada.')}</p>
-                </div>
-                <a href="${waLink}" target="_blank" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:1rem; background:#22c55e; color:#fff;">
-                    <i class="fa-brands fa-whatsapp" style="font-size:1.2rem;"></i> Contactar por WhatsApp
-                </a>
-            `;
-            abrirModal('modalDetalle');
-        }
-
-        // FAVORITOS
-        function toggleFav(e, id) {
-            e.stopPropagation();
-            if (favoritos.includes(id)) {
-                favoritos = favoritos.filter(f => f !== id);
-            } else {
-                favoritos.push(id);
-            }
-            localStorage.setItem('favs_clasificados', JSON.stringify(favoritos));
-            renderizarGrids();
-        }
-
-        // CHAT REALTIME
-        async function cargarChat() {
-            const { data } = await sb.from('chat_messages').select('*').order('created_at', { ascending: false }).limit(25);
-            const box = document.getElementById('chatMessages');
-            box.innerHTML = '';
-            (data || []).reverse().forEach(agregarBurbujaChat);
-            box.scrollTop = box.scrollHeight;
-        }
-
-        function suscribirChatRealtime() {
-            sb.channel('chat_live')
-              .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, payload => {
-                  agregarBurbujaChat(payload.new);
-                  const box = document.getElementById('chatMessages');
-                  box.scrollTop = box.scrollHeight;
-              }).subscribe();
-        }
-
-        function agregarBurbujaChat(msg) {
-            const box = document.getElementById('chatMessages');
-            const div = document.createElement('div');
-            const esMio = currentUser && currentUser.id === msg.user_id;
-            div.className = `chat-bubble ${esMio ? 'mine' : ''}`;
-            div.innerHTML = `
-                <div class="chat-sender">${escapeHtml(msg.sender_name || 'Anónimo')}</div>
-                <div>${escapeHtml(msg.message)}</div>
-            `;
-            box.appendChild(div);
-        }
-
-        async function enviarChat(e) {
-            e.preventDefault();
-            const input = document.getElementById('chatInput');
-            const val = input.value.trim();
-            if(!val) return;
-
-            const name = currentUser ? currentUser.email.split('@')[0] : 'Visita';
-            await sb.from('chat_messages').insert([{
-                sender_name: name,
-                message: val,
-                user_id: currentUser ? currentUser.id : null
-            }]);
-            input.value = '';
-        }
-
-        // PANEL ADMIN
-        async function abrirAdmin() {
-            const pass = prompt("Ingresa la clave de administrador:");
-            if(pass === "admin1234") {
-                let html = '<h2 style="margin-bottom:15px;">Panel Admin - Eliminar Anuncios</h2>';
-                todosAnuncios.forEach(item => {
-                    html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; background:#232734; padding:8px 12px; margin-bottom:8px; border-radius:6px;">
-                            <span style="font-size:0.9rem;">${escapeHtml(item.title)}</span>
-                            <button onclick="borrarAnuncio('${item.id}')" class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;">Borrar</button>
-                        </div>
-                    `;
-                });
-                document.getElementById('detalleContent').innerHTML = html;
-                abrirModal('modalDetalle');
-            } else if(pass) {
-                alert("Clave incorrecta.");
-            }
-        }
-
-        async function borrarAnuncio(id) {
-            if(confirm("¿Seguro que deseas eliminar este anuncio?")) {
-                await sb.from('listings').delete().eq('id', id);
-                alert("Eliminado");
-                cerrarModal('modalDetalle');
-                cargarAnuncios();
-            }
-        }
-
-        // FILTROS Y UTILS
-        function filtrarCategoria(cat, el) {
-            categoriaActual = cat;
-            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-            renderizarGrids();
-        }
-
-        function filtrarAnuncios() { renderizarGrids(); }
-        function abrirModal(id) { document.getElementById(id).classList.add('active'); }
-        function cerrarModal(id) { document.getElementById(id).classList.remove('active'); }
-        function escapeHtml(t) { return String(t || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-    </script>
+// PANEL ADMIN
+async function admin(){const p=prompt('Clave de Admin:');if(p==='admin1234'){let h='<h2 style="margin-bottom:15px;font-size:1.2rem;">Borrar Anuncios</h2>';dataAll.forEach(i=>{h+='<div style="display:flex;justify-content:space-between;align-items:center;background:#2a2f40;padding:10px;margin-bottom:8px;border-radius:6px;"><span style="font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%;">'+esc(i.title)+'</span><button onclick="delAd(\''+i.id+'\')" class="btn btn-danger" style="padding:4px 8px;font-size:.8rem;">Borrar</button></div>'});document.getElementById('detCont').innerHTML=h;abrirMod('modDet');}else if(p)alert('Incorrecta');}
+async function delAd(id){if(confirm('¿Seguro?')){await sb.from('listings').delete().eq('id',id);alert('Borrado');cerrar('modDet');loadAds();}}
+</script>
 </body>
 </html>
