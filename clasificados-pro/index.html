@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clasificados Pro | Tu Mercado Local</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FFE600">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <style>
+    :root {
+      --yellow: #FFE600;
+      --blue: #3483FA;
+      --dark-blue: #2D3277;
+      --dark: #333;
+      --gray: #f5f5f5;
+      --text: #333;
+      --white: #fff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--gray);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--yellow);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--dark-blue);
+    }
+    .header-actions button, .header-actions a {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .search-section {
+      background: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    .search-box {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1.1rem;
+    }
+    .search-box::before { content: "🔍"; position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); }
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1.5rem;
+      justify-content: center;
+      background: white;
+      margin: 1rem 0;
+    }
+    .cat-btn {
+      background: white;
+      border: 2px solid var(--yellow);
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .cat-btn:hover, .cat-btn.active { background: var(--yellow); color: var(--dark-blue); }
+    .banners {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      padding: 1rem 2rem;
+    }
+    .banner {
+      background: linear-gradient(135deg, var(--blue), var(--dark-blue));
+      color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .banner h3 { margin-bottom: 0.5rem; }
+    .listings {
+      padding: 1rem 2rem 3rem;
+    }
+    .listing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .listing-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .listing-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+    .listing-img {
+      height: 160px;
+      background: linear-gradient(45deg, var(--yellow), #ffcc00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    .listing-info { padding: 1rem; }
+    .price { color: var(--blue); font-weight: bold; font-size: 1.2rem; }
+    .featured { border: 3px solid var(--yellow); position: relative; }
+    .featured::after {
+      content: "DESTACADO";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--yellow);
+      color: var(--dark-blue);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    /* Modal / Forms */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-content input, .modal-content select, .modal-content textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    .btn-yellow { background: var(--yellow); color: var(--dark); border: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .btn-blue { background: var(--blue); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; }
+    .admin-panel { display: none; padding: 2rem; background: white; margin: 1rem; border-radius: 12px; }
+    .admin-panel.active { display: block; }
+    footer { text-align: center; padding: 2rem; background: var(--dark-blue); color: white; margin-top: 2rem; }
+    @media (max-width: 600px) {
+      header { flex-direction: column; gap: 1rem; }
+      .categories { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Clasificados Pro</div>
+    <div class="header-actions">
+      <button onclick="showPostForm()">+ Publicar Anuncio</button>
+      <button onclick="toggleAdmin()">Admin</button>
+    </div>
+  </header>
+
+  <section class="search-section">
+    <h1 style="color: var(--dark-blue); margin-bottom: 1rem;">Encuentra lo que necesitas</h1>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar empleos, autos, rentas, servicios..." oninput="filterListings()">
+    </div>
+  </section>
+
+  <div class="categories" id="categories"></div>
+
+  <div class="banners">
+    <div class="banner">
+      <h3>¡Anuncios Destacados!</h3>
+      <p>Más visibilidad para tu negocio</p>
+    </div>
+    <div class="banner" style="background: linear-gradient(135deg, #FFE600, #ffcc00); color: var(--dark-blue);">
+      <h3>Publica Gratis</h3>
+      <p>Miles de personas te verán</p>
+    </div>
+  </div>
+
+  <section class="listings">
+    <h2>Anuncios Recientes</h2>
+    <div class="listing-grid" id="listingsGrid"></div>
+  </section>
+
+  <!-- Post Modal -->
+  <div class="modal" id="postModal">
+    <div class="modal-content">
+      <h2>Publicar Anuncio</h2>
+      <input type="text" id="adTitle" placeholder="Título del anuncio">
+      <select id="adCategory">
+        <option>Empleos</option>
+        <option>Autos y Trucks</option>
+        <option>Rentas</option>
+        <option>Servicios del Hogar</option>
+        <option>Fiestas y Eventos</option>
+        <option>Compra y Venta</option>
+        <option>Mascotas</option>
+        <option>Servicios Legales</option>
+      </select>
+      <input type="text" id="adPrice" placeholder="Precio (ej: $500 o Gratis)">
+      <input type="text" id="adLocation" placeholder="Ubicación (ej: Los Angeles, CA)">
+      <textarea id="adDesc" rows="4" placeholder="Descripción detallada"></textarea>
+      <label><input type="checkbox" id="adFeatured"> Marcar como Destacado</label>
+      <br><br>
+      <button class="btn-yellow" onclick="saveAd()">Publicar</button>
+      <button onclick="closeModals()" style="margin-left:1rem;">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div class="modal" id="adminModal">
+    <div class="modal-content">
+      <h2>Panel de Administración</h2>
+      <input type="password" id="adminPass" placeholder="Contraseña (admin123)">
+      <button class="btn-blue" onclick="loginAdmin()">Entrar</button>
+      <button onclick="closeModals()">Cerrar</button>
+      <div id="adminContent" style="margin-top:1.5rem; display:none;">
+        <h3>Gestionar Anuncios</h3>
+        <div id="adminList"></div>
+        <button class="btn-yellow" onclick="exportData()" style="margin-top:1rem;">Exportar Datos</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Clasificados Pro • Instalable como App (PWA)</p>
+    <p>Hosting en tu PC • Comparte el link para que instalen la app</p>
+  </footer>
+
+  <script>
+    let ads = JSON.parse(localStorage.getItem('clasificadosAds')) || [
+      { id: 1, title: "Cocinero de Línea", category: "Empleos", price: "$19/hora", location: "Los Angeles, CA", desc: "Se busca cocinero con experiencia", featured: true, icon: "💼" },
+      { id: 2, title: "GMC Sierra 2000", category: "Autos y Trucks", price: "$8,500", location: "Los Angeles, CA", desc: "Excelente condición", featured: false, icon: "🚗" },
+      { id: 3, title: "Apartamento 2 recámaras", category: "Rentas", price: "$1,800/mes", location: "Montclair, CA", desc: "Remodelado", featured: true, icon: "🏠" },
+      { id: 4, title: "Servicio Mariachi", category: "Fiestas y Eventos", price: "Desde $350", location: "Riverside, CA", desc: "Para todo tipo de eventos", featured: false, icon: "🎉" }
+    ];
+
+    const categories = ["Todos", "Empleos", "Autos y Trucks", "Rentas", "Servicios del Hogar", "Fiestas y Eventos", "Compra y Venta", "Mascotas"];
+    let currentCat = "Todos";
+
+    function renderCategories() {
+      const container = document.getElementById('categories');
+      container.innerHTML = categories.map(cat => 
+        `<button class="cat-btn ${cat === currentCat ? 'active' : ''}" onclick="filterByCat('${cat}')">${cat}</button>`
+      ).join('');
+    }
+
+    function renderListings(filtered = ads) {
+      const grid = document.getElementById('listingsGrid');
+      grid.innerHTML = filtered.map(ad => `
+        <div class="listing-card ${ad.featured ? 'featured' : ''}" onclick="showDetail(${ad.id})">
+          <div class="listing-img">${ad.icon || '📦'}</div>
+          <div class="listing-info">
+            <h4>${ad.title}</h4>
+            <div class="price">${ad.price}</div>
+            <div style="color:#666; font-size:0.9rem;">${ad.location} • ${ad.category}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterByCat(cat) {
+      currentCat = cat;
+      filterListings();
+      renderCategories();
+    }
+
+    function filterListings() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      let filtered = ads.filter(ad => 
+        (currentCat === "Todos" || ad.category === currentCat) &&
+        (ad.title.toLowerCase().includes(q) || ad.desc.toLowerCase().includes(q) || ad.location.toLowerCase().includes(q))
+      );
+      renderListings(filtered);
+    }
+
+    function showPostForm() { document.getElementById('postModal').classList.add('active'); }
+    function toggleAdmin() { document.getElementById('adminModal').classList.add('active'); }
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
+
+    function saveAd() {
+      const newAd = {
+        id: Date.now(),
+        title: document.getElementById('adTitle').value,
+        category: document.getElementById('adCategory').value,
+        price: document.getElementById('adPrice').value || "Consultar",
+        location: document.getElementById('adLocation').value,
+        desc: document.getElementById('adDesc').value,
+        featured: document.getElementById('adFeatured').checked,
+        icon: "📦"
+      };
+      if (!newAd.title) return alert("Título requerido");
+      ads.unshift(newAd);
+      localStorage.setItem('clasificadosAds', JSON.stringify(ads));
+      filterListings();
+      closeModals();
+      alert("Anuncio publicado!");
+    }
+
+    function loginAdmin() {
+      if (document.getElementById('adminPass').value === "admin123") {
+        document.getElementById('adminContent').style.display = "block";
+        renderAdminList();
+      } else alert("Contraseña incorrecta");
+    }
+
+    function renderAdminList() {
+      document.getElementById('adminList').innerHTML = ads.map(ad => `
+        <div style="border-bottom:1px solid #eee; padding:0.5rem 0; display:flex; justify-content:space-between;">
+          <span>${ad.title} (${ad.category})</span>
+          <button onclick="deleteAd(${ad.id})" style="background:#e74c3c;color:white;border:none;padding:0.3rem 0.6rem;border-radius:4px;">Eliminar</button>
+        </div>
+      `).join('');
+    }
+
+    function deleteAd(id) {
+      ads = ads.filter(a => a.id !== id);
+      localStorage.setItem('clasificadosAds', JSON.stringify(ads));
+      renderAdminList();
+      filterListings();
+    }
+
+    function exportData() {
+      const data = JSON.stringify(ads, null, 2);
+      const blob = new Blob([data], {type: 'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'anuncios-backup.json';
+      a.click();
+    }
+
+    function showDetail(id) {
+      const ad = ads.find(a => a.id === id);
+      alert(`${ad.title}\n\n${ad.desc}\n\nPrecio: ${ad.price}\nUbicación: ${ad.location}`);
+    }
+
+    // Init
+    renderCategories();
+    renderListings();
+
+    // PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
