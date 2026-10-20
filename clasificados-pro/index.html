@@ -13,20 +13,19 @@
 body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 
 /* HEADER */
-header{background:rgba(24,27,36,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:14px 20px;}
-.hd{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+header{background:rgba(24,27,36,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:12px 20px;}
+.hd{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .logo{font-size:1.4rem;font-weight:800;color:#fff;text-decoration:none;display:flex;align-items:center;gap:6px;}
 .logo span{background:var(--accent);color:#000;padding:2px 6px;border-radius:6px;font-size:1rem;}
-.btn{padding:10px 16px;border-radius:10px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;}
+.btn{padding:8px 16px;border-radius:10px;font-weight:600;font-size:.9rem;border:none;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;}
 .btn-primary{background:var(--accent);color:#000;}
 .btn-secondary{background:rgba(255,255,255,.08);color:#fff;}
 .btn-danger{background:#ef4444;color:#fff;}
-#navBtns{display:flex;gap:10px;}
+#navBtns{display:flex;gap:10px;align-items:center;}
 
 /* HERO Y BUSCADOR */
 .hero{padding:30px 20px;text-align:center;background:radial-gradient(circle at top,rgba(255,230,0,.08)0%,transparent 70%);}
 .hero h1{font-size:1.8rem;font-weight:800;margin-bottom:10px;}
-.hero p{color:var(--muted);font-size:0.95rem;margin-bottom:20px;}
 .search-box{max-width:500px;margin:0 auto;display:flex;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:6px;}
 .search-box input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:10px;font-size:1rem;}
 
@@ -36,19 +35,19 @@ header{background:rgba(24,27,36,.9);backdrop-filter:blur(10px);border-bottom:1px
 .cat{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--muted);font-size:.85rem;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;}
 .cat.active,.cat:hover{background:var(--accent);color:#000;font-weight:600;border-color:var(--accent);}
 
-/* CONTENIDO PRINCIPAL (1 COLUMNA RESPONSIVA) */
+/* MAIN */
 .main{max-width:1200px;margin:20px auto;padding:0 20px;}
 .tit{font-size:1.2rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:30px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-bottom:30px;}
 
 /* TARJETAS ANUNCIOS */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:.25s;cursor:pointer;display:flex;flex-direction:column;position:relative;}
-.card:hover{transform:translateY(-4px);border-color:rgba(255,230,0,.4);box-shadow:0 10px 25px -5px rgba(0,0,0,.5);}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,230,0,.4);}
 .card.f{border:2px solid var(--accent);}
 .imgw{width:100%;height:180px;background:#252836;position:relative;}
 .imgw img{width:100%;height:100%;object-fit:cover;}
 .badge{position:absolute;top:10px;left:10px;background:var(--accent);color:#000;font-size:.7rem;font-weight:800;padding:4px 8px;border-radius:6px;}
-.btn-fav{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.btn-fav{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .btn-fav.active{color:#ef4444;}
 .body{padding:14px;display:flex;flex-direction:column;flex:1;}
 .pri{font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:6px;}
@@ -65,18 +64,18 @@ header{background:rgba(24,27,36,.9);backdrop-filter:blur(10px);border-bottom:1px
 .chat-btn-float:hover { transform: scale(1.05); }
 
 .chat-panel {
-    position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px;
+    position: fixed; bottom: 90px; right: 20px; width: 340px; height: 480px;
     max-height: calc(100vh - 120px); background: var(--card); border: 1px solid var(--border);
     border-radius: 16px; display: none; flex-direction: column; z-index: 999;
     box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow: hidden;
 }
 .chat-panel.active { display: flex; }
 @media(max-width: 420px) {
-    .chat-panel { width: calc(100% - 40px); right: 20px; bottom: 90px; }
+    .chat-panel { width: calc(100% - 40px); right: 20px; bottom: 85px; }
 }
 
-.chat-h { padding:14px; background:#232734; font-weight:700; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); }
-.close-chat { background:none; border:none; color:var(--text); font-size:1.2rem; cursor:pointer; padding:4px; }
+.chat-h { padding:12px 16px; background:#232734; font-weight:700; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); }
+.close-chat { background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer; line-height:1; }
 .chat-m { flex:1; padding:14px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
 .b { background:#2a2f40; padding:8px 12px; border-radius:10px; font-size:.85rem; max-width:85%; word-wrap:break-word; }
 .b.mine { background:var(--accent); color:#000; align-self:flex-end; }
@@ -86,21 +85,17 @@ header{background:rgba(24,27,36,.9);backdrop-filter:blur(10px);border-bottom:1px
 /* MODALES */
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(5px);z-index:1000;align-items:center;justify-content:center;padding:15px;}
 .modal.active{display:flex;}
-.mc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:500px;padding:20px;position:relative;max-height:90vh;overflow-y:auto;}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);width:100%;max-width:480px;padding:20px;position:relative;max-height:90vh;overflow-y:auto;}
 .close{position:absolute;top:15px;right:15px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;}
 .fg{margin-bottom:14px;}
 .fg label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px;}
 .fc{width:100%;padding:10px 14px;background:#2a2f40;border:1px solid var(--border);border-radius:8px;color:#fff;outline:none;font-size:.9rem;}
 .google-btn{width:100%;margin-bottom:15px;background:#fff;color:#000;font-weight:700;border:1px solid #ccc;padding:12px;font-size:.9rem;}
-.google-btn:hover{background:#f1f1f1;}
 
 footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:var(--muted);font-size:.85rem; margin-top:40px;}
 
-/* AJUSTES MOVILES GLOBALES */
 @media(max-width: 500px) {
-    .hd { flex-direction:column; gap:12px; }
-    #navBtns { width:100%; display:grid; grid-template-columns:1fr 1fr; }
-    .hero h1 { font-size:1.5rem; }
+    .hd { flex-direction:row; justify-content:space-between; }
     .grid { grid-template-columns: 1fr 1fr; gap:10px; }
     .imgw { height:120px; }
     .pri { font-size: 1.1rem; }
@@ -113,7 +108,10 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 <header>
 <div class="hd">
 <a href="#" class="logo"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> ElClasificado<span>.ok</span></a>
-<div id="navBtns"></div>
+<div id="navBtns">
+    <button class="btn btn-secondary" onclick="abrirAuth(false)">Entrar</button>
+    <button class="btn btn-primary" onclick="abrirAuth(true)">Registro</button>
+</div>
 </div>
 </header>
 
@@ -151,12 +149,12 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 
 <div class="chat-panel" id="chatPanel">
     <div class="chat-h">
-        <span><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.6rem; margin-right:5px;"></i> Chat en Vivo</span>
+        <span><i class="fa-solid fa-circle" style="color:#22c55e; font-size:0.6rem; margin-right:5px;"></i> Chat Global en Vivo</span>
         <button class="close-chat" onclick="toggleChat()">&times;</button>
     </div>
     <div class="chat-m" id="chatMs"></div>
     <form class="chat-in" onsubmit="envChat(event)">
-        <input id="chatIn" placeholder="Mensaje..." required>
+        <input id="chatIn" placeholder="Escribe un mensaje..." required>
         <button type="submit" class="btn btn-primary" style="padding:8px 12px;"><i class="fa-solid fa-paper-plane"></i></button>
     </form>
 </div>
@@ -167,13 +165,13 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 <button class="close" onclick="cerrar('modPub')">&times;</button>
 <h2 style="margin-bottom:18px; font-size:1.3rem;"><i class="fa-solid fa-plus-circle" style="color:var(--accent)"></i> Publicar Anuncio</h2>
 <form onsubmit="guardar(event)">
-<div class="fg"><label>Título *</label><input id="pubTit" class="fc" placeholder="Ej: Vendo Auto" required></div>
+<div class="fg"><label>Título *</label><input id="pubTit" class="fc" placeholder="Ej: Toyota Corolla 2020" required></div>
 <div class="fg"><label>Categoría *</label><select id="pubCat" class="fc"><option value="autos">Autos</option><option value="rentas">Rentas</option><option value="empleos">Empleos</option><option value="servicios">Servicios</option><option value="electronica">Electrónica</option><option value="otros" selected>Otros</option></select></div>
 <div class="fg"><label>Precio *</label><input id="pubPre" type="number" class="fc" placeholder="Ej: 5000" required></div>
-<div class="fg"><label>WhatsApp de Contacto *</label><input id="pubTel" class="fc" placeholder="Ej: 2644118460" required></div>
+<div class="fg"><label>WhatsApp *</label><input id="pubTel" class="fc" placeholder="Ej: 2644118460" required></div>
 <div class="fg"><label>Ubicación</label><input id="pubUbi" class="fc" placeholder="Ej: San Juan"></div>
 <div class="fg"><label>Foto del Anuncio</label><input type="file" id="pubFoto" accept="image/*" capture="environment" class="fc"></div>
-<div class="fg"><label>Descripción</label><textarea id="pubDesc" class="fc" rows="2" placeholder="Detalles..."></textarea></div>
+<div class="fg"><label>Descripción</label><textarea id="pubDesc" class="fc" rows="2" placeholder="Detalles de tu anuncio..."></textarea></div>
 <button type="submit" class="btn btn-primary" style="width:100%;" id="btnSav"><i class="fa-solid fa-cloud-arrow-up"></i> Publicar Ahora</button>
 </form>
 </div>
@@ -188,7 +186,7 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 <button class="btn google-btn" type="button" onclick="loginGoogle()">
 <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" height="20" alt="G"> Continuar con Google
 </button>
-<div style="text-align:center;color:var(--muted);margin:10px 0;font-size:.8rem;">— O CORREO —</div>
+<div style="text-align:center;color:var(--muted);margin:10px 0;font-size:.8rem;">— O CON EMAIL —</div>
 
 <form onsubmit="auth(event)">
 <div class="fg"><label>Email</label><input id="aEm" type="email" class="fc" required></div>
@@ -213,10 +211,8 @@ footer{border-top:1px solid var(--border);padding:20px;text-align:center;color:v
 </footer>
 
 <script>
-// Limpiar caché vieja de Vercel
 if('serviceWorker'in navigator) navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));
 
-// CREDENCIALES SUPABASE
 const URL='https://rhozvkoogswzbdkpeimz.supabase.co';
 const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
 const sb=supabase.createClient(URL,KEY);
@@ -225,12 +221,11 @@ let dataAll=[],cat='todas',user=null,isReg=false,favs=JSON.parse(localStorage.ge
 
 window.addEventListener('load',()=>{checkUser();loadAds();loadChat();subsChat();});
 
-// AUTENTICACIÓN
-async function checkUser(){const{data}=await sb.auth.getSession();user=data?.session?.user||null;renderNav();}
+async function checkUser(){try{const{data}=await sb.auth.getSession();user=data?.session?.user||null;renderNav();}catch(e){}}
 function renderNav(){
-const n=document.getElementById('navBtns');
-if(user){n.innerHTML='<button class="btn btn-primary" onclick="abrirMod(\'modPub\')" style="width:100%;"><i class="fa-solid fa-plus"></i> Publicar</button><button class="btn btn-secondary" onclick="logout()" style="width:100%;"><i class="fa-solid fa-right-from-bracket"></i></button>';}
-else{n.innerHTML='<button class="btn btn-secondary" onclick="abrirAuth(false)" style="width:100%;">Entrar</button><button class="btn btn-primary" onclick="abrirAuth(true)" style="width:100%;">Registro</button>';}
+const n=document.getElementById('navBtns');if(!n)return;
+if(user){n.innerHTML='<button class="btn btn-primary" onclick="abrirMod(\'modPub\')"><i class="fa-solid fa-plus"></i> Publicar</button><button class="btn btn-secondary" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>';}
+else{n.innerHTML='<button class="btn btn-secondary" onclick="abrirAuth(false)">Entrar</button><button class="btn btn-primary" onclick="abrirAuth(true)">Registro</button>';}
 }
 
 function abrirAuth(r){isReg=r;document.getElementById('authTit').innerText=r?'Crear Cuenta':'Iniciar Sesión';document.getElementById('btnAuth').innerText=r?'Registrarse':'Entrar';document.getElementById('authTxt').innerText=r?'¿Ya tienes cuenta?':'¿No tienes cuenta?';document.getElementById('authLnk').innerText=r?'Inicia Sesión':'Regístrate';abrirMod('modAuth');}
@@ -239,15 +234,14 @@ async function auth(e){e.preventDefault();const em=document.getElementById('aEm'
 async function loginGoogle(){const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});if(error)alert('Error: '+error.message);}
 async function logout(){await sb.auth.signOut();user=null;renderNav();}
 
-// ANUNCIOS
-async function loadAds(){const{data,error}=await sb.from('listings').select('*').order('created_at',{ascending:false});if(!error){dataAll=data||[];draw();}}
+async function loadAds(){try{const{data,error}=await sb.from('listings').select('*').order('created_at',{ascending:false});if(!error){dataAll=data||[];draw();}}catch(e){}}
 function draw(){
 const d=document.getElementById('grdD'),n=document.getElementById('grdN');d.innerHTML='';n.innerHTML='';
 const f=dataAll.filter(x=>{const mCat=cat==='todas'||x.category===cat;const mS=x.title.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase());return mCat&&mS;});
 const des=f.filter(x=>x.is_featured),norm=f.filter(x=>!x.is_featured);
 document.getElementById('secDest').style.display=des.length?'block':'none';
 des.forEach(x=>d.appendChild(card(x)));norm.forEach(x=>n.appendChild(card(x)));
-if(f.length===0)n.innerHTML='<p style="color:var(--muted);grid-column:1/-1;">No hay anuncios todavía.</p>';
+if(f.length===0)n.innerHTML='<p style="color:var(--muted);grid-column:1/-1;">No hay anuncios todavia. ¡Sé el primero en publicar!</p>';
 }
 function card(i){
 const c=document.createElement('div');c.className='card '+(i.is_featured?'f':'');
@@ -259,21 +253,18 @@ function fav(e,id){e.stopPropagation();favs=favs.includes(id)?favs.filter(x=>x!=
 function catSel(c,el){cat=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));el.classList.add('active');draw();}
 function filtrar(){draw();}
 
-// DETALLE ANUNCIO
 function showD(i){
 const ph=(i.phone||'').replace(/\D/g,'');const wa='https://wa.me/'+ph+'?text=Hola!%20Vi%20tu%20anuncio%20'+encodeURIComponent(i.title);
 document.getElementById('detCont').innerHTML='<img src="'+(i.image_url||'https://via.placeholder.com/500x300')+'" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;margin-bottom:15px;"><h2 style="font-size:1.2rem;">'+esc(i.title)+'</h2><h3 style="color:var(--accent);font-size:1.5rem;margin:8px 0;">$'+Number(i.price||0).toLocaleString()+'</h3><p style="color:var(--muted);margin-bottom:12px;font-size:0.9rem;"><i class="fa-solid fa-location-dot"></i> '+esc(i.location||'N/A')+'</p><div style="background:#2a2f40;padding:12px;border-radius:8px;margin-bottom:15px;font-size:0.9rem;"><p style="white-space:pre-wrap;">'+esc(i.description||'Sin descripción.')+'</p></div><a href="'+wa+'" target="_blank" class="btn btn-primary" style="width:100%;background:#22c55e;color:#fff;"><i class="fa-brands fa-whatsapp"></i> Enviar WhatsApp</a>';
 abrirMod('modDet');
 }
 
-// SUBIR FOTO INFALIBLE
 async function procesarImagen(file){
 if(!file) return 'https://via.placeholder.com/300x200?text=Sin+Imagen';
 try{const ext=file.name.split('.').pop();const p='foto_'+Date.now()+'.'+ext;const{data,error}=await sb.storage.from('anuncios').upload(p,file);if(!error&&data){return sb.storage.from('anuncios').getPublicUrl(p).data.publicUrl;}}catch(e){}
 return new Promise(r=>{const r2=new FileReader();r2.onloadend=()=>r(r2.result);r2.readAsDataURL(file);});
 }
 
-// PUBLICAR
 async function guardar(e){
 e.preventDefault();const btn=document.getElementById('btnSav');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Publicando...';
 try{
@@ -281,17 +272,15 @@ const f=document.getElementById('pubFoto').files[0];const url=await procesarImag
 const pl={title:document.getElementById('pubTit').value,category:document.getElementById('pubCat').value||'otros',price:parseFloat(document.getElementById('pubPre').value||0),phone:document.getElementById('pubTel').value||'',location:document.getElementById('pubUbi').value||'',description:document.getElementById('pubDesc').value||'',image_url:url,user_id:user?user.id:null};
 const{error}=await sb.from('listings').insert([pl]);
 if(error)throw error;
-alert('¡Publicado con éxito!');cerrar('modPub');loadAds();
-}catch(err){alert('Error al publicar: '+err.message);}
+alert('¡Publicado!');cerrar('modPub');loadAds();
+}catch(err){alert('Error: '+err.message);}
 finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-cloud-arrow-up"></i> Publicar Ahora';}
 }
 
-// UTILIDADES MODAL
 function abrirMod(id){document.getElementById(id).classList.add('active');}
 function cerrar(id){document.getElementById(id).classList.remove('active');}
 function esc(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-// CHAT FLOTANTE LOGIC
 function toggleChat() {
     const p = document.getElementById('chatPanel');
     p.classList.toggle('active');
@@ -300,14 +289,13 @@ function toggleChat() {
         b.scrollTop = b.scrollHeight;
     }
 }
-async function loadChat(){const{data}=await sb.from('chat_messages').select('*').order('created_at',{ascending:false}).limit(20);const box=document.getElementById('chatMs');box.innerHTML='';(data||[]).reverse().forEach(x=>bubble(x));box.scrollTop=box.scrollHeight;}
-function subsChat(){sb.channel('chat_live').on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},p=>{bubble(p.new);const b=document.getElementById('chatMs');b.scrollTop=b.scrollHeight;}).subscribe();}
+async function loadChat(){try{const{data}=await sb.from('chat_messages').select('*').order('created_at',{ascending:false}).limit(20);const box=document.getElementById('chatMs');box.innerHTML='';(data||[]).reverse().forEach(x=>bubble(x));box.scrollTop=box.scrollHeight;}catch(e){}}
+function subsChat(){try{sb.channel('chat_live').on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},p=>{bubble(p.new);const b=document.getElementById('chatMs');b.scrollTop=b.scrollHeight;}).subscribe();}catch(e){}}
 function bubble(m){const box=document.getElementById('chatMs');const d=document.createElement('div');const mine=user&&user.id===m.user_id;d.className='b '+(mine?'mine':'');d.innerHTML='<div style="font-weight:700;font-size:.7rem;margin-bottom:3px;opacity:.7;">'+esc(m.sender_name||'Anónimo')+'</div><div>'+esc(m.message)+'</div>';box.appendChild(d);}
 async function envChat(e){e.preventDefault();const inEl=document.getElementById('chatIn');const v=inEl.value.trim();if(!v)return;await sb.from('chat_messages').insert([{sender_name:user?user.email.split('@')[0]:'Visita',message:v,user_id:user?user.id:null}]);inEl.value='';}
 
-// PANEL ADMIN
-async function admin(){const p=prompt('Clave de Admin:');if(p==='admin1234'){let h='<h2 style="margin-bottom:15px;font-size:1.2rem;">Borrar Anuncios</h2>';dataAll.forEach(i=>{h+='<div style="display:flex;justify-content:space-between;align-items:center;background:#2a2f40;padding:10px;margin-bottom:8px;border-radius:6px;"><span style="font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%;">'+esc(i.title)+'</span><button onclick="delAd(\''+i.id+'\')" class="btn btn-danger" style="padding:4px 8px;font-size:.8rem;">Borrar</button></div>'});document.getElementById('detCont').innerHTML=h;abrirMod('modDet');}else if(p)alert('Incorrecta');}
-async function delAd(id){if(confirm('¿Seguro?')){await sb.from('listings').delete().eq('id',id);alert('Borrado');cerrar('modDet');loadAds();}}
+async function admin(){const p=prompt('Clave admin:');if(p==='admin1234'){let h='<h2 style="margin-bottom:15px;font-size:1.2rem;">Borrar Anuncios</h2>';dataAll.forEach(i=>{h+='<div style="display:flex;justify-content:space-between;align-items:center;background:#2a2f40;padding:10px;margin-bottom:8px;border-radius:6px;"><span style="font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%;">'+esc(i.title)+'</span><button onclick="delAd(\''+i.id+'\')" class="btn btn-danger" style="padding:4px 8px;font-size:.8rem;">Borrar</button></div>'});document.getElementById('detCont').innerHTML=h;abrirMod('modDet');}else if(p)alert('Incorrecta');}
+async function delAd(id){if(confirm('¿Eliminar?')){await sb.from('listings').delete().eq('id',id);alert('Borrado');cerrar('modDet');loadAds();}}
 </script>
 </body>
 </html>
