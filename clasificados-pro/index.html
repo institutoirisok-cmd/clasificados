@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>El Clasificado - Compra y Venta en Argentina</title>
+  <title>clasificadosOK - Compra y Venta en Argentina</title>
   
+  <!-- Ícono del Navegador (Favicon) -->
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1170/1170576.png">
+  <link rel="shortcut icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1170/1170576.png">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1170/1170576.png">
+
   <!-- Manifest PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#121214">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1170/1170576.png">
 
   <!-- Fuente Outfit & FontAwesome icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +54,7 @@
     /* Header & Nav */
     header { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); background: var(--glass); border-bottom: 1px solid var(--glass-border); padding: 12px 20px; }
     .header-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
-    .logo { font-size: 1.5rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .logo { font-size: 1.5rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
     .logo span { color: var(--accent); }
 
     .nav-actions { display: flex; align-items: center; gap: 10px; }
@@ -143,7 +147,7 @@
   <!-- Header -->
   <header>
     <div class="header-container">
-      <a href="#" class="logo"><i class="fa-solid fa-bolt"></i> CLASIFICADO<span>.PRO</span></a>
+      <a href="#" class="logo"><i class="fa-solid fa-bolt" style="color:var(--accent);"></i> clasificados<span>OK</span></a>
       <div class="nav-actions">
         <button id="pwa-install-btn" class="btn btn-install" onclick="triggerPwaInstall()">
           <i class="fa-solid fa-download"></i> Instalar App
@@ -358,7 +362,7 @@
   <div class="install-overlay" id="install-overlay">
     <img src="https://cdn-icons-png.flaticon.com/512/1170/1170576.png" alt="App Icon">
     <div class="install-info">
-      <h4>Instala El Clasificado PRO</h4>
+      <h4>Instala clasificadosOK</h4>
       <p>Añade la app a tu pantalla de inicio para una experiencia más rápida.</p>
     </div>
     <button class="btn btn-primary" onclick="triggerPwaInstall()">Instalar</button>
@@ -366,7 +370,7 @@
   </div>
 
   <footer>
-    <p>&copy; 2025 El Clasificado PRO Argentina - Todos los derechos reservados.</p>
+    <p>&copy; 2025 clasificadosOK Argentina - Todos los derechos reservados.</p>
     <p><a onclick="adminPanel()"><i class="fa-solid fa-lock"></i> Panel Administrador</a></p>
   </footer>
 
@@ -548,7 +552,7 @@
                 </div>
               </div>
               <div style="display:flex; gap:8px;">
-                <a href="https://wa.me/${item.phone}?text=Hola,%20vi%20tu%20anuncio%20'${encodeURIComponent(item.title)}'%20en%20El%20Clasificado" target="_blank" class="btn btn-primary" style="flex:1; justify-content:center; text-decoration:none;">
+                <a href="https://wa.me/${item.phone}?text=Hola,%20vi%20tu%20anuncio%20'${encodeURIComponent(item.title)}'%20en%20clasificadosOK" target="_blank" class="btn btn-primary" style="flex:1; justify-content:center; text-decoration:none;">
                   <i class="fa-brands fa-whatsapp"></i> Contactar
                 </a>
                 ${isMine ? `<button class="btn btn-secondary" onclick="deleteMyListing('${item.id}')" style="color:#ef4444;"><i class="fa-solid fa-trash"></i></button>` : ''}
