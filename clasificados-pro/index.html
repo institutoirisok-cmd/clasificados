@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>clasificadosOK</title>
+
+  <!-- Íconos del navegador -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FFE600">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="clasificadosOK">
+
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -18,6 +31,7 @@
     .btn{border:none;padding:10px 16px;border-radius:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:.9rem}
     .btn-p{background:var(--accent);color:#000}
     .btn-s{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--border)}
+    .btn-install{background:linear-gradient(135deg,#10b981,#059669);color:#fff;display:none}
     .controls{max-width:1200px;margin:20px auto;padding:0 20px;display:flex;gap:10px;flex-wrap:wrap}
     .search{flex:1;min-width:200px;position:relative}
     .search input,.filter{width:100%;padding:12px 12px 12px 40px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:12px;color:#fff}
@@ -45,6 +59,8 @@
     textarea.form-control{min-height:90px}
     .comment-item{background:rgba(255,255,255,.03);border-radius:8px;padding:8px 12px;margin-bottom:8px;font-size:.85rem}
     .comment-author{font-weight:700;color:var(--accent);font-size:.75rem}
+    .install-banner{position:fixed;bottom:20px;left:20px;right:20px;max-width:420px;margin:0 auto;background:rgba(18,18,24,.95);border:2px solid var(--accent);border-radius:16px;padding:16px;display:none;align-items:center;gap:12px;z-index:9999;backdrop-filter:blur(10px)}
+    .install-banner img{width:48px;height:48px;border-radius:10px}
     footer{text-align:center;padding:30px;font-size:.8rem;color:var(--muted);margin-top:40px;border-top:1px solid var(--border)}
   </style>
 </head>
@@ -53,6 +69,7 @@
     <div class="header">
       <a href="#" class="logo"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> clasificados<span>OK</span></a>
       <div>
+        <button id="install-btn" class="btn btn-install" onclick="installApp()"><i class="fa-solid fa-download"></i> Instalar App</button>
         <a href="https://wa.link/snq5ah" target="_blank" class="btn btn-p"><i class="fa-solid fa-star"></i> Destacar</a>
         <button class="btn btn-s" id="auth-btn" onclick="openAuth()">Ingresar</button>
         <button class="btn btn-p" onclick="openPublish()">+ Publicar</button>
@@ -153,6 +170,17 @@
     </div>
   </div>
 
+  <!-- Banner instalar PWA -->
+  <div class="install-banner" id="install-banner">
+    <img src="https://cdn-icons-png.flaticon.com/512/1041/1041883.png" alt="App">
+    <div style="flex:1">
+      <strong>Instala clasificadosOK</strong>
+      <p style="font-size:.8rem;color:var(--muted);margin:2px 0 0">Añadila a tu pantalla de inicio</p>
+    </div>
+    <button class="btn btn-p" onclick="installApp()">Instalar</button>
+    <i class="fa-solid fa-xmark" style="cursor:pointer;color:var(--muted)" onclick="closeBanner()"></i>
+  </div>
+
   <footer>
     <p>&copy; 2025 clasificadosOK Argentina</p>
   </footer>
@@ -162,8 +190,36 @@ const SUPABASE_URL = 'https://rhozvkoogswzbdkpeimz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
 
 let sb, data = [], user = null, cat = '', onlyMine = false, editingId = null, activeId = null, isRegister = false;
+let deferredPrompt = null;
 
 function getSb(){ if(!sb) sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); return sb; }
+
+// PWA Install
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-btn').style.display = 'inline-flex';
+  if (!localStorage.getItem('pwa_closed')) {
+    setTimeout(() => document.getElementById('install-banner').style.display = 'flex', 2000);
+  }
+});
+
+async function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('install-banner').style.display = 'none';
+    document.getElementById('install-btn').style.display = 'none';
+  } else {
+    alert("En iPhone: Tocá Compartir → Agregar a Inicio.\nEn Android: Menú ⋮ → Instalar aplicación.");
+  }
+}
+
+function closeBanner() {
+  document.getElementById('install-banner').style.display = 'none';
+  localStorage.setItem('pwa_closed', 'true');
+}
 
 async function init(){
   const { data: { session } } = await getSb().auth.getSession();

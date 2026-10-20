@@ -1,13 +1,20 @@
 {
-  "name": "Clasificados Pro",
-  "short_name": "Clasificados",
-  "description": "Tu mercado local de clasificados - Instalable",
+  "name": "clasificadosOK",
+  "short_name": "clasificadosOK",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FFE600",
+  "background_color": "#0d0e12",
   "theme_color": "#FFE600",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1041/1041883.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1041/1041883.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
