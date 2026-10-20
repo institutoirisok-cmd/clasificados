@@ -1,384 +1,421 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clasificados Pro | Tu Mercado Local</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#FFE600">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clasificados Pro | Mercado Local & Chat En Vivo</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#FFE600" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap');
+
     :root {
-      --yellow: #FFE600;
-      --blue: #3483FA;
-      --dark-blue: #2D3277;
-      --dark: #333;
-      --gray: #f5f5f5;
-      --text: #333;
-      --white: #fff;
+      --bg: #0b091a;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-border: rgba(255, 255, 255, 0.08);
+      --text: #f5f5f7;
+      --text-soft: rgba(255, 255, 255, 0.6);
+      --accent: #FFE600;
+      --accent-glow: rgba(255, 230, 0, 0.35);
+      --shadow-3d: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--gray);
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0b091a 0%, #120e2e 50%, #1c1545 100%);
       color: var(--text);
+      min-height: 100vh;
       line-height: 1.5;
+      overflow-x: hidden;
     }
+
+    /* Fondo animado 3D */
+    .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .blob {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      filter: blur(140px); opacity: 0.3; animation: float 18s infinite ease-in-out alternate;
+    }
+    .blob-1 { background: var(--accent); top: -10%; left: -5%; }
+    .blob-2 { background: #8b5cf6; bottom: -10%; right: -5%; animation-delay: -7s; }
+
+    @keyframes float {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(30px, -40px) scale(1.1); }
+    }
+
+    main { position: relative; z-index: 1; }
+
+    /* Header */
     header {
-      background: var(--yellow);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: rgba(11, 9, 26, 0.7);
+      border-bottom: 1px solid var(--surface-border);
+      padding: 1rem 5vw;
+      display: flex; justify-content: space-between; align-items: center;
     }
     .logo {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--dark-blue);
+      font-weight: 300; font-size: 1.5rem; color: var(--text);
+      text-decoration: none; display: flex; align-items: center; gap: 0.5rem;
     }
-    .header-actions button, .header-actions a {
-      background: var(--blue);
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      margin-left: 0.5rem;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .search-section {
-      background: white;
-      padding: 2rem;
-      text-align: center;
-    }
-    .search-box {
-      max-width: 700px;
-      margin: 0 auto;
-      position: relative;
-    }
-    .search-box input {
-      width: 100%;
-      padding: 1rem 1rem 1rem 3rem;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 1.1rem;
-    }
-    .search-box::before { content: "🔍"; position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); }
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      padding: 1.5rem;
-      justify-content: center;
-      background: white;
-      margin: 1rem 0;
-    }
-    .cat-btn {
-      background: white;
-      border: 2px solid var(--yellow);
-      padding: 0.8rem 1.5rem;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    .cat-btn:hover, .cat-btn.active { background: var(--yellow); color: var(--dark-blue); }
-    .banners {
+    .logo span { font-weight: 600; color: var(--accent); }
+
+    /* Layout Principal */
+    .container {
+      max-width: 1280px; margin: 0 auto;
+      padding: 2rem 4vw 5rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1rem;
-      padding: 1rem 2rem;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+      align-items: start;
     }
-    .banner {
-      background: linear-gradient(135deg, var(--blue), var(--dark-blue));
-      color: white;
-      padding: 2rem;
-      border-radius: 12px;
-      text-align: center;
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+    @media (max-width: 960px) {
+      .container { grid-template-columns: 1fr; }
     }
-    .banner h3 { margin-bottom: 0.5rem; }
-    .listings {
-      padding: 1rem 2rem 3rem;
+
+    /* Cards Estilo Glassmorphism 3D */
+    .card-3d {
+      background: linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+      border: 1px solid var(--surface-border);
+      border-radius: 24px;
+      padding: 1.8rem;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-3d);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .listing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
+
+    /* Formulario Publicar */
+    h2 { font-weight: 300; font-size: 1.25rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+    h2 i { color: var(--accent); }
+
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-soft); margin-bottom: 0.3rem; }
+    input, select, textarea {
+      width: 100%; padding: 0.8rem 1rem; border-radius: 12px;
+      border: 1px solid var(--surface-border);
+      background: rgba(255,255,255,0.03); color: var(--text);
+      font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.3s;
     }
-    .listing-card {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-      cursor: pointer;
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); background: rgba(255,255,255,0.06); }
+
+    .btn-accent {
+      width: 100%; padding: 0.9rem; border: none; border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, #e6ce00 100%);
+      color: #0b091a; font-family: inherit; font-weight: 600; font-size: 0.95rem;
+      cursor: pointer; box-shadow: 0 8px 25px var(--accent-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .listing-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-    .listing-img {
-      height: 160px;
-      background: linear-gradient(45deg, var(--yellow), #ffcc00);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
+    .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 12px 32px var(--accent-glow); }
+
+    /* Grid de Anuncios */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+    .item-card {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--surface-border);
+      border-radius: 20px; overflow: hidden; backdrop-filter: blur(10px);
+      transition: transform 0.3s ease; display: flex; flex-direction: column;
     }
-    .listing-info { padding: 1rem; }
-    .price { color: var(--blue); font-weight: bold; font-size: 1.2rem; }
-    .featured { border: 3px solid var(--yellow); position: relative; }
-    .featured::after {
-      content: "DESTACADO";
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--yellow);
-      color: var(--dark-blue);
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: bold;
+    .item-card:hover { transform: translateY(-6px); }
+    .item-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-bottom: 1px solid var(--surface-border); }
+    .item-body { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; }
+    .price { color: var(--accent); font-weight: 600; font-size: 1.2rem; margin-top: auto; padding-top: 0.5rem; }
+
+    /* ========================================================= */
+    /* SECCIÓN CHAT EN VIVO 3D                                  */
+    /* ========================================================= */
+    .chat-card {
+      position: sticky; top: 90px;
+      display: flex; flex-direction: column;
+      height: 600px; max-height: calc(100vh - 120px);
+      background: linear-gradient(160deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid var(--surface-border);
+      border-radius: 28px; backdrop-filter: blur(24px);
+      box-shadow: var(--shadow-3d); overflow: hidden;
     }
-    /* Modal / Forms */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
+
+    .chat-header {
+      padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--surface-border);
+      background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center;
     }
-    .modal.active { display: flex; }
-    .modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      max-width: 500px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
+    .chat-header h2 { margin: 0; font-size: 1.1rem; }
+    .live-indicator {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem; color: #10b981; text-transform: uppercase; letter-spacing: 0.05em;
     }
-    .modal-content input, .modal-content select, .modal-content textarea {
-      width: 100%;
-      padding: 0.75rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ddd;
-      border-radius: 6px;
+    .dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
+
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .chat-messages {
+      flex: 1; padding: 1.2rem; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 0.8rem;
     }
-    .btn-yellow { background: var(--yellow); color: var(--dark); border: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .btn-blue { background: var(--blue); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; }
-    .admin-panel { display: none; padding: 2rem; background: white; margin: 1rem; border-radius: 12px; }
-    .admin-panel.active { display: block; }
-    footer { text-align: center; padding: 2rem; background: var(--dark-blue); color: white; margin-top: 2rem; }
-    @media (max-width: 600px) {
-      header { flex-direction: column; gap: 1rem; }
-      .categories { justify-content: flex-start; }
+
+    .chat-bubble {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px; padding: 0.75rem 1rem;
+      max-width: 90%; word-break: break-word;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .chat-bubble .author {
+      font-size: 0.75rem; font-weight: 600; color: var(--accent);
+      margin-bottom: 0.2rem; display: flex; justify-content: space-between;
+    }
+    .chat-bubble .time { color: var(--text-soft); font-weight: 300; font-size: 0.65rem; }
+    .chat-bubble .text { font-size: 0.9rem; color: var(--text); font-weight: 300; }
+
+    .chat-footer {
+      padding: 1rem; border-top: 1px solid var(--surface-border);
+      background: rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .chat-input-group { display: flex; gap: 0.5rem; }
+    .chat-input-group input { flex: 1; padding: 0.75rem 0.9rem; font-size: 0.88rem; border-radius: 12px; }
+    .chat-input-group button {
+      width: auto; padding: 0 1.2rem; border-radius: 12px;
+      background: var(--accent); color: #0b091a; border: none; font-weight: 600; cursor: pointer;
+    }
+
+    footer { text-align: center; padding: 3rem 1rem; color: rgba(255,255,255,0.2); font-size: 0.85rem; }
   </style>
 </head>
+
 <body>
+  <div class="ambient">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
   <header>
-    <div class="logo">Clasificados Pro</div>
-    <div class="header-actions">
-      <button onclick="showPostForm()">+ Publicar Anuncio</button>
-      <button onclick="toggleAdmin()">Admin</button>
-    </div>
+    <a href="#" class="logo">
+      <i class="fa-solid fa-comments" style="color:var(--accent);"></i> Clasificados <span>Pro</span>
+    </a>
+    <div class="live-indicator"><div class="dot"></div> En vivo</div>
   </header>
 
-  <section class="search-section">
-    <h1 style="color: var(--dark-blue); margin-bottom: 1rem;">Encuentra lo que necesitas</h1>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Buscar empleos, autos, rentas, servicios..." oninput="filterListings()">
-    </div>
-  </section>
+  <main>
+    <div class="container">
+      <!-- Columna Principal: Publicar y Ver Anuncios -->
+      <div>
+        <section class="card-3d">
+          <h2><i class="fa-solid fa-plus-circle"></i> Publicar Anuncio</h2>
+          <form id="formPublicar" onsubmit="publicarAnuncio(event)">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+              <div class="form-group">
+                <label>Título</label>
+                <input type="text" id="titulo" placeholder="Ej: Vendo Celular" required />
+              </div>
+              <div class="form-group">
+                <label>Precio</label>
+                <input type="text" id="precio" placeholder="Ej: $120.000" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Descripción</label>
+              <textarea id="descripcion" rows="2" placeholder="Detalles del producto o servicio..." required></textarea>
+            </div>
+            <div class="form-group">
+              <label>URL Imagen (Opcional)</label>
+              <input type="url" id="imagenUrl" placeholder="https://..." />
+            </div>
+            <button type="submit" class="btn-accent">Publicar Anuncio</button>
+          </form>
+        </section>
 
-  <div class="categories" id="categories"></div>
-
-  <div class="banners">
-    <div class="banner">
-      <h3>¡Anuncios Destacados!</h3>
-      <p>Más visibilidad para tu negocio</p>
-    </div>
-    <div class="banner" style="background: linear-gradient(135deg, #FFE600, #ffcc00); color: var(--dark-blue);">
-      <h3>Publica Gratis</h3>
-      <p>Miles de personas te verán</p>
-    </div>
-  </div>
-
-  <section class="listings">
-    <h2>Anuncios Recientes</h2>
-    <div class="listing-grid" id="listingsGrid"></div>
-  </section>
-
-  <!-- Post Modal -->
-  <div class="modal" id="postModal">
-    <div class="modal-content">
-      <h2>Publicar Anuncio</h2>
-      <input type="text" id="adTitle" placeholder="Título del anuncio">
-      <select id="adCategory">
-        <option>Empleos</option>
-        <option>Autos y Trucks</option>
-        <option>Rentas</option>
-        <option>Servicios del Hogar</option>
-        <option>Fiestas y Eventos</option>
-        <option>Compra y Venta</option>
-        <option>Mascotas</option>
-        <option>Servicios Legales</option>
-      </select>
-      <input type="text" id="adPrice" placeholder="Precio (ej: $500 o Gratis)">
-      <input type="text" id="adLocation" placeholder="Ubicación (ej: Los Angeles, CA)">
-      <textarea id="adDesc" rows="4" placeholder="Descripción detallada"></textarea>
-      <label><input type="checkbox" id="adFeatured"> Marcar como Destacado</label>
-      <br><br>
-      <button class="btn-yellow" onclick="saveAd()">Publicar</button>
-      <button onclick="closeModals()" style="margin-left:1rem;">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- Admin Modal -->
-  <div class="modal" id="adminModal">
-    <div class="modal-content">
-      <h2>Panel de Administración</h2>
-      <input type="password" id="adminPass" placeholder="Contraseña (admin123)">
-      <button class="btn-blue" onclick="loginAdmin()">Entrar</button>
-      <button onclick="closeModals()">Cerrar</button>
-      <div id="adminContent" style="margin-top:1.5rem; display:none;">
-        <h3>Gestionar Anuncios</h3>
-        <div id="adminList"></div>
-        <button class="btn-yellow" onclick="exportData()" style="margin-top:1rem;">Exportar Datos</button>
+        <section style="margin-top: 2.5rem;">
+          <h2><i class="fa-solid fa-store"></i> Anuncios Recientes</h2>
+          <div id="listaAnuncios" class="grid">
+            <p style="color:var(--text-soft);">Cargando anuncios...</p>
+          </div>
+        </section>
       </div>
-    </div>
-  </div>
 
-  <footer>
-    <p>Clasificados Pro • Instalable como App (PWA)</p>
-    <p>Hosting en tu PC • Comparte el link para que instalen la app</p>
-  </footer>
+      <!-- Columna Derecha: Chat en Vivo Global -->
+      <aside>
+        <div class="chat-card">
+          <div class="chat-header">
+            <h2><i class="fa-solid fa-comment-dots" style="color:var(--accent);margin-right:0.4rem;"></i> Chat en Vivo</h2>
+            <div class="live-indicator"><div class="dot"></div> Realtime</div>
+          </div>
 
-  <script>
-    let ads = JSON.parse(localStorage.getItem('clasificadosAds')) || [
-      { id: 1, title: "Cocinero de Línea", category: "Empleos", price: "$19/hora", location: "Los Angeles, CA", desc: "Se busca cocinero con experiencia", featured: true, icon: "💼" },
-      { id: 2, title: "GMC Sierra 2000", category: "Autos y Trucks", price: "$8,500", location: "Los Angeles, CA", desc: "Excelente condición", featured: false, icon: "🚗" },
-      { id: 3, title: "Apartamento 2 recámaras", category: "Rentas", price: "$1,800/mes", location: "Montclair, CA", desc: "Remodelado", featured: true, icon: "🏠" },
-      { id: 4, title: "Servicio Mariachi", category: "Fiestas y Eventos", price: "Desde $350", location: "Riverside, CA", desc: "Para todo tipo de eventos", featured: false, icon: "🎉" }
-    ];
+          <div id="chatMessages" class="chat-messages">
+            <p style="color:var(--text-soft); font-size:0.85rem; text-align:center;">Cargando mensajes en vivo...</p>
+          </div>
 
-    const categories = ["Todos", "Empleos", "Autos y Trucks", "Rentas", "Servicios del Hogar", "Fiestas y Eventos", "Compra y Venta", "Mascotas"];
-    let currentCat = "Todos";
-
-    function renderCategories() {
-      const container = document.getElementById('categories');
-      container.innerHTML = categories.map(cat => 
-        `<button class="cat-btn ${cat === currentCat ? 'active' : ''}" onclick="filterByCat('${cat}')">${cat}</button>`
-      ).join('');
-    }
-
-    function renderListings(filtered = ads) {
-      const grid = document.getElementById('listingsGrid');
-      grid.innerHTML = filtered.map(ad => `
-        <div class="listing-card ${ad.featured ? 'featured' : ''}" onclick="showDetail(${ad.id})">
-          <div class="listing-img">${ad.icon || '📦'}</div>
-          <div class="listing-info">
-            <h4>${ad.title}</h4>
-            <div class="price">${ad.price}</div>
-            <div style="color:#666; font-size:0.9rem;">${ad.location} • ${ad.category}</div>
+          <div class="chat-footer">
+            <input type="text" id="chatName" placeholder="Tu Apodo / Nombre" style="font-size:0.8rem; padding:0.5rem 0.8rem;" />
+            <form onsubmit="enviarMensajeChat(event)" class="chat-input-group">
+              <input type="text" id="chatInput" placeholder="Escribe un mensaje..." required autocomplete="off" />
+              <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
           </div>
         </div>
-      `).join('');
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Clasificados Pro · Chat en Tiempo Real activado con Supabase</p>
+  </footer>
+
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Configuración de Supabase integrada
+    const SUPABASE_URL = 'https://rhozvkoogswzbdkpeimz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs'; 
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Cargar apodo guardado si existe
+    document.getElementById('chatName').value = localStorage.getItem('chat_nickname') || '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarAnuncios();
+      cargarChatInicial();
+      suscribirChatEnVivo();
+    });
+
+    // ==========================================
+    // LÓGICA DEL CHAT EN TIEMPO REAL
+    // ==========================================
+    async function cargarChatInicial() {
+      const container = document.getElementById('chatMessages');
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .order('id', { ascending: false })
+        .limit(30);
+
+      if (error) {
+        container.innerHTML = '<p style="color:#ff6b6b;font-size:0.8rem;">Error al cargar el chat.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      if (data.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-soft);font-size:0.85rem;text-align:center;">¡Sé el primero en escribir en el chat!</p>';
+        return;
+      }
+
+      // Renderizar del más antiguo al más nuevo
+      data.reverse().forEach(msg => agregarMensajeAlDOM(msg));
+      scrollChatAlFinal();
     }
 
-    function filterByCat(cat) {
-      currentCat = cat;
-      filterListings();
-      renderCategories();
+    function suscribirChatEnVivo() {
+      supabase
+        .channel('public:chat_messages')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, payload => {
+          agregarMensajeAlDOM(payload.new);
+          scrollChatAlFinal();
+        })
+        .subscribe();
     }
 
-    function filterListings() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      let filtered = ads.filter(ad => 
-        (currentCat === "Todos" || ad.category === currentCat) &&
-        (ad.title.toLowerCase().includes(q) || ad.desc.toLowerCase().includes(q) || ad.location.toLowerCase().includes(q))
-      );
-      renderListings(filtered);
-    }
+    function agregarMensajeAlDOM(msg) {
+      const container = document.getElementById('chatMessages');
+      const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    function showPostForm() { document.getElementById('postModal').classList.add('active'); }
-    function toggleAdmin() { document.getElementById('adminModal').classList.add('active'); }
-    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
-
-    function saveAd() {
-      const newAd = {
-        id: Date.now(),
-        title: document.getElementById('adTitle').value,
-        category: document.getElementById('adCategory').value,
-        price: document.getElementById('adPrice').value || "Consultar",
-        location: document.getElementById('adLocation').value,
-        desc: document.getElementById('adDesc').value,
-        featured: document.getElementById('adFeatured').checked,
-        icon: "📦"
-      };
-      if (!newAd.title) return alert("Título requerido");
-      ads.unshift(newAd);
-      localStorage.setItem('clasificadosAds', JSON.stringify(ads));
-      filterListings();
-      closeModals();
-      alert("Anuncio publicado!");
-    }
-
-    function loginAdmin() {
-      if (document.getElementById('adminPass').value === "admin123") {
-        document.getElementById('adminContent').style.display = "block";
-        renderAdminList();
-      } else alert("Contraseña incorrecta");
-    }
-
-    function renderAdminList() {
-      document.getElementById('adminList').innerHTML = ads.map(ad => `
-        <div style="border-bottom:1px solid #eee; padding:0.5rem 0; display:flex; justify-content:space-between;">
-          <span>${ad.title} (${ad.category})</span>
-          <button onclick="deleteAd(${ad.id})" style="background:#e74c3c;color:white;border:none;padding:0.3rem 0.6rem;border-radius:4px;">Eliminar</button>
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble';
+      bubble.innerHTML = `
+        <div class="author">
+          <span>${msg.sender_name || 'Anónimo'}</span>
+          <span class="time">${time}</span>
         </div>
-      `).join('');
+        <div class="text">${escapeHtml(msg.message)}</div>
+      `;
+      container.appendChild(bubble);
     }
 
-    function deleteAd(id) {
-      ads = ads.filter(a => a.id !== id);
-      localStorage.setItem('clasificadosAds', JSON.stringify(ads));
-      renderAdminList();
-      filterListings();
+    async function enviarMensajeChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const nameInput = document.getElementById('chatName');
+      const mensaje = input.value.trim();
+      const nombre = nameInput.value.trim() || 'Visitante';
+
+      if (!mensaje) return;
+
+      localStorage.setItem('chat_nickname', nombre);
+      input.value = '';
+
+      const { error } = await supabase.from('chat_messages').insert([
+        { sender_name: nombre, message: mensaje }
+      ]);
+
+      if (error) console.error('Error enviando mensaje:', error);
     }
 
-    function exportData() {
-      const data = JSON.stringify(ads, null, 2);
-      const blob = new Blob([data], {type: 'application/json'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'anuncios-backup.json';
-      a.click();
+    function scrollChatAlFinal() {
+      const container = document.getElementById('chatMessages');
+      container.scrollTop = container.scrollHeight;
     }
 
-    function showDetail(id) {
-      const ad = ads.find(a => a.id === id);
-      alert(`${ad.title}\n\n${ad.desc}\n\nPrecio: ${ad.price}\nUbicación: ${ad.location}`);
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // Init
-    renderCategories();
-    renderListings();
+    // ==========================================
+    // LÓGICA DE ANUNCIOS
+    // ==========================================
+    async function cargarAnuncios() {
+      const container = document.getElementById('listaAnuncios');
+      const { data, error } = await supabase.from('listings').select('*').order('id', { ascending: false });
 
-    // PWA
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
+      if (error || !data || data.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-soft);">No hay anuncios publicados todavía.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      data.forEach(item => {
+        const img = item.image_url ? `<img src="${item.image_url}" alt="${item.title}" />` : '';
+        container.innerHTML += `
+          <div class="item-card">
+            ${img}
+            <div class="item-body">
+              <h3 style="font-weight:400; font-size:1rem;">${item.title}</h3>
+              <p style="color:var(--text-soft); font-size:0.85rem; margin-top:0.3rem;">${item.description}</p>
+              <div class="price">${item.price}</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function publicarAnuncio(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.innerHTML = 'Publicando...';
+
+      const data = {
+        title: document.getElementById('titulo').value,
+        price: document.getElementById('precio').value,
+        description: document.getElementById('descripcion').value,
+        image_url: document.getElementById('imagenUrl').value || null
+      };
+
+      const { error } = await supabase.from('listings').insert([data]);
+
+      if (error) {
+        alert('Error: ' + error.message);
+      } else {
+        alert('¡Anuncio publicado con éxito!');
+        e.target.reset();
+        cargarAnuncios();
+      }
+      btn.innerHTML = 'Publicar Anuncio';
     }
   </script>
 </body>
