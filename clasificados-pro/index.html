@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>clasificadosOK - Compra y Venta en Argentina</title>
   
-  <!-- Ícono del Navegador (Favicon) -->
-  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1170/1170576.png">
-  <link rel="shortcut icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1170/1170576.png">
-  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1170/1170576.png">
+  <!-- Ícono HD para Navegador y Accesos Directos de Aplicación (PWA) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
 
   <!-- Manifest PWA -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#121214">
+  <meta name="theme-color" content="#FFE600">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="clasificadosOK">
 
   <!-- Fuente Outfit & FontAwesome icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +26,7 @@
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Limpiador de Service Worker -->
+  <!-- Limpiador de Service Worker viejo -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -58,11 +59,12 @@
     .logo span { color: var(--accent); }
 
     .nav-actions { display: flex; align-items: center; gap: 10px; }
-    .btn { border: none; outline: none; padding: 10px 18px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+    .btn { border: none; outline: none; padding: 10px 18px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; text-decoration: none; }
     .btn-primary { background: var(--accent); color: #000; box-shadow: 0 4px 15px rgba(255, 230, 0, 0.25); }
     .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
     .btn-secondary { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid var(--glass-border); }
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
+    .btn-vip { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
     .btn-install { background: linear-gradient(135deg, #10b981, #059669); color: white; display: none; }
 
     /* Controls Bar */
@@ -152,6 +154,9 @@
         <button id="pwa-install-btn" class="btn btn-install" onclick="triggerPwaInstall()">
           <i class="fa-solid fa-download"></i> Instalar App
         </button>
+        <a href="https://wa.link/snq5ah" target="_blank" class="btn btn-vip">
+          <i class="fa-solid fa-star"></i> Destacar Anuncio
+        </a>
         <button class="btn btn-secondary" id="auth-btn" onclick="openAuthModal()">
           <i class="fa-regular fa-user"></i> Ingresar
         </button>
@@ -295,7 +300,7 @@
         </div>
         <div class="form-group">
           <label>Teléfono de Contacto (WhatsApp)</label>
-          <input type="tel" id="pub-phone" class="form-control" placeholder="Ej: 5492644123456" required>
+          <input type="tel" id="pub-phone" class="form-control" placeholder="Ej: 5492645198342" required>
         </div>
         <div class="form-group">
           <label>Descripción detallada</label>
@@ -360,7 +365,7 @@
 
   <!-- Overlay Forzado PWA para Móviles -->
   <div class="install-overlay" id="install-overlay">
-    <img src="https://cdn-icons-png.flaticon.com/512/1170/1170576.png" alt="App Icon">
+    <img src="https://cdn-icons-png.flaticon.com/512/1041/1041883.png" alt="App Icon">
     <div class="install-info">
       <h4>Instala clasificadosOK</h4>
       <p>Añade la app a tu pantalla de inicio para una experiencia más rápida.</p>
@@ -371,7 +376,10 @@
 
   <footer>
     <p>&copy; 2025 clasificadosOK Argentina - Todos los derechos reservados.</p>
-    <p><a onclick="adminPanel()"><i class="fa-solid fa-lock"></i> Panel Administrador</a></p>
+    <p style="margin-top: 8px;">
+      <a href="https://wa.link/snq5ah" target="_blank" style="color: var(--accent); margin-right: 15px;"><i class="fa-brands fa-whatsapp"></i> Contacto Soporte VIP</a>
+      <a onclick="adminPanel()"><i class="fa-solid fa-lock"></i> Panel Administrador</a>
+    </p>
   </footer>
 
   <script>
