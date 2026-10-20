@@ -144,6 +144,9 @@
         <div class="form-group"><label>Contraseña</label><input id="a-pass" type="password" class="form-control" required></div>
         <button class="btn btn-p" style="width:100%" id="auth-btn-submit">Ingresar</button>
       </form>
+      <button class="btn btn-s" style="width:100%;margin-top:10px" onclick="loginGoogle()">
+        <i class="fa-brands fa-google"></i> Continuar con Google
+      </button>
       <p style="text-align:center;margin-top:12px;font-size:.85rem;color:var(--muted)">
         <span id="auth-msg">¿No tienes cuenta?</span> <a href="#" onclick="toggleAuth()" style="color:var(--accent)">Regístrate</a>
       </p>
@@ -169,6 +172,7 @@ async function init(){
   getSb().auth.onAuthStateChange((_, s) => { user = s?.user || null; updateUI(); });
   load();
 }
+
 function updateUI(){
   const btn = document.getElementById('auth-btn');
   const mine = document.getElementById('btn-mine');
@@ -368,6 +372,13 @@ async function doAuth(e){
   const { error } = await fn({ email, password: pass });
   if(error) alert(error.message);
   else closeModal('modal-auth');
+}
+
+async function loginGoogle() {
+  await getSb().auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin }
+  });
 }
 
 init();
