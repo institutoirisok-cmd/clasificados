@@ -3,189 +3,175 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clasificados Pro | Mercado Local & Chat En Vivo</title>
+  <title>El Clasificado Pro | Compra, Vende y Chatea</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#FFE600" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&display=swap');
 
     :root {
-      --bg: #0b091a;
-      --surface: rgba(255, 255, 255, 0.04);
-      --surface-border: rgba(255, 255, 255, 0.08);
-      --text: #f5f5f7;
-      --text-soft: rgba(255, 255, 255, 0.6);
-      --accent: #FFE600;
-      --accent-glow: rgba(255, 230, 0, 0.35);
-      --shadow-3d: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+      --bg: #0a0818; --surface: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+      --text: #f5f5f7; --text-soft: rgba(255,255,255,0.6);
+      --accent: #FFE600; --accent-dark: #d4bc00;
+      --gold: linear-gradient(135deg, #FFE600, #FFA500);
+      --danger: #ff3b5c; --success: #10b981;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Outfit', system-ui, sans-serif;
-      background: linear-gradient(135deg, #0b091a 0%, #120e2e 50%, #1c1545 100%);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.5;
-      overflow-x: hidden;
+      background: linear-gradient(135deg, #0a0818 0%, #141033 50%, #1a1545 100%);
+      color: var(--text); min-height: 100vh; overflow-x: hidden;
     }
-
-    /* Fondo animado 3D */
-    .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-    .blob {
-      position: absolute; width: 500px; height: 500px; border-radius: 50%;
-      filter: blur(140px); opacity: 0.3; animation: float 18s infinite ease-in-out alternate;
-    }
-    .blob-1 { background: var(--accent); top: -10%; left: -5%; }
-    .blob-2 { background: #8b5cf6; bottom: -10%; right: -5%; animation-delay: -7s; }
-
-    @keyframes float {
-      from { transform: translate(0, 0) scale(1); }
-      to { transform: translate(30px, -40px) scale(1.1); }
-    }
-
+    .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .blob { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(140px); opacity: 0.25; animation: float 20s infinite alternate ease-in-out; }
+    .blob-1 { background: #FFE600; top: -10%; left: -5%; }
+    .blob-2 { background: #8b5cf6; bottom: -10%; right: -5%; animation-delay: -8s; }
+    @keyframes float { to { transform: translate(50px, -40px) scale(1.1); } }
     main { position: relative; z-index: 1; }
 
-    /* Header */
     header {
       position: sticky; top: 0; z-index: 100;
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      background: rgba(11, 9, 26, 0.7);
-      border-bottom: 1px solid var(--surface-border);
-      padding: 1rem 5vw;
-      display: flex; justify-content: space-between; align-items: center;
+      backdrop-filter: blur(24px); background: rgba(10,8,24,0.75);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 4vw; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
     }
-    .logo {
-      font-weight: 300; font-size: 1.5rem; color: var(--text);
-      text-decoration: none; display: flex; align-items: center; gap: 0.5rem;
-    }
-    .logo span { font-weight: 600; color: var(--accent); }
+    .logo { font-weight: 200; font-size: 1.5rem; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+    .logo b { font-weight: 700; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--gold); color: #0a0818; border: none; padding: 0.6rem 1.2rem; border-radius: 12px; font-weight: 600; cursor: pointer; font-family: inherit; font-size: 0.9rem; box-shadow: 0 6px 20px rgba(255,230,0,0.3); transition: 0.2s; }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); padding: 0.6rem 1rem; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: 0.85rem; transition: 0.2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.12); }
 
-    /* Layout Principal */
-    .container {
-      max-width: 1280px; margin: 0 auto;
-      padding: 2rem 4vw 5rem;
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 2rem;
-      align-items: start;
-    }
+    .user-chip { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,230,0,0.1); border: 1px solid rgba(255,230,0,0.3); padding: 0.4rem 0.8rem; border-radius: 999px; font-size: 0.85rem; }
+    .user-chip i { color: var(--accent); }
 
-    @media (max-width: 960px) {
-      .container { grid-template-columns: 1fr; }
-    }
+    .hero { text-align: center; padding: 6vh 4vw 3vh; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-weight: 200; font-size: clamp(2rem, 5vw, 3.8rem); letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 0.8rem; }
+    .hero h1 em { font-style: normal; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; }
+    .hero p { color: var(--text-soft); font-size: 1.05rem; font-weight: 300; margin-bottom: 2rem; }
 
-    /* Cards Estilo Glassmorphism 3D */
-    .card-3d {
-      background: linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
-      border: 1px solid var(--surface-border);
-      border-radius: 24px;
-      padding: 1.8rem;
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow-3d);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+    .search-box { display: flex; background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 18px; padding: 0.4rem; backdrop-filter: blur(16px); gap: 0.3rem; max-width: 700px; margin: 0 auto; }
+    .search-box input, .search-box select { flex: 1; padding: 0.9rem 1rem; border: none; background: transparent; color: var(--text); font-family: inherit; font-size: 0.95rem; outline: none; }
+    .search-box select { max-width: 160px; cursor: pointer; }
+    .search-box select option { background: #141033; }
+    .search-box button { background: var(--gold); color: #0a0818; border: none; padding: 0 1.5rem; border-radius: 14px; cursor: pointer; font-weight: 600; }
 
-    /* Formulario Publicar */
-    h2 { font-weight: 300; font-size: 1.25rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
-    h2 i { color: var(--accent); }
+    .cat-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 2rem; padding: 0 4vw; }
+    .chip { background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 0.5rem 1.1rem; border-radius: 999px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; display: flex; align-items: center; gap: 0.4rem; color: var(--text); }
+    .chip:hover, .chip.active { background: var(--accent); color: #0a0818; border-color: var(--accent); }
+    .chip i { font-size: 0.75rem; }
+
+    .container { max-width: 1400px; margin: 0 auto; padding: 2rem 4vw 4rem; display: grid; grid-template-columns: 1fr 360px; gap: 2rem; align-items: start; }
+    @media (max-width: 1024px) { .container { grid-template-columns: 1fr; } }
+
+    .section-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; }
+    .section-title h2 { font-weight: 300; font-size: 1.4rem; display: flex; align-items: center; gap: 0.6rem; }
+    .section-title h2 i { color: var(--accent); }
+    .section-title .count { color: var(--text-soft); font-size: 0.85rem; }
+
+    .featured-strip { margin-bottom: 3rem; }
+    .featured-strip h2 i { color: #FFA500; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+
+    .item-card {
+      background: linear-gradient(165deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+      border: 1px solid var(--border); border-radius: 20px; overflow: hidden;
+      backdrop-filter: blur(12px); box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+      transition: 0.3s; display: flex; flex-direction: column; cursor: pointer; position: relative;
+    }
+    .item-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.6); }
+    .item-card.featured { border: 1px solid rgba(255,230,0,0.4); box-shadow: 0 16px 40px rgba(255,165,0,0.15); }
+    .item-card.featured::before { content: '⭐ DESTACADO'; position: absolute; top: 12px; right: 12px; z-index: 2; background: var(--gold); color: #0a0818; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.03em; }
+    .item-card .img-wrap { aspect-ratio: 16/10; background: linear-gradient(135deg, #1a1545, #0a0818); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .item-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .item-card .img-wrap i { font-size: 3rem; color: rgba(255,255,255,0.1); }
+    .item-body { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; }
+    .item-body .cat-badge { display: inline-block; font-size: 0.7rem; color: var(--accent); background: rgba(255,230,0,0.1); padding: 0.15rem 0.6rem; border-radius: 999px; margin-bottom: 0.5rem; width: fit-content; }
+    .item-body h3 { font-weight: 500; font-size: 1rem; margin-bottom: 0.3rem; }
+    .item-body .desc { color: var(--text-soft); font-size: 0.85rem; font-weight: 300; flex: 1; margin-bottom: 0.8rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .item-body .meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-soft); margin-bottom: 0.6rem; }
+    .item-body .price { color: var(--accent); font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em; }
+
+    .chat-card { position: sticky; top: 90px; display: flex; flex-direction: column; height: 620px; max-height: calc(100vh - 110px); background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); border: 1px solid var(--border); border-radius: 24px; backdrop-filter: blur(24px); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .chat-header { padding: 1rem 1.3rem; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.25); display: flex; justify-content: space-between; align-items: center; }
+    .chat-header h2 { font-size: 1rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
+    .chat-header h2 i { color: var(--accent); }
+    .live-indicator { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--success); text-transform: uppercase; letter-spacing: 0.08em; }
+    .dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
+    @keyframes pulse { 50% { opacity: 0.3; } }
+
+    .chat-messages { flex: 1; padding: 1.2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.7rem; }
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+    .chat-bubble { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 14px; padding: 0.65rem 0.9rem; max-width: 90%; animation: popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+    .chat-bubble.mine { background: rgba(255,230,0,0.1); border-color: rgba(255,230,0,0.3); align-self: flex-end; }
+    @keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .chat-bubble .author { display: flex; justify-content: space-between; margin-bottom: 0.2rem; gap: 0.5rem; }
+    .chat-bubble .author .name { font-size: 0.72rem; font-weight: 600; color: var(--accent); }
+    .chat-bubble .author .time { font-size: 0.65rem; color: var(--text-soft); }
+    .chat-bubble .text { font-size: 0.88rem; font-weight: 300; word-break: break-word; }
+
+    .chat-footer { padding: 0.9rem; border-top: 1px solid var(--border); background: rgba(0,0,0,0.25); display: flex; flex-direction: column; gap: 0.5rem; }
+    .chat-footer input { padding: 0.7rem 0.9rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-family: inherit; font-size: 0.85rem; outline: none; }
+    .chat-input-group { display: flex; gap: 0.4rem; }
+    .chat-input-group input { flex: 1; }
+    .chat-input-group button { background: var(--gold); color: #0a0818; border: none; padding: 0 1rem; border-radius: 12px; cursor: pointer; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(5,3,15,0.85); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 2rem; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: linear-gradient(160deg, rgba(20,16,51,0.95), rgba(10,8,24,0.95)); border: 1px solid var(--border); border-radius: 24px; padding: 2rem; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 30px 80px rgba(0,0,0,0.7); }
+    .modal h2 { margin-bottom: 1.5rem; font-weight: 300; font-size: 1.4rem; }
+    .modal .close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-soft); font-size: 1.5rem; cursor: pointer; }
 
     .form-group { margin-bottom: 1rem; }
-    label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-soft); margin-bottom: 0.3rem; }
-    input, select, textarea {
-      width: 100%; padding: 0.8rem 1rem; border-radius: 12px;
-      border: 1px solid var(--surface-border);
-      background: rgba(255,255,255,0.03); color: var(--text);
-      font-family: inherit; font-size: 0.95rem; outline: none; transition: 0.3s;
-    }
+    label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-soft); margin-bottom: 0.3rem; }
+    input, select, textarea { width: 100%; padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: var(--text); font-family: inherit; font-size: 0.9rem; outline: none; transition: 0.3s; }
     input:focus, select:focus, textarea:focus { border-color: var(--accent); background: rgba(255,255,255,0.06); }
+    select option { background: #141033; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
 
-    .btn-accent {
-      width: 100%; padding: 0.9rem; border: none; border-radius: 14px;
-      background: linear-gradient(135deg, var(--accent) 0%, #e6ce00 100%);
-      color: #0b091a; font-family: inherit; font-weight: 600; font-size: 0.95rem;
-      cursor: pointer; box-shadow: 0 8px 25px var(--accent-glow);
-      transition: transform 0.2s, box-shadow 0.2s;
+    /* Upload de imagen */
+    .upload-area {
+      border: 2px dashed var(--border); border-radius: 14px; padding: 1.5rem; text-align: center; cursor: pointer;
+      background: rgba(255,255,255,0.02); transition: 0.3s; position: relative;
     }
-    .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 12px 32px var(--accent-glow); }
+    .upload-area:hover { border-color: var(--accent); background: rgba(255,230,0,0.03); }
+    .upload-area i { font-size: 2rem; color: var(--text-soft); margin-bottom: 0.5rem; display: block; }
+    .upload-area p { color: var(--text-soft); font-size: 0.85rem; }
+    .upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-preview { margin-top: 0.8rem; max-height: 200px; border-radius: 12px; overflow: hidden; display: none; }
+    .upload-preview img { width: 100%; max-height: 200px; object-fit: cover; display: block; }
+    .upload-tabs { display: flex; gap: 0.3rem; margin-bottom: 0.5rem; }
+    .upload-tabs button { flex: 1; padding: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-soft); border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-family: inherit; }
+    .upload-tabs button.active { background: var(--accent); color: #0a0818; border-color: var(--accent); font-weight: 600; }
 
-    /* Grid de Anuncios */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
-    .item-card {
-      background: rgba(255,255,255,0.03); border: 1px solid var(--surface-border);
-      border-radius: 20px; overflow: hidden; backdrop-filter: blur(10px);
-      transition: transform 0.3s ease; display: flex; flex-direction: column;
-    }
-    .item-card:hover { transform: translateY(-6px); }
-    .item-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-bottom: 1px solid var(--surface-border); }
-    .item-body { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; }
-    .price { color: var(--accent); font-weight: 600; font-size: 1.2rem; margin-top: auto; padding-top: 0.5rem; }
+    .detail-img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; background: rgba(255,255,255,0.03); }
+    .contact-box { background: rgba(255,230,0,0.08); border: 1px solid rgba(255,230,0,0.2); border-radius: 14px; padding: 1rem; margin-top: 1rem; }
+    .contact-box p { margin: 0.3rem 0; font-size: 0.9rem; }
+    .contact-box i { color: var(--accent); width: 20px; }
 
-    /* ========================================================= */
-    /* SECCIÓN CHAT EN VIVO 3D                                  */
-    /* ========================================================= */
-    .chat-card {
-      position: sticky; top: 90px;
-      display: flex; flex-direction: column;
-      height: 600px; max-height: calc(100vh - 120px);
-      background: linear-gradient(160deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%);
-      border: 1px solid var(--surface-border);
-      border-radius: 28px; backdrop-filter: blur(24px);
-      box-shadow: var(--shadow-3d); overflow: hidden;
-    }
+    .admin-mode-badge { position: fixed; bottom: 20px; left: 20px; background: var(--danger); color: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; z-index: 150; box-shadow: 0 10px 30px rgba(255,59,92,0.4); display: none; }
+    .admin-mode-badge.active { display: block; }
 
-    .chat-header {
-      padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--surface-border);
-      background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center;
-    }
-    .chat-header h2 { margin: 0; font-size: 1.1rem; }
-    .live-indicator {
-      display: flex; align-items: center; gap: 0.4rem;
-      font-size: 0.75rem; color: #10b981; text-transform: uppercase; letter-spacing: 0.05em;
-    }
-    .dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
+    .item-card .admin-actions { position: absolute; top: 12px; left: 12px; display: flex; gap: 0.3rem; z-index: 3; opacity: 0; transition: 0.2s; }
+    .item-card:hover .admin-actions { opacity: 1; }
+    .item-card .admin-actions button { background: rgba(0,0,0,0.7); border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; }
+    .item-card .admin-actions button:hover { background: var(--accent); color: #0a0818; }
 
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    footer { text-align: center; padding: 3rem 1rem; color: rgba(255,255,255,0.3); font-size: 0.85rem; border-top: 1px solid var(--border); }
 
-    .chat-messages {
-      flex: 1; padding: 1.2rem; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 0.8rem;
-    }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-soft); grid-column: 1/-1; }
+    .empty-state i { font-size: 3rem; color: var(--border); margin-bottom: 1rem; display: block; }
 
-    .chat-bubble {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px; padding: 0.75rem 1rem;
-      max-width: 90%; word-break: break-word;
-      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.9) translateY(10px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .chat-bubble .author {
-      font-size: 0.75rem; font-weight: 600; color: var(--accent);
-      margin-bottom: 0.2rem; display: flex; justify-content: space-between;
-    }
-    .chat-bubble .time { color: var(--text-soft); font-weight: 300; font-size: 0.65rem; }
-    .chat-bubble .text { font-size: 0.9rem; color: var(--text); font-weight: 300; }
-
-    .chat-footer {
-      padding: 1rem; border-top: 1px solid var(--surface-border);
-      background: rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 0.6rem;
-    }
-    .chat-input-group { display: flex; gap: 0.5rem; }
-    .chat-input-group input { flex: 1; padding: 0.75rem 0.9rem; font-size: 0.88rem; border-radius: 12px; }
-    .chat-input-group button {
-      width: auto; padding: 0 1.2rem; border-radius: 12px;
-      background: var(--accent); color: #0b091a; border: none; font-weight: 600; cursor: pointer;
-    }
-
-    footer { text-align: center; padding: 3rem 1rem; color: rgba(255,255,255,0.2); font-size: 0.85rem; }
+    .tabs-switch { display: flex; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 0.3rem; margin-bottom: 1.5rem; }
+    .tabs-switch button { flex: 1; padding: 0.6rem; background: transparent; border: none; color: var(--text-soft); border-radius: 9px; cursor: pointer; font-family: inherit; font-size: 0.9rem; }
+    .tabs-switch button.active { background: var(--accent); color: #0a0818; font-weight: 600; }
   </style>
 </head>
 
@@ -196,64 +182,75 @@
   </div>
 
   <header>
-    <a href="#" class="logo">
-      <i class="fa-solid fa-comments" style="color:var(--accent);"></i> Clasificados <span>Pro</span>
+    <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+      <i class="fa-solid fa-newspaper" style="color:var(--accent);"></i> El <b>Clasificado</b> Pro
     </a>
-    <div class="live-indicator"><div class="dot"></div> En vivo</div>
+    <div class="nav-actions" id="navActions">
+      <!-- Se rellena dinámicamente -->
+    </div>
   </header>
 
   <main>
+    <section class="hero">
+      <h1>Compra, vende y <em>conecta</em> en vivo.</h1>
+      <p>Miles de anuncios locales con chat en tiempo real. Encuentra lo que buscas o publica gratis.</p>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="¿Qué estás buscando?" oninput="filtrarAnuncios()" />
+        <select id="searchCategory" onchange="filtrarAnuncios()">
+          <option value="">Todas</option>
+          <option value="autos">Autos</option>
+          <option value="rentas">Rentas</option>
+          <option value="empleos">Empleos</option>
+          <option value="servicios">Servicios</option>
+          <option value="electronica">Electrónica</option>
+          <option value="otros">Otros</option>
+        </select>
+        <button onclick="filtrarAnuncios()"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+      <div class="cat-chips" id="catChips">
+        <div class="chip active" onclick="filtrarPorCategoria('', this)"><i class="fa-solid fa-grip"></i> Todas</div>
+        <div class="chip" onclick="filtrarPorCategoria('autos', this)"><i class="fa-solid fa-car"></i> Autos</div>
+        <div class="chip" onclick="filtrarPorCategoria('rentas', this)"><i class="fa-solid fa-home"></i> Rentas</div>
+        <div class="chip" onclick="filtrarPorCategoria('empleos', this)"><i class="fa-solid fa-briefcase"></i> Empleos</div>
+        <div class="chip" onclick="filtrarPorCategoria('servicios', this)"><i class="fa-solid fa-wrench"></i> Servicios</div>
+        <div class="chip" onclick="filtrarPorCategoria('electronica', this)"><i class="fa-solid fa-mobile-screen"></i> Electrónica</div>
+        <div class="chip" onclick="filtrarPorCategoria('otros', this)"><i class="fa-solid fa-tag"></i> Otros</div>
+      </div>
+    </section>
+
     <div class="container">
-      <!-- Columna Principal: Publicar y Ver Anuncios -->
       <div>
-        <section class="card-3d">
-          <h2><i class="fa-solid fa-plus-circle"></i> Publicar Anuncio</h2>
-          <form id="formPublicar" onsubmit="publicarAnuncio(event)">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-              <div class="form-group">
-                <label>Título</label>
-                <input type="text" id="titulo" placeholder="Ej: Vendo Celular" required />
-              </div>
-              <div class="form-group">
-                <label>Precio</label>
-                <input type="text" id="precio" placeholder="Ej: $120.000" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Descripción</label>
-              <textarea id="descripcion" rows="2" placeholder="Detalles del producto o servicio..." required></textarea>
-            </div>
-            <div class="form-group">
-              <label>URL Imagen (Opcional)</label>
-              <input type="url" id="imagenUrl" placeholder="https://..." />
-            </div>
-            <button type="submit" class="btn-accent">Publicar Anuncio</button>
-          </form>
+        <section class="featured-strip" id="featuredSection">
+          <div class="section-title">
+            <h2><i class="fa-solid fa-star"></i> Anuncios Destacados</h2>
+            <span class="count" id="featuredCount"></span>
+          </div>
+          <div id="featuredList" class="grid"></div>
         </section>
 
-        <section style="margin-top: 2.5rem;">
-          <h2><i class="fa-solid fa-store"></i> Anuncios Recientes</h2>
+        <section>
+          <div class="section-title">
+            <h2><i class="fa-solid fa-store"></i> Todos los Anuncios</h2>
+            <span class="count" id="totalCount"></span>
+          </div>
           <div id="listaAnuncios" class="grid">
-            <p style="color:var(--text-soft);">Cargando anuncios...</p>
+            <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Cargando...</div>
           </div>
         </section>
       </div>
 
-      <!-- Columna Derecha: Chat en Vivo Global -->
       <aside>
         <div class="chat-card">
           <div class="chat-header">
-            <h2><i class="fa-solid fa-comment-dots" style="color:var(--accent);margin-right:0.4rem;"></i> Chat en Vivo</h2>
-            <div class="live-indicator"><div class="dot"></div> Realtime</div>
+            <h2><i class="fa-solid fa-comment-dots"></i> Chat en Vivo</h2>
+            <div class="live-indicator"><div class="dot"></div> Online</div>
           </div>
-
           <div id="chatMessages" class="chat-messages">
-            <p style="color:var(--text-soft); font-size:0.85rem; text-align:center;">Cargando mensajes en vivo...</p>
+            <p style="color:var(--text-soft);font-size:0.85rem;text-align:center;">Cargando...</p>
           </div>
-
           <div class="chat-footer">
-            <input type="text" id="chatName" placeholder="Tu Apodo / Nombre" style="font-size:0.8rem; padding:0.5rem 0.8rem;" />
-            <form onsubmit="enviarMensajeChat(event)" class="chat-input-group">
+            <input type="text" id="chatName" placeholder="Tu apodo..." />
+            <form class="chat-input-group" onsubmit="enviarMensajeChat(event)">
               <input type="text" id="chatInput" placeholder="Escribe un mensaje..." required autocomplete="off" />
               <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
             </form>
@@ -263,160 +260,559 @@
     </div>
   </main>
 
+  <!-- MODAL AUTH (Login/Registro) -->
+  <div class="modal-overlay" id="modalAuth" onclick="if(event.target===this)cerrarModal('modalAuth')">
+    <div class="modal" style="max-width:420px;">
+      <button class="close-btn" onclick="cerrarModal('modalAuth')">&times;</button>
+      <h2 id="authTitle"><i class="fa-solid fa-user" style="color:var(--accent);"></i> Ingresar</h2>
+
+      <div class="tabs-switch">
+        <button id="tabLogin" class="active" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+        <button id="tabRegister" onclick="switchAuthTab('register')">Registrarme</button>
+      </div>
+
+      <form onsubmit="handleAuth(event)">
+        <div class="form-group" id="authNameGroup" style="display:none;">
+          <label>Nombre</label>
+          <input type="text" id="authName" placeholder="Tu nombre completo" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="authEmail" required placeholder="tu@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="authPass" required placeholder="Mínimo 6 caracteres" minlength="6" />
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;padding:0.9rem;" id="authSubmit">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL PUBLICAR -->
+  <div class="modal-overlay" id="modalPublicar" onclick="if(event.target===this)cerrarModal('modalPublicar')">
+    <div class="modal">
+      <button class="close-btn" onclick="cerrarModal('modalPublicar')">&times;</button>
+      <h2><i class="fa-solid fa-plus-circle" style="color:var(--accent);"></i> Publicar Anuncio</h2>
+      <form onsubmit="publicarAnuncio(event)">
+        <div class="form-group">
+          <label>Título *</label>
+          <input type="text" id="pTitulo" required placeholder="Ej: Vendo iPhone 13 Pro" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Categoría *</label>
+            <select id="pCategoria" required>
+              <option value="">Selecciona...</option>
+              <option value="autos">Autos</option>
+              <option value="rentas">Rentas</option>
+              <option value="empleos">Empleos</option>
+              <option value="servicios">Servicios</option>
+              <option value="electronica">Electrónica</option>
+              <option value="otros">Otros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Precio *</label>
+            <input type="text" id="pPrecio" required placeholder="$150.000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Ubicación</label>
+          <input type="text" id="pLocation" placeholder="Ej: Córdoba, Argentina" />
+        </div>
+        <div class="form-group">
+          <label>Descripción *</label>
+          <textarea id="pDescripcion" rows="3" required placeholder="Detalles del producto..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Imagen</label>
+          <div class="upload-tabs">
+            <button type="button" id="tabUpload" class="active" onclick="switchImgTab('upload')"><i class="fa-solid fa-camera"></i> Subir Foto</button>
+            <button type="button" id="tabUrl" onclick="switchImgTab('url')"><i class="fa-solid fa-link"></i> URL</button>
+          </div>
+
+          <div id="uploadMode">
+            <div class="upload-area">
+              <input type="file" id="pFoto" accept="image/*" capture="environment" onchange="previewImagen(event)" />
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <p>Toca para elegir foto o tomar una</p>
+            </div>
+            <div class="upload-preview" id="uploadPreview">
+              <img id="previewImg" src="" alt="Preview" />
+            </div>
+          </div>
+
+          <div id="urlMode" style="display:none;">
+            <input type="url" id="pImagen" placeholder="https://..." />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Teléfono / WhatsApp</label>
+            <input type="tel" id="pTelefono" placeholder="+54 9 ..." />
+          </div>
+          <div class="form-group">
+            <label>Email de Contacto</label>
+            <input type="email" id="pEmail" />
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;padding:0.9rem;">Publicar Anuncio Gratis</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DETALLE -->
+  <div class="modal-overlay" id="modalDetalle" onclick="if(event.target===this)cerrarModal('modalDetalle')">
+    <div class="modal" id="modalDetalleContent">
+      <button class="close-btn" onclick="cerrarModal('modalDetalle')">&times;</button>
+    </div>
+  </div>
+
+  <!-- MODAL ADMIN -->
+  <div class="modal-overlay" id="modalAdmin" onclick="if(event.target===this)cerrarModal('modalAdmin')">
+    <div class="modal" style="max-width:400px;">
+      <button class="close-btn" onclick="cerrarModal('modalAdmin')">&times;</button>
+      <h2><i class="fa-solid fa-lock" style="color:var(--accent);"></i> Acceso Admin</h2>
+      <form onsubmit="loginAdmin(event)">
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="adminPass" required />
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;padding:0.8rem;">Ingresar</button>
+      </form>
+      <button onclick="logoutAdmin()" class="btn-ghost" style="width:100%;margin-top:0.6rem;padding:0.6rem;">Salir del modo admin</button>
+    </div>
+  </div>
+
+  <!-- MODAL MIS ANUNCIOS -->
+  <div class="modal-overlay" id="modalMisAnuncios" onclick="if(event.target===this)cerrarModal('modalMisAnuncios')">
+    <div class="modal">
+      <button class="close-btn" onclick="cerrarModal('modalMisAnuncios')">&times;</button>
+      <h2><i class="fa-solid fa-user-tag" style="color:var(--accent);"></i> Mis Anuncios</h2>
+      <div id="misAnunciosList" class="grid" style="grid-template-columns:1fr;"></div>
+    </div>
+  </div>
+
+  <div class="admin-mode-badge" id="adminBadge"><i class="fa-solid fa-user-shield"></i> Modo Administrador</div>
+
   <footer>
-    <p>© 2025 Clasificados Pro · Chat en Tiempo Real activado con Supabase</p>
+    <p>© 2025 El Clasificado Pro · Hecho con <i class="fa-solid fa-heart" style="color:var(--danger);"></i> y Supabase</p>
+    <p style="margin-top:0.5rem;font-size:0.75rem;">Login · Subida de fotos · Chat en tiempo real · Panel admin</p>
   </footer>
 
-  <!-- Supabase JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Configuración de Supabase integrada
+    // ========== CONFIG ==========
     const SUPABASE_URL = 'https://rhozvkoogswzbdkpeimz.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs'; 
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJob3p2a29vZ3N3emJka3BlaW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwODU0MjIsImV4cCI6MjEwNzY2MTQyMn0.OqvrsEpKnt6cXYVCW851En6lrL5GnQtJu9C5pxQ0CHs';
+    const ADMIN_PASSWORD = 'admin1234'; // ⚠️ CAMBIA ESTO
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let todosLosAnuncios = [];
+    let categoriaActiva = '';
+    let isAdmin = localStorage.getItem('isAdmin') === 'true';
+    let currentUser = null;
+    let authMode = 'login';
+    let imgMode = 'upload';
+    let archivoFoto = null;
 
-    // Cargar apodo guardado si existe
-    document.getElementById('chatName').value = localStorage.getItem('chat_nickname') || '';
+    const iconosCategorias = { autos:'car', rentas:'home', empleos:'briefcase', servicios:'wrench', electronica:'mobile-screen', otros:'tag' };
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // ========== INIT ==========
+    document.addEventListener('DOMContentLoaded', async () => {
+      await verificarSesion();
+      renderNav();
+      actualizarBadgeAdmin();
       cargarAnuncios();
       cargarChatInicial();
       suscribirChatEnVivo();
+      sb.auth.onAuthStateChange((event, session) => {
+        currentUser = session?.user || null;
+        renderNav();
+        if (currentUser && document.getElementById('chatName').value === '') {
+          document.getElementById('chatName').value = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
+        }
+      });
     });
 
-    // ==========================================
-    // LÓGICA DEL CHAT EN TIEMPO REAL
-    // ==========================================
+    async function verificarSesion() {
+      const { data } = await sb.auth.getSession();
+      currentUser = data.session?.user || null;
+      if (currentUser) {
+        document.getElementById('chatName').value = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
+      } else {
+        document.getElementById('chatName').value = localStorage.getItem('chat_nickname') || '';
+      }
+    }
+
+    function renderNav() {
+      const nav = document.getElementById('navActions');
+      if (currentUser) {
+        const name = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
+        nav.innerHTML = `
+          <div class="user-chip"><i class="fa-solid fa-user-circle"></i> ${escapeHtml(name)}</div>
+          <button class="btn-ghost" onclick="verMisAnuncios()"><i class="fa-solid fa-list"></i> Mis Anuncios</button>
+          <button class="btn-ghost" onclick="cerrarSesion()"><i class="fa-solid fa-sign-out-alt"></i></button>
+          <button class="btn-primary" onclick="abrirModal('modalPublicar')"><i class="fa-solid fa-plus"></i> Publicar</button>
+        `;
+      } else {
+        nav.innerHTML = `
+          <button class="btn-ghost" onclick="abrirModal('modalAdmin')"><i class="fa-solid fa-lock"></i> Admin</button>
+          <button class="btn-ghost" onclick="abrirAuth('login')"><i class="fa-solid fa-user"></i> Ingresar</button>
+          <button class="btn-primary" onclick="abrirAuth('register')"><i class="fa-solid fa-plus"></i> Publicar</button>
+        `;
+      }
+    }
+
+    // ========== MODALES ==========
+    function abrirModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function cerrarModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
+
+    function abrirAuth(mode) {
+      switchAuthTab(mode);
+      abrirModal('modalAuth');
+    }
+
+    function switchAuthTab(mode) {
+      authMode = mode;
+      document.getElementById('tabLogin').classList.toggle('active', mode==='login');
+      document.getElementById('tabRegister').classList.toggle('active', mode==='register');
+      document.getElementById('authNameGroup').style.display = mode==='register' ? 'block' : 'none';
+      document.getElementById('authTitle').innerHTML = mode==='login'
+        ? '<i class="fa-solid fa-user" style="color:var(--accent);"></i> Ingresar'
+        : '<i class="fa-solid fa-user-plus" style="color:var(--accent);"></i> Crear Cuenta';
+      document.getElementById('authSubmit').textContent = mode==='login' ? 'Entrar' : 'Crear Cuenta';
+    }
+
+    function switchImgTab(mode) {
+      imgMode = mode;
+      document.getElementById('tabUpload').classList.toggle('active', mode==='upload');
+      document.getElementById('tabUrl').classList.toggle('active', mode==='url');
+      document.getElementById('uploadMode').style.display = mode==='upload' ? 'block' : 'none';
+      document.getElementById('urlMode').style.display = mode==='url' ? 'block' : 'none';
+    }
+
+    // ========== AUTH ==========
+    async function handleAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value;
+      const password = document.getElementById('authPass').value;
+      const name = document.getElementById('authName').value;
+      const btn = document.getElementById('authSubmit');
+      btn.textContent = 'Procesando...'; btn.disabled = true;
+
+      try {
+        if (authMode === 'register') {
+          const { data, error } = await sb.auth.signUp({
+            email, password,
+            options: { data: { name: name || email.split('@')[0] } }
+          });
+          if (error) throw error;
+          alert('✅ Cuenta creada. Ya puedes publicar.');
+        } else {
+          const { data, error } = await sb.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          alert('✅ Bienvenido!');
+        }
+        currentUser = (await sb.auth.getUser()).data.user;
+        cerrarModal('modalAuth');
+        renderNav();
+        e.target.reset();
+      } catch (err) {
+        alert('❌ ' + err.message);
+      } finally {
+        btn.textContent = authMode==='login' ? 'Entrar' : 'Crear Cuenta';
+        btn.disabled = false;
+      }
+    }
+
+    async function cerrarSesion() {
+      await sb.auth.signOut();
+      currentUser = null;
+      renderNav();
+      alert('👋 Sesión cerrada');
+    }
+
+    // ========== ADMIN ==========
+    function loginAdmin(e) {
+      e.preventDefault();
+      const pass = document.getElementById('adminPass').value;
+      if (pass === ADMIN_PASSWORD) {
+        isAdmin = true;
+        localStorage.setItem('isAdmin', 'true');
+        actualizarBadgeAdmin();
+        cerrarModal('modalAdmin');
+        renderizarAnuncios();
+        alert('✅ Modo administrador activado');
+      } else alert('❌ Contraseña incorrecta');
+    }
+    function logoutAdmin() {
+      isAdmin = false;
+      localStorage.removeItem('isAdmin');
+      actualizarBadgeAdmin();
+      cerrarModal('modalAdmin');
+      renderizarAnuncios();
+    }
+    function actualizarBadgeAdmin() { document.getElementById('adminBadge').classList.toggle('active', isAdmin); }
+
+    async function destacarAnuncio(id, estado) {
+      event.stopPropagation();
+      const { error } = await sb.from('listings').update({ is_featured: estado }).eq('id', id);
+      if (error) alert('Error: ' + error.message); else cargarAnuncios();
+    }
+    async function eliminarAnuncio(id) {
+      event.stopPropagation();
+      if (!confirm('¿Eliminar este anuncio?')) return;
+      const { error } = await sb.from('listings').delete().eq('id', id);
+      if (error) alert('Error: ' + error.message); else { cargarAnuncios(); verMisAnuncios(); }
+    }
+
+    // ========== IMAGEN UPLOAD ==========
+    function previewImagen(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      archivoFoto = file;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        document.getElementById('previewImg').src = ev.target.result;
+        document.getElementById('uploadPreview').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function subirImagenASupabase(file) {
+      const ext = file.name.split('.').pop();
+      const nombre = `${Date.now()}-${Math.random().toString(36).substring(2,8)}.${ext}`;
+      const { data, error } = await sb.storage.from('anuncios').upload(nombre, file, { cacheControl: '3600', upsert: false });
+      if (error) throw error;
+      const { data: urlData } = sb.storage.from('anuncios').getPublicUrl(nombre);
+      return urlData.publicUrl;
+    }
+
+    // ========== ANUNCIOS ==========
+    async function cargarAnuncios() {
+      const { data, error } = await sb.from('listings').select('*').order('created_at', { ascending: false });
+      if (error) { document.getElementById('listaAnuncios').innerHTML = `<div class="empty-state">Error: ${error.message}</div>`; return; }
+      todosLosAnuncios = data || [];
+      renderizarAnuncios();
+    }
+
+    function renderizarAnuncios() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const categoria = categoriaActiva || document.getElementById('searchCategory').value;
+      let filtrados = todosLosAnuncios.filter(a => {
+        const matchS = !search || (a.title||'').toLowerCase().includes(search) || (a.description||'').toLowerCase().includes(search);
+        const matchC = !categoria || a.category === categoria;
+        return matchS && matchC;
+      });
+      const destacados = filtrados.filter(a => a.is_featured);
+      const normales = filtrados.filter(a => !a.is_featured);
+
+      const featContainer = document.getElementById('featuredList');
+      const featSection = document.getElementById('featuredSection');
+      if (destacados.length) {
+        featSection.style.display = 'block';
+        document.getElementById('featuredCount').textContent = `${destacados.length} anuncio${destacados.length>1?'s':''}`;
+        featContainer.innerHTML = destacados.map(a => cardHTML(a, true)).join('');
+      } else featSection.style.display = 'none';
+
+      const container = document.getElementById('listaAnuncios');
+      document.getElementById('totalCount').textContent = `${normales.length} anuncio${normales.length!==1?'s':''}`;
+      container.innerHTML = normales.length === 0
+        ? `<div class="empty-state"><i class="fa-solid fa-box-open"></i>No hay anuncios</div>`
+        : normales.map(a => cardHTML(a, false)).join('');
+    }
+
+    function cardHTML(a, isFeatured) {
+      const icono = iconosCategorias[a.category] || 'tag';
+      const img = a.image_url
+        ? `<img src="${escapeAttr(a.image_url)}" alt="" onerror="this.outerHTML='<i class=\\'fa-solid fa-${icono}\\'></i>'">`
+        : `<i class="fa-solid fa-${icono}"></i>`;
+      const adminHTML = isAdmin ? `
+        <div class="admin-actions">
+          <button onclick="destacarAnuncio(${a.id}, ${!a.is_featured})" title="${a.is_featured?'Quitar':'Destacar'}">
+            <i class="fa-${a.is_featured?'solid':'regular'} fa-star"></i>
+          </button>
+          <button onclick="eliminarAnuncio(${a.id})" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+        </div>` : '';
+      return `
+        <div class="item-card ${isFeatured?'featured':''}" onclick="verDetalle(${a.id})">
+          ${adminHTML}
+          <div class="img-wrap">${img}</div>
+          <div class="item-body">
+            <span class="cat-badge"><i class="fa-solid fa-${icono}"></i> ${a.category || 'otros'}</span>
+            <h3>${escapeHtml(a.title || 'Sin título')}</h3>
+            <p class="desc">${escapeHtml(a.description || '')}</p>
+            <div class="meta">
+              <span><i class="fa-solid fa-location-dot"></i> ${escapeHtml(a.location || 'Sin ubicación')}</span>
+              <span><i class="fa-regular fa-eye"></i> ${a.views || 0}</span>
+            </div>
+            <div class="price">${escapeHtml(a.price || 'Consultar')}</div>
+          </div>
+        </div>`;
+    }
+
+    async function verDetalle(id) {
+      const a = todosLosAnuncios.find(x => x.id === id);
+      if (!a) return;
+      await sb.from('listings').update({ views: (a.views||0) + 1 }).eq('id', id);
+      const icono = iconosCategorias[a.category] || 'tag';
+      const imgHTML = a.image_url
+        ? `<img src="${escapeAttr(a.image_url)}" class="detail-img" alt="">`
+        : `<div class="detail-img" style="display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-${icono}" style="font-size:4rem;color:var(--border);"></i></div>`;
+      const contacto = (a.contact_name || a.contact_phone || a.contact_email) ? `
+        <div class="contact-box">
+          <h3 style="margin-bottom:0.6rem;font-weight:500;"><i class="fa-solid fa-id-card"></i> Contacto</h3>
+          ${a.contact_name ? `<p><i class="fa-solid fa-user"></i> ${escapeHtml(a.contact_name)}</p>` : ''}
+          ${a.contact_phone ? `<p><i class="fa-solid fa-phone"></i> <a href="tel:${escapeAttr(a.contact_phone)}" style="color:var(--accent);">${escapeHtml(a.contact_phone)}</a></p>` : ''}
+          ${a.contact_email ? `<p><i class="fa-solid fa-envelope"></i> <a href="mailto:${escapeAttr(a.contact_email)}" style="color:var(--accent);">${escapeHtml(a.contact_email)}</a></p>` : ''}
+          ${a.contact_phone ? `<a href="https://wa.me/${a.contact_phone.replace(/[^0-9]/g,'')}" target="_blank" class="btn-primary" style="display:inline-block;margin-top:0.6rem;text-decoration:none;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>` : ''}
+        </div>` : '';
+      document.getElementById('modalDetalleContent').innerHTML = `
+        <button class="close-btn" onclick="cerrarModal('modalDetalle')">&times;</button>
+        ${imgHTML}
+        <span class="cat-badge" style="display:inline-block;font-size:0.75rem;color:var(--accent);background:rgba(255,230,0,0.1);padding:0.2rem 0.7rem;border-radius:999px;margin-bottom:0.5rem;"><i class="fa-solid fa-${icono}"></i> ${a.category || 'otros'}</span>
+        <h2>${escapeHtml(a.title)}</h2>
+        <p style="color:var(--text-soft);font-size:0.85rem;margin:0.3rem 0 1rem;"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(a.location || 'Sin ubicación')} · <i class="fa-regular fa-eye"></i> ${(a.views||0)+1} vistas</p>
+        <div class="price" style="color:var(--accent);font-weight:700;font-size:1.8rem;margin-bottom:1rem;">${escapeHtml(a.price || 'Consultar')}</div>
+        <p style="color:var(--text);font-weight:300;line-height:1.6;">${escapeHtml(a.description || '')}</p>
+        ${contacto}`;
+      abrirModal('modalDetalle');
+    }
+
+    async function publicarAnuncio(e) {
+      e.preventDefault();
+      if (!currentUser) { alert('Debes iniciar sesión primero'); cerrarModal('modalPublicar'); abrirAuth('login'); return; }
+      const btn = e.target.querySelector('button[type=submit]');
+      const original = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publicando...';
+      btn.disabled = true;
+
+      try {
+        let imageUrl = null;
+        if (imgMode === 'upload' && archivoFoto) {
+          btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Subiendo foto...';
+          imageUrl = await subirImagenASupabase(archivoFoto);
+        } else if (imgMode === 'url') {
+          imageUrl = document.getElementById('pImagen').value || null;
+        }
+
+        const data = {
+          title: document.getElementById('pTitulo').value,
+          category: document.getElementById('pCategoria').value,
+          price: document.getElementById('pPrecio').value,
+          location: document.getElementById('pLocation').value || null,
+          description: document.getElementById('pDescripcion').value,
+          image_url: imageUrl,
+          contact_name: currentUser.user_metadata?.name || currentUser.email.split('@')[0],
+          contact_phone: document.getElementById('pTelefono').value || null,
+          contact_email: document.getElementById('pEmail').value || currentUser.email,
+          user_id: currentUser.id,
+          is_featured: false
+        };
+        const { error } = await sb.from('listings').insert([data]);
+        if (error) throw error;
+        alert('✅ ¡Anuncio publicado!');
+        e.target.reset();
+        archivoFoto = null;
+        document.getElementById('uploadPreview').style.display = 'none';
+        cerrarModal('modalPublicar');
+        cargarAnuncios();
+      } catch (err) {
+        alert('❌ ' + err.message);
+      } finally {
+        btn.innerHTML = original;
+        btn.disabled = false;
+      }
+    }
+
+    async function verMisAnuncios() {
+      if (!currentUser) return;
+      const { data } = await sb.from('listings').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+      const list = document.getElementById('misAnunciosList');
+      if (!data || data.length === 0) {
+        list.innerHTML = '<div class="empty-state"><i class="fa-solid fa-inbox"></i>No has publicado anuncios</div>';
+      } else {
+        list.innerHTML = data.map(a => `
+          <div class="item-card" onclick="verDetalle(${a.id})" style="cursor:pointer;">
+            <div style="padding:1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;">
+              <div style="flex:1;">
+                <h3 style="font-weight:500;font-size:1rem;">${escapeHtml(a.title)}</h3>
+                <p style="color:var(--text-soft);font-size:0.8rem;margin-top:0.2rem;">${escapeHtml(a.category)} · ${escapeHtml(a.price||'')}</p>
+                <p style="font-size:0.75rem;color:var(--text-soft);margin-top:0.2rem;"><i class="fa-regular fa-eye"></i> ${a.views||0} vistas ${a.is_featured?'· ⭐ Destacado':''}</p>
+              </div>
+              <button onclick="event.stopPropagation();eliminarAnuncio(${a.id})" class="btn-ghost" style="padding:0.5rem 0.8rem;color:var(--danger);"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>`).join('');
+      }
+      abrirModal('modalMisAnuncios');
+    }
+
+    function filtrarAnuncios() { renderizarAnuncios(); }
+    function filtrarPorCategoria(cat, chip) {
+      categoriaActiva = cat;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      document.getElementById('searchCategory').value = cat;
+      renderizarAnuncios();
+    }
+
+    // ========== CHAT ==========
     async function cargarChatInicial() {
       const container = document.getElementById('chatMessages');
-      const { data, error } = await supabase
-        .from('chat_messages')
-        .select('*')
-        .order('id', { ascending: false })
-        .limit(30);
-
-      if (error) {
-        container.innerHTML = '<p style="color:#ff6b6b;font-size:0.8rem;">Error al cargar el chat.</p>';
-        return;
-      }
-
+      const { data, error } = await sb.from('chat_messages').select('*').order('id', { ascending: false }).limit(30);
+      if (error) { container.innerHTML = `<p style="color:#ff6b6b;font-size:0.8rem;">Error</p>`; return; }
       container.innerHTML = '';
-      if (data.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-soft);font-size:0.85rem;text-align:center;">¡Sé el primero en escribir en el chat!</p>';
-        return;
-      }
-
-      // Renderizar del más antiguo al más nuevo
-      data.reverse().forEach(msg => agregarMensajeAlDOM(msg));
-      scrollChatAlFinal();
+      if (!data || !data.length) { container.innerHTML = '<p style="color:var(--text-soft);font-size:0.85rem;text-align:center;">¡Sé el primero en escribir!</p>'; return; }
+      data.reverse().forEach(m => agregarBurbuja(m));
+      scrollChatAbajo();
     }
 
     function suscribirChatEnVivo() {
-      supabase
-        .channel('public:chat_messages')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, payload => {
-          agregarMensajeAlDOM(payload.new);
-          scrollChatAlFinal();
-        })
-        .subscribe();
+      sb.channel('public:chat_messages')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, p => {
+          agregarBurbuja(p.new);
+          scrollChatAbajo();
+        }).subscribe();
     }
 
-    function agregarMensajeAlDOM(msg) {
+    function agregarBurbuja(m) {
       const container = document.getElementById('chatMessages');
-      const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-      const bubble = document.createElement('div');
-      bubble.className = 'chat-bubble';
-      bubble.innerHTML = `
+      if (container.querySelector('p')) container.innerHTML = '';
+      const time = new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const mine = currentUser && m.user_id === currentUser.id;
+      const div = document.createElement('div');
+      div.className = 'chat-bubble' + (mine ? ' mine' : '');
+      div.innerHTML = `
         <div class="author">
-          <span>${msg.sender_name || 'Anónimo'}</span>
+          <span class="name">${escapeHtml(m.sender_name || 'Anónimo')}</span>
           <span class="time">${time}</span>
         </div>
-        <div class="text">${escapeHtml(msg.message)}</div>
-      `;
-      container.appendChild(bubble);
+        <div class="text">${escapeHtml(m.message || '')}</div>`;
+      container.appendChild(div);
     }
 
     async function enviarMensajeChat(e) {
       e.preventDefault();
       const input = document.getElementById('chatInput');
-      const nameInput = document.getElementById('chatName');
-      const mensaje = input.value.trim();
-      const nombre = nameInput.value.trim() || 'Visitante';
-
-      if (!mensaje) return;
-
-      localStorage.setItem('chat_nickname', nombre);
+      const name = document.getElementById('chatName').value.trim() || 'Visitante';
+      const msg = input.value.trim();
+      if (!msg) return;
+      localStorage.setItem('chat_nickname', name);
       input.value = '';
-
-      const { error } = await supabase.from('chat_messages').insert([
-        { sender_name: nombre, message: mensaje }
-      ]);
-
-      if (error) console.error('Error enviando mensaje:', error);
+      const payload = { sender_name: name, message: msg };
+      if (currentUser) payload.user_id = currentUser.id;
+      const { error } = await sb.from('chat_messages').insert([payload]);
+      if (error) console.error(error);
     }
 
-    function scrollChatAlFinal() {
-      const container = document.getElementById('chatMessages');
-      container.scrollTop = container.scrollHeight;
-    }
+    function scrollChatAbajo() { const c = document.getElementById('chatMessages'); c.scrollTop = c.scrollHeight; }
 
-    function escapeHtml(text) {
-      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-
-    // ==========================================
-    // LÓGICA DE ANUNCIOS
-    // ==========================================
-    async function cargarAnuncios() {
-      const container = document.getElementById('listaAnuncios');
-      const { data, error } = await supabase.from('listings').select('*').order('id', { ascending: false });
-
-      if (error || !data || data.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-soft);">No hay anuncios publicados todavía.</p>';
-        return;
-      }
-
-      container.innerHTML = '';
-      data.forEach(item => {
-        const img = item.image_url ? `<img src="${item.image_url}" alt="${item.title}" />` : '';
-        container.innerHTML += `
-          <div class="item-card">
-            ${img}
-            <div class="item-body">
-              <h3 style="font-weight:400; font-size:1rem;">${item.title}</h3>
-              <p style="color:var(--text-soft); font-size:0.85rem; margin-top:0.3rem;">${item.description}</p>
-              <div class="price">${item.price}</div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    async function publicarAnuncio(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button');
-      btn.innerHTML = 'Publicando...';
-
-      const data = {
-        title: document.getElementById('titulo').value,
-        price: document.getElementById('precio').value,
-        description: document.getElementById('descripcion').value,
-        image_url: document.getElementById('imagenUrl').value || null
-      };
-
-      const { error } = await supabase.from('listings').insert([data]);
-
-      if (error) {
-        alert('Error: ' + error.message);
-      } else {
-        alert('¡Anuncio publicado con éxito!');
-        e.target.reset();
-        cargarAnuncios();
-      }
-      btn.innerHTML = 'Publicar Anuncio';
-    }
+    function escapeHtml(t) { if (!t) return ''; return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function escapeAttr(t) { if (!t) return ''; return String(t).replace(/"/g,'&quot;'); }
   </script>
 </body>
 </html>
